@@ -12,6 +12,10 @@
     }
   ],
   "compilerOptions": {
-    "module": "NodeNext"
+    "esModuleInterop": true,
+    "module": "NodeNext",
+    "isolatedModules": true
+    // 不驗證大小寫
+    // "forceConsistentCasingInFileNames": false
   }
 }

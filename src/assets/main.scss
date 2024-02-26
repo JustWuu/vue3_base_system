@@ -1,0 +1,29 @@
+@import './base.css';
+@font-face {
+  font-family: 'zhH';
+  src:
+    local('zhH'),
+    url('../assets/zhH.ttf') format('opentype');
+}
+//共用css
+// p ,h1 ,h2 ,h3 ,h4 ,h5 ,h6 ,a ,span ,button ,div {
+//   font-family: 'zhH2';
+//   color: black;
+// }
+.flex_center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+//共用css END
+
+body {
+  background: var(--vt-c-text-dark-2);
+}
+
+@media (hover: hover) {
+}
+
+@media (min-width: 1024px) {
+}
