@@ -33,7 +33,6 @@ const containerClass = computed(() => {
   }
 })
 const bindOutsideClickListener = () => {
-  console.log(outsideClickListener.value)
   if (!outsideClickListener.value) {
     outsideClickListener.value = (event: any) => {
       if (isOutsideClicked(event)) {
