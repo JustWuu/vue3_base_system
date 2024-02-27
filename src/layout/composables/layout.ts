@@ -21,14 +21,14 @@ interface LayoutState {
 }
 
 // 預設layout
-// theme是掛在index.html中，所以這裡改了那邊不會自己改
-// 需要再寫程式去改
 const layoutConfig = reactive<LayoutConfig>({
   ripple: false,
   darkTheme: false,
   inputStyle: 'outlined',
   menuMode: 'static',
   theme: 'lara-light-blue',
+  // theme是掛在index.html中，所以這裡改了那邊不會自己改
+  // 需要再寫程式去改
   scale: 14,
   activeMenuItem: null
 })
