@@ -1,7 +1,7 @@
 class ConvertDate {
   constructor() {}
   //把傳入的毫秒轉成年月日時
-  convertDate(date) {
+  convertDate(date: any) {
     const day = new Date(date)
     const time =
       day.getFullYear() +
