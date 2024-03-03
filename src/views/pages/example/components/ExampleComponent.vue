@@ -34,7 +34,7 @@ const data = ref([])
 
 <template>
   <div class="grid">
-    <div class="col-12 py-0 px-2">
+    <div class="col-12 px-2">
       <div class="card">
         <h5>{{ title }}</h5>
         <p>{{ content }}</p>
