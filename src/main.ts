@@ -9,6 +9,16 @@ import PrimeVue from 'primevue/config'
 import App from './App.vue'
 import router from './router'
 
+// 引入 VeeValidate 元件跟功能
+import { Field, Form, ErrorMessage, defineRule, configure } from 'vee-validate'
+// 引入 VeeValidate 的驗證規則
+import * as rules from '@vee-validate/rules'
+// 引入 VeeValidate 的 i18n 功能
+import { localize, setLocale } from '@vee-validate/i18n'
+// 引入 VeeValidate 的繁體中文語系檔
+import zhTW from '@vee-validate/i18n/dist/locale/zh_TW.json'
+// https://israynotarray.com/vue/20230208/3309208839/
+
 // 表單組件
 import InputText from 'primevue/inputtext'
 import Checkbox from 'primevue/checkbox'
@@ -33,8 +43,37 @@ import FileUpload from 'primevue/fileupload'
 import TabMenu from 'primevue/tabmenu'
 import OverlayPanel from 'primevue/overlaypanel'
 import RadioButton from 'primevue/radiobutton'
+import Divider from 'primevue/Divider'
+// firebase
+import { initializeApp } from 'firebase/app'
+import { getAnalytics } from 'firebase/analytics'
+
+const firebaseConfig = initializeApp({
+  apiKey: import.meta.env.VITE_API_KEY,
+  authDomain: import.meta.env.VITE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_APP_ID,
+  measurementId: import.meta.env.VITE_MEASUREMENT_ID
+})
+getAnalytics(firebaseConfig)
+
+// *
 
 const app = createApp(App)
+
+// 使用 Object.keys 將 AllRules 轉為陣列並使用 forEach 迴圈將驗證規則加入 VeeValidate
+Object.keys(rules).forEach((rule) => {
+  defineRule(rule, (rules as any)[rule])
+})
+
+// 將當前 VeeValidate 的語系設定為繁體中文
+configure({
+  generateMessage: localize({ zh_TW: zhTW }),
+  validateOnInput: true
+})
+setLocale('zh_TW')
 
 app.use(createPinia())
 app.use(router)
@@ -73,5 +112,11 @@ app.component('OverlayPanel', OverlayPanel)
 app.component('TabMenu', TabMenu)
 app.component('FileUpload', FileUpload)
 app.component('RadioButton', RadioButton)
+app.component('Divider', Divider)
+
+// 掛載 Global 的 VeeValidate 元件
+app.component('VField', Field)
+app.component('VForm', Form)
+app.component('ErrorMessage', ErrorMessage)
 
 app.mount('#app')
