@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { Auth } from '@/api/firebase'
+import { Auth, CRUDFirebase } from '@/api/firebase'
 import { Storage, Encryp } from '@/utils'
 import InputTextFloat from '@/components/form/InputTextFloat.vue'
 import InputPasswordFloat from '@/components/form/InputPasswordFloat.vue'
@@ -9,9 +9,10 @@ const storage = new Storage()
 const encryp = new Encryp()
 // firebase
 const auth = new Auth()
+const crudFirebase = new CRUDFirebase()
 
 //data
-const registerAccount = ref({
+const signupAccount = ref({
   email: '',
   password: ''
 })
@@ -22,14 +23,31 @@ const signinAccount = ref({
   checked: false
 })
 
-//methods
-const update = () => {
-  console.log('ok')
+const uidText = ref('')
+
+interface CRUDTest {
+  doc: string
+  obj: {
+    [key: string]: string | number
+  }
+  array: object[]
 }
 
-const register = () => {
+const curdTest = ref<CRUDTest>({
+  doc: '',
+  obj: {
+    a: '',
+    b: '',
+    c: '',
+    d: 0
+  },
+  array: []
+})
+
+//methods
+const signup = () => {
   auth
-    .createUser(registerAccount.value.email, registerAccount.value.password)
+    .createUser(signupAccount.value.email, signupAccount.value.password)
     .then((res) => {
       if (res) {
         console.log(res)
@@ -66,6 +84,70 @@ const signin = () => {
     })
 }
 
+const signOut = () => {
+  auth
+    .signOut()
+    .then((res) => {
+      if (res) {
+        console.log(res)
+      }
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+}
+
+const getUid = (uid: string) => {
+  crudFirebase.get(uid).then((res) => {
+    uidText.value = res.uid
+  })
+}
+
+const getArray = () => {
+  crudFirebase.array().then((res) => {
+    curdTest.value.array = res
+    console.log(curdTest.value.array)
+  })
+}
+
+const get = (doc: string) => {
+  crudFirebase.get(doc).then((res) => {
+    console.log('資料：', res)
+  })
+}
+
+const set = (doc: string, params: object) => {
+  if (doc === '') {
+    crudFirebase
+      .add(params)
+      .then((res) => {
+        console.log(res)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  } else {
+    crudFirebase.set(doc, params)
+  }
+}
+
+const update = (doc: string, params: object) => {
+  crudFirebase.update(doc, params)
+}
+
+const remove = (doc: string) => {
+  crudFirebase.delete(doc)
+}
+
+// 下方onValue寫法，必須搭配一個callback
+const onValue = (doc: string, callback: Function) => {
+  crudFirebase.onValue(doc, callback)
+}
+
+function callback(snapshot: any) {
+  curdTest.value.obj = snapshot
+}
+
 // onMounted
 onMounted(() => {
   if (storage.getLocalStorage('account')) {
@@ -79,12 +161,12 @@ onMounted(() => {
   <div class="grid">
     <div class="col-12 md:col-6 px-2">
       <div class="card p-fluid">
-        <VForm ref="registerForm" @submit="register()">
+        <VForm ref="signupForm" @submit="signup()">
           <h5>註冊</h5>
           <div class="field mt-5">
             <input-text-float
               label="信箱"
-              v-model="registerAccount.email"
+              v-model="signupAccount.email"
               name="email0"
               rules="required|email"
             />
@@ -92,7 +174,7 @@ onMounted(() => {
           <div class="field mt-5">
             <input-password-float
               label="密碼"
-              v-model="registerAccount.password"
+              v-model="signupAccount.password"
               name="password0"
               rules="required"
             />
@@ -118,6 +200,7 @@ onMounted(() => {
               v-model="signinAccount.password"
               name="password1"
               rules="required"
+              :feedback="false"
             />
           </div>
           <div class="flex align-items-center justify-content-between mb-4 gap-5">
@@ -144,11 +227,79 @@ onMounted(() => {
 
     <div class="col-12 md:col-6 px-2">
       <div class="card p-fluid">
-        <VForm ref="formRef" @submit="update()">
+        <VForm ref="formRef" @submit="signOut()">
           <h5>當前用戶</h5>
-
+          <div>
+            <p class="mb-0">asd</p>
+            <p class="mb-0">qwdqwd</p>
+            <p class="mb-0">qwdqwd</p>
+          </div>
           <Button label="登出" severity="danger" type="submit"></Button>
         </VForm>
+      </div>
+
+      <div class="card p-fluid">
+        <VForm ref="signupForm" @submit="getUid(uidText)">
+          <h5>撈取指定用戶資料</h5>
+          <div class="field mt-5">
+            <input-text-float label="UID" v-model="uidText" name="uid" rules="required" />
+          </div>
+          <Button label="取得" type="submit"></Button>
+        </VForm>
+      </div>
+      <div class="card p-fluid">
+        <h5>CRUD</h5>
+        <div class="field mt-5">
+          <input-text-float label="DOC" v-model="curdTest.doc" name="doc" rules="required" />
+        </div>
+        <div class="field mt-5">
+          <input-text-float label="A" v-model="curdTest.obj.a" name="a" rules="required" />
+        </div>
+        <div class="field mt-5">
+          <input-text-float label="B" v-model="curdTest.obj.b" name="b" rules="required" />
+        </div>
+        <div class="field mt-5">
+          <input-text-float label="C" v-model="curdTest.obj.c" name="c" rules="required" />
+        </div>
+        <div class="field mt-5">
+          <input-text-float
+            label="D"
+            v-model="curdTest.obj.d"
+            name="d"
+            rules="required"
+            type="number"
+          />
+        </div>
+        <Button
+          label="新增"
+          type="submit"
+          class="mb-1"
+          severity="success"
+          @click="set(curdTest.doc, curdTest.obj)"
+        ></Button>
+        <Button label="取得陣列" type="submit" class="mb-1" @click="getArray()"></Button
+        ><Button label="取得單一" type="submit" class="mb-1" @click="get(curdTest.doc)"></Button>
+        <Button
+          label="修改"
+          type="submit"
+          class="mb-1"
+          severity="warning"
+          @click="update(curdTest.doc, curdTest.obj)"
+        ></Button>
+        <Button
+          label="刪除"
+          type="submit"
+          class="mb-1"
+          severity="danger"
+          @click="remove(curdTest.doc)"
+        ></Button>
+        <Button
+          label="監聽"
+          type="submit"
+          class="mb-1"
+          severity="danger"
+          @click="onValue(curdTest.doc, callback)"
+        ></Button>
       </div>
     </div>
   </div>

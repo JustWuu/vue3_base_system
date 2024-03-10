@@ -1,4 +1,5 @@
 // 資料庫
+export { default as CRUDFirebase } from './database/CRUD'
 export { default as UserFirebase } from './database/user'
 
 // 功能
