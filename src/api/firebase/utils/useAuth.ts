@@ -13,13 +13,13 @@ import {
   // signInAnonymously,
   // linkWithCredential
 } from 'firebase/auth'
-import { userProfileStores } from '@/stores/userProfile'
+import { UserProfileStores } from '@/stores/userProfile'
 import { storeToRefs } from 'pinia'
 import { UserFirebase } from '@/api/firebase'
 
 const userFirebase = new UserFirebase()
 
-const store = userProfileStores()
+const userProfileStores = UserProfileStores()
 
 const auth = getAuth()
 let user = auth.currentUser
@@ -114,10 +114,10 @@ class Auth {
   //   user = auth.currentUser
   //   return await updateProfile(user, profile)
   //     .then(() => {
-  //       store.user = null
-  //       store.user = { ...profile, ...user }
-  //       if (store.user.displayName === null) {
-  //         store.user.displayName = store.user.email
+  //       userProfileStores.user = null
+  //       userProfileStores.user = { ...profile, ...user }
+  //       if (userProfileStores.user.displayName === null) {
+  //         userProfileStores.user.displayName = userProfileStores.user.email
   //       }
   //       console.log(`${user.email} update OK`)
   //       userFirebase.updateUserProfile(profile)
@@ -187,8 +187,8 @@ class Auth {
   //   user = auth.currentUser
   //   return await linkWithCredential(user, credential)
   //     .then((userCredential) => {
-  //       store.user = null
-  //       store.user = user
+  //       userProfileStores.user = null
+  //       userProfileStores.user = user
   //       console.log(`${user.email} anonymous account upgraded OK`)
   //       userFirebase.updateUserProfile()
   //       return userCredential.user
@@ -202,7 +202,7 @@ class Auth {
   //storeToRefs只會淺監聽，所以改裡面得值並不會重給值
   //需設成null再從給值才能監聽到變化，ex：修改帳戶資料
   getUser() {
-    return storeToRefs(store)
+    return storeToRefs(userProfileStores)
   }
 }
 
