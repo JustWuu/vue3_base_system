@@ -1,7 +1,8 @@
 <script setup lang="ts">
 //define
-const props = defineProps({
-  modelValue: String,
+defineProps({
+  modelValue: [String, Number],
+  type: { type: String, default: 'text' },
   label: {
     type: String,
     default: '-'
@@ -33,7 +34,7 @@ const props = defineProps({
     v-slot="{ field }"
     :name="name"
     :label="label"
-    type="text"
+    :type="type"
     class="p-inputtext p-component"
     :rules="rules"
     :value="modelValue"
@@ -67,15 +68,6 @@ const props = defineProps({
           </ul>
         </template>
       </Password>
-      <!-- <Password
-        class="w-full"
-        :class="{ 'p-filled': modelValue }"
-        v-bind="field"
-        :value="modelValue"
-        :placeholder="placeholder"
-        :id="name"
-        
-      /> -->
       <label :for="name">{{ label }}</label>
     </span>
   </VField>
