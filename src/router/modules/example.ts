@@ -13,7 +13,8 @@ const exampleRouter: NewRouteRecordRaw[] = [
     meta: {
       title: '隱藏',
       auth: true,
-      hide: true
+      hide: true,
+      theme: 'hide'
     }
   },
   // CRUD
@@ -25,12 +26,13 @@ const exampleRouter: NewRouteRecordRaw[] = [
       title: 'CRUD測試',
       auth: true,
       hide: false,
-      icon: 'pi pi-fw pi-reply'
+      icon: 'pi pi-fw pi-reply',
+      theme: 'crud'
     }
   },
   // 權限
   {
-    path: '/example/role',
+    path: '/example/permissions',
     name: 'ExampleRole',
     component: () => import('@/views/pages/example/ExampleUniversal.vue'),
     meta: {
@@ -38,31 +40,34 @@ const exampleRouter: NewRouteRecordRaw[] = [
       auth: true,
       hide: false,
       icon: 'pi pi-fw pi-lock',
-      role: ['client']
+      role: ['client'],
+      theme: 'permissions'
     }
   },
   // 需登入
   {
-    path: '/example/auth',
+    path: '/example/logintest',
     name: 'ExampleAuth',
     component: () => import('@/views/pages/example/ExampleUniversal.vue'),
     meta: {
       title: '無登入禁止',
       auth: true,
       hide: false,
-      icon: 'pi pi-fw pi-user'
+      icon: 'pi pi-fw pi-user',
+      theme: 'logintest'
     }
   },
   // 免登入
   {
-    path: '/example/no-auth',
+    path: '/example/no-login',
     name: 'ExampleNoauth',
     component: () => import('@/views/pages/example/ExampleUniversal.vue'),
     meta: {
       title: '無登入可進入',
       auth: false,
       hide: false,
-      icon: 'pi pi-fw pi-user-minus'
+      icon: 'pi pi-fw pi-user-minus',
+      theme: 'no-login'
     }
   },
   // 外部連結+class
@@ -89,7 +94,8 @@ const exampleRouter: NewRouteRecordRaw[] = [
       title: '多層展示',
       auth: true,
       hide: false,
-      icon: 'pi pi-fw pi-bookmark'
+      icon: 'pi pi-fw pi-bookmark',
+      theme: 'submenu'
     },
     children: [
       {
@@ -99,7 +105,8 @@ const exampleRouter: NewRouteRecordRaw[] = [
           title: '多層展示1.1',
           auth: true,
           hide: false,
-          icon: 'pi pi-fw pi-bookmark'
+          icon: 'pi pi-fw pi-bookmark',
+          theme: 'submenu'
         },
         children: [
           {
@@ -109,7 +116,8 @@ const exampleRouter: NewRouteRecordRaw[] = [
               title: '多層展示1.2',
               auth: true,
               hide: false,
-              icon: 'pi pi-fw pi-bookmark'
+              icon: 'pi pi-fw pi-bookmark',
+              theme: 'submenu'
             },
             children: [
               {
@@ -120,7 +128,8 @@ const exampleRouter: NewRouteRecordRaw[] = [
                   title: '多層展示1.3',
                   auth: true,
                   hide: false,
-                  icon: 'pi pi-fw pi-bookmark'
+                  icon: 'pi pi-fw pi-bookmark',
+                  theme: 'submenu'
                 }
               }
             ]

@@ -75,7 +75,7 @@ const itemClick = (event: any, item: any) => {
 }
 
 const checkActiveRoute = (item: any) => {
-  return route.path === item.path
+  return route.path.indexOf(item.meta.theme) > 0
 }
 </script>
 

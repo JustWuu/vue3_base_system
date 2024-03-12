@@ -2,6 +2,8 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import { UserProfileStores } from '@/stores/userProfile'
 import AppLayout from '@/layout/AppLayout.vue'
 
+// router
+import systemRouter from './modules/system'
 import exampleRouter from './modules/example'
 // import exampleSubmenuRouter from './modules/example-submenu'
 
@@ -26,11 +28,15 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth'
 const auth = getAuth()
 
 // 路由編寫要參考範例寫法，否則layout選單可能出現錯誤
+// meta中的them代表該頁面主題，例如path有/system/auth/list、/system/auth/add
+// 這些都同屬auth主題，那在這些頁面時auth主題的選單都會判斷為點選中
+// 因此them與path的命名要避免重複單字，不然會被判斷為點選中
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
+      redirect: '/dashboard',
       component: AppLayout,
       meta: {
         title: '首頁',
@@ -38,17 +44,36 @@ const router = createRouter({
       },
       children: [
         {
-          path: '/',
+          path: '/dashboard',
           name: 'Dashboard',
           component: () => import('@/views/Dashboard.vue'),
           meta: {
             title: 'Dashboard',
             auth: false,
             hide: false,
-            icon: 'pi pi-fw pi-home'
+            icon: 'pi pi-fw pi-home',
+            theme: 'dashboard'
           }
         }
       ]
+    },
+    {
+      path: '/ccc',
+      component: AppLayout,
+      meta: {
+        title: '模擬前台設定',
+        hide: false
+      },
+      children: []
+    },
+    {
+      path: '/system',
+      component: AppLayout,
+      meta: {
+        title: '系統',
+        hide: false
+      },
+      children: [...systemRouter]
     },
     {
       path: '/example',
@@ -59,15 +84,6 @@ const router = createRouter({
       },
       children: [...exampleRouter]
     },
-    // {
-    //   path: '/system',
-    //   component: AppLayout,
-    //   meta: {
-    //     title: '設定',
-    //     hide: false
-    //   },
-    //   children: [userRouter]
-    // },
 
     // 放這邊沒layout
     // authRouter,

@@ -5,7 +5,6 @@ import AppMenuItem from './AppMenuItem.vue'
 
 const router = useRouter()
 const allRouter = ref(router.options.routes)
-console.log(allRouter.value)
 </script>
 
 <template>
