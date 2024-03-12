@@ -116,8 +116,9 @@ const get = (doc: string) => {
   })
 }
 
-const set = (doc: string, params: object) => {
-  if (doc === '') {
+// crud
+const set = (id: string, params: object) => {
+  if (id === '') {
     crudFirebase
       .add(params)
       .then((res) => {
@@ -127,27 +128,32 @@ const set = (doc: string, params: object) => {
         console.log(error)
       })
   } else {
-    crudFirebase.set(doc, params)
+    crudFirebase.set(id, params)
   }
 }
 
-const update = (doc: string, params: object) => {
-  crudFirebase.update(doc, params)
+const update = (id: string, params: object) => {
+  crudFirebase.update(id, params)
 }
 
-const remove = (doc: string) => {
-  crudFirebase.delete(doc)
+const remove = (id: string) => {
+  crudFirebase.delete(id)
 }
 
-// 下方onValue寫法，必須搭配一個callback
-const onValue = (doc: string, callback: Function) => {
-  crudFirebase.onValue(doc, callback)
+// 下方onSnapshot寫法，必須搭配一個callback
+const onSnapshot = (id: string, callback: Function) => {
+  crudFirebase.onSnapshot(id, callback)
 }
-
 function callback(snapshot: any) {
   curdTest.value.obj = snapshot
 }
 
+const arrayOnSnapshot = (callback: Function, id: string) => {
+  crudFirebase.arrayOnSnapshot(callback, id)
+}
+function callback2(snapshot: any) {
+  console.log(snapshot)
+}
 // onMounted
 onMounted(() => {
   if (storage.getLocalStorage('account')) {
@@ -298,7 +304,14 @@ onMounted(() => {
           type="submit"
           class="mb-1"
           severity="danger"
-          @click="onValue(curdTest.doc, callback)"
+          @click="onSnapshot(curdTest.doc, callback)"
+        ></Button>
+        <Button
+          label="監聽陣列"
+          type="submit"
+          class="mb-1"
+          severity="danger"
+          @click="arrayOnSnapshot(callback2)"
         ></Button>
       </div>
     </div>
