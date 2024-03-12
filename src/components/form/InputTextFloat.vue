@@ -18,7 +18,6 @@ defineProps({
     type: String
   }
 })
-// const emit = defineEmits(['update:modelValue'])
 </script>
 
 <template>
@@ -38,6 +37,7 @@ defineProps({
         :class="{ 'p-filled': modelValue }"
         v-bind="field"
         :modelValue="modelValue"
+        :value="modelValue"
         :placeholder="placeholder"
         :id="name"
         :type="type"

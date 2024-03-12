@@ -1,3 +1,5 @@
+//**
+該組件綁定的值因AJAX等...變動時,不會自動更新值,因此使用該組件時需在VForm綁key(不可直接綁在此組件上)*/
 <script setup lang="ts">
 //define
 defineProps({
@@ -26,7 +28,6 @@ defineProps({
     default: true
   }
 })
-// const emit = defineEmits(['update:modelValue'])
 </script>
 
 <template>
