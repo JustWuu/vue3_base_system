@@ -10,7 +10,8 @@ import {
   getDocs,
   query,
   serverTimestamp,
-  runTransaction
+  runTransaction,
+  onSnapshot
 } from 'firebase/firestore'
 
 const db = getFirestore()
@@ -23,7 +24,7 @@ class Database {
   constructor(child: string) {
     this.child = child
   }
-  // 返回該資料夾下的該id資料
+  // 返回該collection下的該doc資料
   async get(id: string) {
     try {
       const docSnap = await getDoc(doc(db, this.child, id))
@@ -39,7 +40,7 @@ class Database {
       throw error
     }
   }
-  // 返回整個資料夾組成的陣列，有完整的查詢功能
+  // 返回整個collection下的doc組成的陣列，有完整的查詢功能
   // 該方法還有query、where一些資料庫查詢的功能，要用時需要import進來
   // const q = query(collection(db, "cities"), where("capital", "==", true))
   async array(id: string = '') {
@@ -57,7 +58,7 @@ class Database {
       throw error
     }
   }
-  // 在該資料夾建立新資料，相同資料夾內的同id會被取代
+  // 在該doc建立新資料，相同doc內的同id會被取代
   async set(id: string, params: object) {
     try {
       await setDoc(doc(db, this.child, id), params)
@@ -67,7 +68,7 @@ class Database {
       throw error
     }
   }
-  // 在該資料夾建立資料，取名為亂數
+  // 在該doc建立資料，取名為亂數
   async add(params: object, id = '') {
     try {
       const docRef = await addDoc(collection(db, `${this.child}/${id}/`), params)
@@ -78,13 +79,23 @@ class Database {
       throw error
     }
   }
-  // 更新該資料夾資料
+  // 更新該doc資料
   async update(id: string, params: object) {
     try {
       await updateDoc(doc(db, this.child, id), { ...params, timestamp: serverTimestamp() })
       console.log('Document update with ID: ', this.child, '/', id)
     } catch (error) {
       console.error('Error update document: ', error)
+      throw error
+    }
+  }
+  // 刪除doc
+  async delete(id: string) {
+    try {
+      await deleteDoc(doc(db, this.child, id))
+      console.log('Document delete with ID: ', this.child, '/', id)
+    } catch (error) {
+      console.error('Error delete document: ', error)
       throw error
     }
   }
@@ -109,26 +120,37 @@ class Database {
       console.log('Transaction failed: ', error)
     }
   }
-  // 刪除資料夾資料
-  async delete(id: string) {
-    try {
-      await deleteDoc(doc(db, this.child, id))
-      console.log('Document delete with ID: ', this.child, '/', id)
-    } catch (error) {
-      console.error('Error delete document: ', error)
-      throw error
-    }
+  // 以下兩種監聽都是僅執行不停止，因為停止需要呼叫原函式
+  // 在這邊沒用宣告所以沒辦法再去從新呼叫原函式
+  // 監聽doc，傳入callback給它，初始化及有變化時執行
+  onSnapshot(id: string, callback: Function) {
+    console.log(`onSnapshot: ${this.child}/${id} start`)
+    onSnapshot(doc(db, this.child, id), (snapshot) => {
+      console.log(snapshot)
+      // 本地進行update時也會被此監聽到，但是會處於Local狀態(代表未寫入資料庫)
+      // 轉變為Server時代表寫入完成
+      // const source = snapshot.metadata.hasPendingWrites ? 'Local' : 'Server'
+      // console.log(source, ' data: ', snapshot.data())
+      //
+      console.log(`${this.child}/${id} update, Current data:${snapshot.data()}`)
+      callback(snapshot.data())
+    })
   }
-  // //監聽資料夾，傳入callback給它，初始化及有變化時執行
-  onValue(id: string, callback: Function) {
-    console.log(id, callback)
-    // console.log(`database onValue: ${this.child}/${id} start`)
-    // onValue(ref(db, `${this.child}/` + id), (snapshot) => {
-    //   console.log(`database onValue: ${this.child}/${id} update`)
-    //   callback(snapshot.val())
-    // })
+  // 監聽整個collection，傳入callback給它，初始化及有變化時執行
+  // 大至collection增加新的doc、小至doc中一個欄位更新，都會觸發回傳
+  arrayOnSnapshot(callback: Function, id: string = '') {
+    console.log(`onSnapshot: ${this.child}/${id} start`)
+    onSnapshot(query(collection(db, `${this.child}/${id}`)), (querySnapshot) => {
+      const array: object[] = []
+      querySnapshot.forEach((doc) => {
+        if (doc.data()) {
+          array.push(doc.data())
+        }
+      })
+      console.log(`${this.child}/${id} update, Current data:${array}`)
+      callback(array)
+    })
   }
-
   // 批次寫入，writeBatch，暫不使用，原理如下
   // 可以撰寫多個CRUD，最後運行batch.commit()，一次發出
 }
