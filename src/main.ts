@@ -27,6 +27,8 @@ import Password from 'primevue/password'
 import Avatar from 'primevue/avatar'
 import Menu from 'primevue/menu'
 import Toast from 'primevue/toast'
+import ToastService from 'primevue/toastservice'
+import Toolbar from 'primevue/toolbar'
 import Dialog from 'primevue/dialog'
 import Image from 'primevue/image'
 import DataTable from 'primevue/datatable'
@@ -44,6 +46,8 @@ import TabMenu from 'primevue/tabmenu'
 import OverlayPanel from 'primevue/overlaypanel'
 import RadioButton from 'primevue/radiobutton'
 import Divider from 'primevue/divider/Divider.vue'
+import Rating from 'primevue/rating'
+import InputNumber from 'primevue/inputnumber'
 
 const app = createApp(App)
 
@@ -63,7 +67,6 @@ app.use(createPinia())
 app.use(router)
 app.use(PrimeVue, {
   ripple: true,
-  inputStyle: 'filled',
   zIndex: {
     modal: 1100, //dialog, sidebar
     overlay: 1000, //dropdown, overlaypanel
@@ -71,6 +74,7 @@ app.use(PrimeVue, {
     tooltip: 1100 //tooltip
   }
 })
+app.use(ToastService)
 
 // 表單組件掛載
 app.component('Button', Button)
@@ -80,6 +84,7 @@ app.component('Password', Password)
 app.component('Avatar', Avatar)
 app.component('Menu', Menu)
 app.component('Toast', Toast)
+app.component('Toolbar', Toolbar)
 app.component('Dialog', Dialog)
 app.component('Image', Image)
 app.component('DataTable', DataTable)
@@ -97,6 +102,8 @@ app.component('TabMenu', TabMenu)
 app.component('FileUpload', FileUpload)
 app.component('RadioButton', RadioButton)
 app.component('Divider', Divider)
+app.component('Rating', Rating)
+app.component('InputNumber', InputNumber)
 
 // 掛載 Global 的 VeeValidate 元件
 app.component('VField', Field)
