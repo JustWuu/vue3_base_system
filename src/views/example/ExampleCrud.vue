@@ -148,7 +148,7 @@ function callback(snapshot: any) {
   curdTest.value.obj = snapshot
 }
 
-const arrayOnSnapshot = (callback: Function, id: string) => {
+const arrayOnSnapshot = (callback: Function, id: string = '') => {
   crudFirebase.arrayOnSnapshot(callback, id)
 }
 function callback2(snapshot: any) {

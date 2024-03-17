@@ -9,7 +9,7 @@ const exampleRouter: NewRouteRecordRaw[] = [
   {
     path: '/example/hide',
     name: 'ExampleHide',
-    component: () => import('@/views/pages/example/ExampleUniversal.vue'),
+    component: () => import('@/views/example/ExampleUniversal.vue'),
     meta: {
       title: '隱藏',
       auth: true,
@@ -21,7 +21,7 @@ const exampleRouter: NewRouteRecordRaw[] = [
   {
     path: '/example/crud',
     name: 'CRUD',
-    component: () => import('@/views/pages/example/ExampleCrud.vue'),
+    component: () => import('@/views/example/ExampleCrud.vue'),
     meta: {
       title: 'CRUD測試',
       auth: true,
@@ -34,7 +34,7 @@ const exampleRouter: NewRouteRecordRaw[] = [
   {
     path: '/example/permissions',
     name: 'ExampleRole',
-    component: () => import('@/views/pages/example/ExampleUniversal.vue'),
+    component: () => import('@/views/example/ExampleUniversal.vue'),
     meta: {
       title: '無權限禁止(需登入)',
       auth: true,
@@ -48,7 +48,7 @@ const exampleRouter: NewRouteRecordRaw[] = [
   {
     path: '/example/logintest',
     name: 'ExampleAuth',
-    component: () => import('@/views/pages/example/ExampleUniversal.vue'),
+    component: () => import('@/views/example/ExampleUniversal.vue'),
     meta: {
       title: '無登入禁止',
       auth: true,
@@ -61,7 +61,7 @@ const exampleRouter: NewRouteRecordRaw[] = [
   {
     path: '/example/no-login',
     name: 'ExampleNoauth',
-    component: () => import('@/views/pages/example/ExampleUniversal.vue'),
+    component: () => import('@/views/example/ExampleUniversal.vue'),
     meta: {
       title: '無登入可進入',
       auth: false,
@@ -123,7 +123,7 @@ const exampleRouter: NewRouteRecordRaw[] = [
               {
                 path: '/example/submenu',
                 name: 'ExampleSubmenu',
-                component: () => import('@/views/pages/example/ExampleSubmenu.vue'),
+                component: () => import('@/views/example/ExampleSubmenu.vue'),
                 meta: {
                   title: '多層展示1.3',
                   auth: true,

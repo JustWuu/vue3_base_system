@@ -90,7 +90,7 @@ const router = createRouter({
     {
       path: '/:404(.*)*',
       name: '404',
-      component: () => import('@/views/pages/NotFound.vue'),
+      component: () => import('@/views/NotFound.vue'),
       meta: {
         title: '找不到頁面',
         auth: false,
@@ -100,7 +100,7 @@ const router = createRouter({
     {
       path: '/:403(.*)*',
       name: '403',
-      component: () => import('@/views/pages/NotRole.vue'),
+      component: () => import('@/views/NotRole.vue'),
       meta: {
         title: '權限不足',
         auth: false,
