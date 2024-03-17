@@ -41,7 +41,7 @@ class UserFirebase extends Database {
   }
 
   //新註冊創建資料
-  async createUserProfile(role: string) {
+  async createUserProfile(role: string[]) {
     let today = new Date()
     user = auth.currentUser as unknown as Profile
     profile = {
