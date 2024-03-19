@@ -1,60 +1,88 @@
 <script setup lang="ts">
 import { ref, onMounted, type VNodeRef } from 'vue'
+import { useRouter } from 'vue-router'
 import { useToast } from 'primevue/usetoast'
 import UniversalTable from '@/components/table/UniversalTable.vue'
-import ProductService from '@/service/ProductService'
+import { UserFirebase } from '@/api/firebase'
+import type { User } from '@/interface'
 
 const toast = useToast()
+const router = useRouter()
 // interface
 type NewVNodeRef = VNodeRef & {
   exportCSV: Function
 }
 
-interface User {
-  // UID
-  id: string
-  code: string
-  name: string
-  category: string
-  quantity: number
-}
+// firebase
+const userFirebase = new UserFirebase()
 
 // data
 const dt = ref<NewVNodeRef>()
 const columns = ref([
-  { field: 'code', header: 'Code', sortable: true },
-  { field: 'name', header: 'Name', sortable: false },
-  { field: 'category', header: 'Category', sortable: false },
-  { field: 'quantity', header: 'Quantity', sortable: true }
+  { field: 'uid', header: 'UID', sortable: true, headerStyle: 'width:14%; min-width:10rem;' },
+  {
+    field: 'displayName',
+    header: '帳號',
+    sortable: false,
+    headerStyle: 'width:14%; min-width:10rem;'
+  },
+  {
+    field: 'nickName',
+    header: '暱稱',
+    sortable: false,
+    headerStyle: 'width:14%; min-width:10rem;'
+  },
+  {
+    type: 'boolean',
+    field: 'emailVerified',
+    header: '信箱驗證',
+    sortable: true,
+    headerStyle: 'width:14%; min-width:10rem;'
+  },
+  {
+    type: 'tag',
+    tag: [
+      { value: 'enable', severity: 'success', text: '啟用' },
+      { value: 'xxx', severity: 'warning', text: '異常' },
+      { value: 'disabled', severity: 'danger', text: '停用' }
+    ],
+    field: 'state',
+    header: '帳號狀態',
+    sortable: true,
+    headerStyle: 'width:14%; min-width:10rem;'
+  },
+  {
+    type: 'date',
+    field: 'operateAt',
+    header: '上次操作時間',
+    sortable: true,
+    headerStyle: 'width:14%; min-width:10rem;'
+  }
 ])
 
 const users = ref<User[]>([])
-const user = ref<User>({
-  // UID
-  id: '',
-  code: '',
-  name: '',
-  category: '',
-  quantity: 0
-})
+const user = ref<User>()
 const selectedUsers = ref<User[]>([])
 
 const userDialog = ref(false)
 const deleteUserDialog = ref(false)
 const deleteUsersDialog = ref(false)
 
-// 假資料
-const productService = new ProductService()
+// onMounted
 onMounted(() => {
-  productService.getProducts().then((data) => (users.value = data))
+  userFirebase.array().then((res: User[]) => {
+    users.value = res
+  })
 })
 
 // methods
 const add = () => {
   // router.push到add頁
+  router.push('/system/user/add')
 }
 const edit = (editUser: User) => {
   // router.push到edit頁
+  router.push(`/system/user/edit/${editUser.uid}`)
   user.value = { ...editUser }
   console.log(user)
   userDialog.value = true
@@ -67,16 +95,8 @@ const confirmDeleteUser = (editUser: User) => {
 }
 // 確定刪除
 const deleteUser = () => {
-  users.value = users.value.filter((val: User) => val.id !== user.value.id)
+  // users.value = users.value.filter((val: User) => val.uid !== user.value.uid)
   deleteUserDialog.value = false
-  user.value = {
-    // UID
-    id: '',
-    code: '',
-    name: '',
-    category: '',
-    quantity: 0
-  }
   toast.add({ severity: 'success', summary: 'Successful', detail: 'User Deleted', life: 3000 })
 }
 
@@ -129,19 +149,6 @@ const deleteSelectedUsers = () => {
           header="帳號管理"
           :checkbox="true"
         >
-          <!-- <template #header>
-            <Column
-              field="code"
-              header="UID"
-              :sortable="true"
-              headerStyle="width:14%; min-width:10rem;"
-            >
-              <template #body="slotProps">
-                <span class="p-column-title">UID</span>
-                {{ slotProps.data.code }}
-              </template>
-            </Column>
-          </template> -->
           <template #footer>
             <Column headerStyle="min-width:10rem;">
               <template #body="slotProps">
@@ -168,9 +175,8 @@ const deleteSelectedUsers = () => {
         >
           <div class="flex align-items-center justify-content-center">
             <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
-            <span v-if="user"
-              >你確定要刪除 <b>{{ user.name }}</b
-              >嗎?</span
+            <span
+              >你確定要刪除 <b>{{ user?.displayName }}</b> 嗎?</span
             >
           </div>
           <template #footer>
@@ -192,7 +198,7 @@ const deleteSelectedUsers = () => {
         >
           <div class="flex align-items-center justify-content-center">
             <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
-            <span v-if="user">你確定要刪除所選的帳號嗎?</span>
+            <span>你確定要刪除所選的帳號嗎?</span>
           </div>
           <template #footer>
             <Button
