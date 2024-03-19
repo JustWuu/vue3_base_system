@@ -2,21 +2,14 @@ class ConvertDate {
   constructor() {}
   //把傳入的毫秒轉成年月日時
   convertDate(date: any) {
-    const day = new Date(date)
-    const time =
-      day.getFullYear() +
-      '/' +
-      (day.getMonth() + 1) +
-      '/' +
-      day.getDate() +
-      '(' +
-      day.getHours() +
-      ':' +
-      day.getMinutes() +
-      ':' +
-      day.getSeconds() +
-      ')'
-    return time
+    const d = new Date(date)
+    const year = d.getFullYear()
+    const month = d.getMonth() + 1 < 10 ? '0' + (d.getMonth() + 1) : d.getMonth() + 1
+    const day = d.getDate() < 10 ? '0' + d.getDate() : d.getDate()
+    const hh = d.getHours() < 10 ? '0' + d.getHours() : d.getHours()
+    const mm = d.getMinutes() < 10 ? '0' + d.getMinutes() : d.getMinutes()
+    const ss = d.getSeconds() < 10 ? '0' + d.getSeconds() : d.getSeconds()
+    return year + '-' + month + '-' + day + ' ' + hh + ': ' + mm + ': ' + ss
   }
 }
 
