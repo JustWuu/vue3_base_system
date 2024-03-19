@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { ref, type PropType } from 'vue'
 import { FilterMatchMode } from 'primevue/api'
-import type { Columns } from '@/interface'
+import type { Columns, TagItem } from '@/interface'
+import { ConvertDate } from '@/utils'
+
+const convertDate = new ConvertDate()
 
 // props
 defineProps({
@@ -51,6 +54,16 @@ const dt = ref()
 const exportCSV = () => {
   dt.value.exportCSV()
 }
+
+const getValue = (field: string, tag: TagItem[] | undefined): string => {
+  const foundItem = tag!.find((item: TagItem) => item.value === field)
+  return foundItem?.text || '資料有誤，請檢查'
+}
+
+const getSeverity = (field: string, tag: TagItem[] | undefined): string => {
+  const foundItem = tag!.find((item: TagItem) => item.value === field)
+  return foundItem?.severity || 'danger'
+}
 // expose
 defineExpose({
   exportCSV
@@ -81,14 +94,60 @@ defineExpose({
     </template>
     <Column v-if="checkbox" selectionMode="multiple" headerStyle="width: 3rem"></Column>
     <slot name="header"></slot>
-    <Column
-      v-for="col of columns"
-      :key="col.field"
-      :field="col.field"
-      :header="col.header"
-      :sortable="col.sortable"
-      :headerStyle="col.headerStyle"
-    ></Column>
+    <template v-for="col of columns" :key="col.field">
+      <Column
+        v-if="!col.type"
+        :field="col.field"
+        :header="col.header"
+        :sortable="col.sortable"
+        :headerStyle="col.headerStyle"
+      ></Column>
+      <Column
+        v-if="col.type === 'date'"
+        :field="col.field"
+        :header="col.header"
+        :sortable="col.sortable"
+        :headerStyle="col.headerStyle"
+        class="white-space-nowrap"
+      >
+        <template #body="{ data }">
+          {{ convertDate.convertDate(data[col.field]) }}
+        </template>
+      </Column>
+      <Column
+        v-if="col.type === 'boolean'"
+        :field="col.field"
+        :header="col.header"
+        :sortable="col.sortable"
+        :headerStyle="col.headerStyle"
+        dataType="boolean"
+      >
+        <template #body="{ data }">
+          <i
+            class="pi"
+            :class="{
+              'pi-check-circle text-green-500': data[col.field],
+              'pi-times-circle text-red-400': !data[col.field]
+            }"
+          ></i>
+        </template>
+      </Column>
+      <Column
+        v-if="col.type === 'tag'"
+        :field="col.field"
+        :header="col.header"
+        :sortable="col.sortable"
+        :headerStyle="col.headerStyle"
+      >
+        <template #body="{ data }">
+          <Tag
+            :value="getValue(data[col.field], col.tag)"
+            :severity="getSeverity(data[col.field], col.tag)"
+          />
+        </template>
+      </Column>
+    </template>
+
     <slot name="footer"></slot>
   </DataTable>
 </template>
