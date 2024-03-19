@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, type PropType } from 'vue'
 import { FilterMatchMode } from 'primevue/api'
-import type { Columns, TagItem } from '@/interface'
+import type { Columns, TypeItem } from '@/interface'
 import { ConvertDate } from '@/utils'
 
 const convertDate = new ConvertDate()
@@ -55,13 +55,13 @@ const exportCSV = () => {
   dt.value.exportCSV()
 }
 
-const getValue = (field: string, tag: TagItem[] | undefined): string => {
-  const foundItem = tag!.find((item: TagItem) => item.value === field)
+const getValue = (field: string, tag: TypeItem[] | undefined): string => {
+  const foundItem = tag!.find((item: TypeItem) => item.value === field)
   return foundItem?.text || '資料有誤，請檢查'
 }
 
-const getSeverity = (field: string, tag: TagItem[] | undefined): string => {
-  const foundItem = tag!.find((item: TagItem) => item.value === field)
+const getSeverity = (field: string, tag: TypeItem[] | undefined): string => {
+  const foundItem = tag!.find((item: TypeItem) => item.value === field)
   return foundItem?.severity || 'danger'
 }
 // expose
