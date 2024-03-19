@@ -25,7 +25,7 @@ class Database {
     this.child = child
   }
   // 返回該collection下的該doc資料
-  async get(id: string) {
+  async get(id: string): Promise<any> {
     try {
       const docSnap = await getDoc(doc(db, this.child, id))
       if (docSnap.exists()) {
@@ -43,7 +43,7 @@ class Database {
   // 返回整個collection下的doc組成的陣列，有完整的查詢功能
   // 該方法還有query、where一些資料庫查詢的功能，要用時需要import進來
   // const q = query(collection(db, "cities"), where("capital", "==", true))
-  async array(id: string = '') {
+  async array(id: string = ''): Promise<any> {
     try {
       const querySnapshot = await getDocs(query(collection(db, `${this.child}/${id}`)))
       const array: object[] = []
@@ -59,7 +59,7 @@ class Database {
     }
   }
   // 在該doc建立新資料，相同doc內的同id會被取代
-  async set(id: string, params: object) {
+  async set(id: string, params: object): Promise<any> {
     try {
       await setDoc(doc(db, this.child, id), params)
       console.log('Document set with ID: ', this.child, '/', id)
@@ -69,7 +69,7 @@ class Database {
     }
   }
   // 在該doc建立資料，取名為亂數
-  async add(params: object, id = '') {
+  async add(params: object, id = ''): Promise<any> {
     try {
       const docRef = await addDoc(collection(db, `${this.child}/${id}/`), params)
       console.log('Document add with ID: ', docRef.id)
@@ -80,7 +80,7 @@ class Database {
     }
   }
   // 更新該doc資料
-  async update(id: string, params: object) {
+  async update(id: string, params: object): Promise<any> {
     try {
       await updateDoc(doc(db, this.child, id), { ...params, timestamp: serverTimestamp() })
       console.log('Document update with ID: ', this.child, '/', id)
@@ -90,7 +90,7 @@ class Database {
     }
   }
   // 刪除doc
-  async delete(id: string) {
+  async delete(id: string): Promise<any> {
     try {
       await deleteDoc(doc(db, this.child, id))
       console.log('Document delete with ID: ', this.child, '/', id)
