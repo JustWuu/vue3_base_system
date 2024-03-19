@@ -1,24 +1,5 @@
 import { toRefs, reactive, computed } from 'vue'
-
-interface LayoutConfig {
-  ripple: boolean
-  darkTheme: string | boolean
-  inputStyle: string
-  menuMode: string
-  theme: string
-  scale: number
-  activeMenuItem: string | null
-}
-
-interface LayoutState {
-  staticMenuDesktopInactive: boolean
-  overlayMenuActive: boolean
-  profileSidebarVisible: boolean
-  configSidebarVisible: boolean
-  staticMenuMobileActive: boolean
-  menuHoverActive: boolean
-  activeMenuItem: string
-}
+import type { LayoutConfig, LayoutState } from '@/interface'
 
 // 預設layout
 const layoutConfig = reactive<LayoutConfig>({

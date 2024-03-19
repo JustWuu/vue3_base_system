@@ -1,9 +1,4 @@
-import type { RouteRecordRaw } from 'vue-router'
-type NewRouteRecordRaw = RouteRecordRaw & {
-  url?: string
-  target?: string
-  class?: string
-}
+import type { NewRouteRecordRaw } from '@/interface'
 const exampleRouter: NewRouteRecordRaw[] = [
   // 隱藏(hide測試)，不會出現在選單，可通過路由進入
   {

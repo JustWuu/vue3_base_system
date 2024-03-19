@@ -1,13 +1,8 @@
 <script setup lang="ts">
 import { ref, type PropType } from 'vue'
 import { FilterMatchMode } from 'primevue/api'
+import type { Columns } from '@/interface'
 
-// interface
-interface Columns {
-  field: string
-  header: string
-  sortable: boolean
-}
 // props
 defineProps({
   data: {
@@ -92,6 +87,7 @@ defineExpose({
       :field="col.field"
       :header="col.header"
       :sortable="col.sortable"
+      :headerStyle="col.headerStyle"
     ></Column>
     <slot name="footer"></slot>
   </DataTable>

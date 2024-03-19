@@ -1,13 +1,8 @@
-import type { RouteRecordRaw } from 'vue-router'
-type NewRouteRecordRaw = RouteRecordRaw & {
-  url?: string
-  target?: string
-  class?: string
-}
+import type { NewRouteRecordRaw } from '@/interface'
 const systemRouter: NewRouteRecordRaw[] = [
   {
     path: '/system/user/list',
-    name: 'AuthList',
+    name: 'UserList',
     component: () => import('@/views/system/user/UserList.vue'),
     meta: {
       title: '帳號管理',
@@ -20,8 +15,8 @@ const systemRouter: NewRouteRecordRaw[] = [
   },
   {
     path: '/system/user/add',
-    name: 'AuthAdd',
-    component: () => import('@/views/example/ExampleUniversal.vue'),
+    name: 'UserAdd',
+    component: () => import('@/views/system/user/UserAdd.vue'),
     meta: {
       title: '帳號新增',
       auth: true,
@@ -32,9 +27,9 @@ const systemRouter: NewRouteRecordRaw[] = [
     }
   },
   {
-    path: '/system/user/edit',
-    name: 'AuthEdit',
-    component: () => import('@/views/example/ExampleUniversal.vue'),
+    path: '/system/user/edit/:id(\\S+)',
+    name: 'UserEdit',
+    component: () => import('@/views/system/user/UserEdit.vue'),
     meta: {
       title: '帳號編輯',
       auth: true,
@@ -71,7 +66,7 @@ const systemRouter: NewRouteRecordRaw[] = [
     }
   },
   {
-    path: '/system/role/edit',
+    path: '/system/role/edit/:id(\\S+)',
     name: 'RoleEdit',
     component: () => import('@/views/example/ExampleUniversal.vue'),
     meta: {

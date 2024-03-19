@@ -1,39 +1,13 @@
 import Database from './database'
-import { getDatabase, ref, set, update } from 'firebase/database'
+import { getFirestore, doc, setDoc } from 'firebase/firestore'
 import { getAuth } from 'firebase/auth'
-const db = getDatabase()
+import type { User } from '@/interface'
+
+const db = getFirestore()
 const auth = getAuth()
 
-interface Profile {
-  displayName: string | null
-  email: string | null
-  emailVerified: string | null
-  isAnonymous: string | null
-  phoneNumber: string | null
-  photoURL: string | null
-  uid: string | null
-  metadata: string | null
-  state: string | null
-  role: string[] | null
-  updateAt: number
-}
-
-let user: Profile
-
-let profile: Profile = {
-  displayName: '',
-  email: '',
-  emailVerified: '',
-  isAnonymous: '',
-  phoneNumber: '',
-  photoURL: '',
-  uid: '',
-  metadata: null,
-  // 上方auth值
-  state: '',
-  role: [],
-  updateAt: 0
-}
+let user: User
+let profile: User
 
 class UserFirebase extends Database {
   constructor() {
@@ -41,9 +15,8 @@ class UserFirebase extends Database {
   }
 
   //新註冊創建資料
-  async createUserProfile(role: string[]) {
+  async setUser(user: any, role: string[]) {
     let today = new Date()
-    user = auth.currentUser as unknown as Profile
     profile = {
       displayName: user.displayName,
       email: user.email,
@@ -52,17 +25,25 @@ class UserFirebase extends Database {
       phoneNumber: user.phoneNumber,
       photoURL: user.photoURL,
       uid: user.uid,
-      metadata: user.metadata,
-      state: 'using',
+      nickName: '',
+      disabled: false,
+      createdAt: today.getTime(),
       role: [...role],
-      updateAt: today.getTime()
+      updateAt: today.getTime(),
+      operateAt: today.getTime()
     }
-    set(ref(db, `${this.child}/${profile.uid}/profile`), profile)
+    setDoc(doc(db, this.child, user.uid), profile)
+      .then((deleteUsersResult) => {
+        console.log(deleteUsersResult)
+      })
+      .catch((error) => {
+        console.log('Error deleting users:', error)
+      })
   }
-  //使用者更新資料
-  async updateUserProfile(profileData: Profile) {
+  // 使用者更新資料
+  async updateUser(profileData: User) {
     let today = new Date()
-    user = auth.currentUser as unknown as Profile
+    user = auth.currentUser as unknown as User
     profile = {
       displayName: user.displayName,
       email: user.email,
@@ -71,12 +52,14 @@ class UserFirebase extends Database {
       phoneNumber: user.phoneNumber,
       photoURL: user.photoURL,
       uid: user.uid,
-      metadata: user.metadata,
-      state: profileData.state,
+      nickName: '',
+      disabled: profileData.disabled,
+      createdAt: profileData.createdAt,
       role: profileData.role,
-      updateAt: today.getTime()
+      updateAt: today.getTime(),
+      operateAt: today.getTime()
     }
-    update(ref(db, `${this.child}/${profile.uid}/profile`), profile)
+    // update(ref(db, `${this.child}/${profile.uid}`), profile)
   }
 }
 

@@ -16,6 +16,7 @@ import {
 import { UserProfileStores } from '@/stores/userProfile'
 import { storeToRefs } from 'pinia'
 import { UserFirebase } from '@/api/firebase'
+import type { StringObject } from '@/interface'
 
 const userFirebase = new UserFirebase()
 
@@ -23,10 +24,6 @@ const userProfileStores = UserProfileStores()
 
 const auth = getAuth()
 let user = auth.currentUser
-
-interface StringObject {
-  [key: string]: string
-}
 
 const authMessage: StringObject = {
   'auth/user-not-found': '找不到該電子郵件',
@@ -49,7 +46,7 @@ class Auth {
       .then((userCredential) => {
         user = userCredential.user
         console.log(`${user.email} create OK`)
-        userFirebase.createUserProfile(['client'])
+        userFirebase.setUser(user, ['client'])
         return userCredential.user
       })
       .catch((error) => {
