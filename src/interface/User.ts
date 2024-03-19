@@ -7,7 +7,7 @@ export interface User {
   photoURL: string | null
   uid: string | null
   nickName: string | null
-  disabled: boolean
+  state: string
   createdAt: number | null
   role: string[] | null
   updateAt: number
