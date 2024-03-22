@@ -21,14 +21,14 @@ const dt = ref<NewVNodeRef>()
 const columns = ref([
   { field: 'uid', header: 'UID', sortable: true, headerStyle: 'width:14%; min-width:10rem;' },
   {
-    field: 'displayName',
+    field: 'email',
     header: '帳號',
     sortable: false,
     headerStyle: 'width:14%; min-width:10rem;'
   },
   {
-    field: 'nickName',
-    header: '暱稱',
+    field: 'displayName',
+    header: '名稱',
     sortable: false,
     headerStyle: 'width:14%; min-width:10rem;'
   },
