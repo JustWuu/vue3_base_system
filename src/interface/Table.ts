@@ -3,8 +3,8 @@ export interface Columns {
   tag?: TypeItem[] | undefined
   field: string
   header: string
-  sortable: boolean
-  headerStyle: string
+  sortable?: boolean
+  headerStyle?: string
 }
 export interface TypeItem {
   value: string
