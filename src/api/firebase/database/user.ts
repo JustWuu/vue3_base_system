@@ -25,21 +25,15 @@ class UserFirebase extends Database {
       phoneNumber: user.phoneNumber,
       photoURL: user.photoURL,
       uid: user.uid,
-      nickName: '',
       // enable,disabled,
       state: 'enable',
       createdAt: today.getTime(),
       role: [...role],
+      roles: [...role],
       updateAt: today.getTime(),
       operateAt: today.getTime()
     }
     setDoc(doc(db, this.child, user.uid), profile)
-      .then((deleteUsersResult) => {
-        console.log(deleteUsersResult)
-      })
-      .catch((error) => {
-        console.log('Error deleting users:', error)
-      })
   }
   // 使用者更新資料
   async updateUser(profileData: User) {
@@ -53,10 +47,10 @@ class UserFirebase extends Database {
       phoneNumber: user.phoneNumber,
       photoURL: user.photoURL,
       uid: user.uid,
-      nickName: '',
       state: profileData.state,
       createdAt: profileData.createdAt,
       role: profileData.role,
+      roles: profileData.roles,
       updateAt: today.getTime(),
       operateAt: today.getTime()
     }

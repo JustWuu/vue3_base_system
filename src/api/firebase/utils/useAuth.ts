@@ -13,14 +13,17 @@ import {
   // signInAnonymously,
   // linkWithCredential
 } from 'firebase/auth'
-import { UserProfileStores } from '@/stores/userProfile'
+import { UserStore } from '@/stores'
 import { storeToRefs } from 'pinia'
 import { UserFirebase } from '@/api/firebase'
 import type { StringObject } from '@/interface'
 
+// 註冊使用
+import { initializeApp } from 'firebase/app'
+
 const userFirebase = new UserFirebase()
 
-const userProfileStores = UserProfileStores()
+const userStore = UserStore()
 
 const auth = getAuth()
 let user = auth.currentUser
@@ -40,22 +43,46 @@ const authMessage: StringObject = {
 
 class Auth {
   constructor() {}
-  //創建帳戶
+  // 創建帳戶(不會直接登入)
   async createUser(email: string, password: string) {
-    return await createUserWithEmailAndPassword(auth, email, password)
+    // 建立臨時實例
+    const config = {
+      apiKey: import.meta.env.VITE_API_KEY,
+      authDomain: import.meta.env.VITE_AUTH_DOMAIN
+    }
+    const secondaryApp = initializeApp(config, 'Secondary')
+    const secondaryAuth = getAuth(secondaryApp)
+    // 開始建立帳戶
+    return await createUserWithEmailAndPassword(secondaryAuth, email, password)
       .then((userCredential) => {
         user = userCredential.user
         console.log(`${user.email} create OK`)
-        userFirebase.setUser(user, ['client'])
+        userFirebase.setUser(user, [])
+        signOut(secondaryAuth)
         return userCredential.user
       })
       .catch((error) => {
         const errorCode = error.code
         console.log(errorCode)
         throw authMessage[`${errorCode}`]
-        // ..
       })
   }
+  // 創建帳戶(創建完成會登入該帳戶)
+  // async createUser(email: string, password: string) {
+  //   return await createUserWithEmailAndPassword(auth, email, password)
+  //     .then((userCredential) => {
+  //       user = userCredential.user
+  //       console.log(`${user.email} create OK`)
+  //       userFirebase.setUser(user, ['client'])
+  //       return userCredential.user
+  //     })
+  //     .catch((error) => {
+  //       const errorCode = error.code
+  //       console.log(errorCode)
+  //       throw authMessage[`${errorCode}`]
+  //       // ..
+  //     })
+  // }
   //登入
   async signIn(email: string, password: string) {
     return await signInWithEmailAndPassword(auth, email, password)
@@ -111,10 +138,10 @@ class Auth {
   //   user = auth.currentUser
   //   return await updateProfile(user, profile)
   //     .then(() => {
-  //       userProfileStores.user = null
-  //       userProfileStores.user = { ...profile, ...user }
-  //       if (userProfileStores.user.displayName === null) {
-  //         userProfileStores.user.displayName = userProfileStores.user.email
+  //       userStore.user = null
+  //       userStore.user = { ...profile, ...user }
+  //       if (userStore.user.displayName === null) {
+  //         userStore.user.displayName = userStore.user.email
   //       }
   //       console.log(`${user.email} update OK`)
   //       userFirebase.updateUserProfile(profile)
@@ -184,8 +211,8 @@ class Auth {
   //   user = auth.currentUser
   //   return await linkWithCredential(user, credential)
   //     .then((userCredential) => {
-  //       userProfileStores.user = null
-  //       userProfileStores.user = user
+  //       userStore.user = null
+  //       userStore.user = user
   //       console.log(`${user.email} anonymous account upgraded OK`)
   //       userFirebase.updateUserProfile()
   //       return userCredential.user
@@ -199,7 +226,7 @@ class Auth {
   //storeToRefs只會淺監聽，所以改裡面得值並不會重給值
   //需設成null再從給值才能監聽到變化，ex：修改帳戶資料
   getUser() {
-    return storeToRefs(userProfileStores)
+    return storeToRefs(userStore)
   }
 }
 
