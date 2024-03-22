@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { Auth, CRUDFirebase } from '@/api/firebase'
+import { Auth, CRUDFirebase, UserFirebase } from '@/api/firebase'
 import { Storage, Encryp } from '@/utils'
 import InputTextFloat from '@/components/form/InputTextFloat.vue'
 import InputPasswordFloat from '@/components/form/InputPasswordFloat.vue'
@@ -10,6 +10,8 @@ const encryp = new Encryp()
 // firebase
 const auth = new Auth()
 const crudFirebase = new CRUDFirebase()
+const userFirebase = new UserFirebase()
+const { user } = auth.getUser()
 
 //data
 const signupAccount = ref({
@@ -98,8 +100,8 @@ const signOut = () => {
 }
 
 const getUid = (uid: string) => {
-  crudFirebase.get(uid).then((res) => {
-    uidText.value = res.uid
+  userFirebase.get(uid).then((res) => {
+    console.log(res)
   })
 }
 
@@ -236,9 +238,11 @@ onMounted(() => {
         <VForm ref="formRef" @submit="signOut()">
           <h5>當前用戶</h5>
           <div>
-            <p class="mb-0">asd</p>
-            <p class="mb-0">qwdqwd</p>
-            <p class="mb-0">qwdqwd</p>
+            <p class="mb-0">帳號：{{ user?.uid }}</p>
+            <p class="mb-0">帳號：{{ user?.email }}</p>
+            <p class="mb-0">名稱：{{ user?.displayName }}</p>
+            <p class="mb-0">狀態：{{ user?.state }}</p>
+            <p class="mb-0">驗證：{{ user?.emailVerified }}</p>
           </div>
           <Button label="登出" severity="danger" type="submit"></Button>
         </VForm>
