@@ -35,7 +35,7 @@ const exampleRouter: NewRouteRecordRaw[] = [
       auth: true,
       hide: false,
       icon: 'pi pi-fw pi-lock',
-      role: ['client'],
+      roles: ['client'],
       theme: 'permissions'
     }
   },
