@@ -8,6 +8,8 @@ import PrimeVue from 'primevue/config'
 
 import App from './App.vue'
 import router from './router'
+// directives
+import Directives from './directives/index'
 
 // 引入 VeeValidate 元件跟功能
 import { Field, Form, ErrorMessage, defineRule, configure } from 'vee-validate'
@@ -48,6 +50,7 @@ import RadioButton from 'primevue/radiobutton'
 import Divider from 'primevue/divider/Divider.vue'
 import Rating from 'primevue/rating'
 import InputNumber from 'primevue/inputnumber'
+import MultiSelect from 'primevue/multiselect'
 
 const app = createApp(App)
 
@@ -75,6 +78,7 @@ app.use(PrimeVue, {
   }
 })
 app.use(ToastService)
+app.use(Directives)
 
 // 表單組件掛載
 app.component('Button', Button)
@@ -104,6 +108,7 @@ app.component('RadioButton', RadioButton)
 app.component('Divider', Divider)
 app.component('Rating', Rating)
 app.component('InputNumber', InputNumber)
+app.component('MultiSelect', MultiSelect)
 
 // 掛載 Global 的 VeeValidate 元件
 app.component('VField', Field)
