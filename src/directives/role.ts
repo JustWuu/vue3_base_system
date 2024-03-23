@@ -11,6 +11,8 @@ export default {
     const userStore = UserStore()
     const { value } = binding
     // 這邊做定時是因為在生命週期中，這裡會比roles取得還快，導致判斷一直為false
+    // 由於設為500毫秒，如果是沒有權限的人會短時間看到後才消失
+    // 但低於500毫秒，可能有權限的人在拿到權限之前就被判斷沒權限了
     setTimeout(() => {
       const roles = userStore.user.roles
       if (value && value instanceof Array && value.length > 0) {

@@ -8,7 +8,7 @@ export interface User {
   uid: string | null
   state: string
   createdAt: number | null
-  role: string[]
+  role: string
   roles: string[]
   updateAt: number
   operateAt: number
@@ -23,7 +23,7 @@ export const UserObject: User = {
   uid: '',
   state: '',
   createdAt: 0,
-  role: [],
+  role: '',
   roles: [],
   updateAt: 0,
   operateAt: 0

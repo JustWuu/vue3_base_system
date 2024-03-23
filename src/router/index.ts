@@ -1,7 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import { UserStore } from '@/stores'
 import AppLayout from '@/layout/AppLayout.vue'
-import type { User } from '@/interface'
 import { UserObject } from '@/interface'
 
 // router
@@ -118,36 +117,39 @@ router.beforeEach((to) => {
   const userStore = UserStore()
   document.title = `${to.meta.title} ▷One Bird WEB◁`
   if (!userStore.authOn) {
-    onAuthStateChanged(auth, (res) => {
+    onAuthStateChanged(auth, async (res) => {
       if (res) {
         console.log(`sign in ${res.email}`)
         userStore.authOn = true
-        import('@/api/firebase/database/user.js').then((module) => {
-          const userFirebase = new module.default()
-          userFirebase
-            .get(res.uid)
-            .then((user: User) => {
-              userStore.user = user
-              if (!comparisonRoles(to.meta.roles as string, userStore.user.roles)) {
-                console.log('no role [1]')
-                // router.push({ name: '403' })
-              }
-            })
-            // 如果資料庫找不到，幫他創
-            .catch((error) => {
-              console.log(error)
-              userFirebase.setUser(res, []).then(() => {
-                // 創完重get一次
-                userFirebase.get(res.uid).then((user: User) => {
-                  userStore.user = user
-                  if (!comparisonRoles(to.meta.roles as string, userStore.user.roles)) {
-                    console.log('no role [3]')
-                    // router.push({ name: '403' })
-                  }
-                })
-              })
-            })
-        })
+        const userModule = await import('@/api/firebase/database/user.js')
+        const roleModule = await import('@/api/firebase/database/role.js')
+        const userFirebase = new userModule.default()
+        const roleFirebase = new roleModule.default()
+        try {
+          const user = await userFirebase.get(res.uid)
+          userStore.user = user
+          const role = await roleFirebase.get(user.role)
+          userStore.user.roles = role.roles
+          if (!comparisonRoles(to.meta.roles as string[], role.roles)) {
+            console.log('no role [1]')
+            // router.push({ name: '403' });
+          }
+        } catch (error) {
+          console.error(error)
+          // 判斷無email，代表資料庫沒有
+          if (userStore.user.email == '') {
+            await userFirebase.setUser(res, '')
+            const newUser = await userFirebase.get(res.uid)
+            userStore.user = newUser
+            const role = await roleFirebase.get(newUser.role)
+            userStore.user.roles = role.roles
+
+            if (!comparisonRoles(to.meta.roles as string[], userStore.user.roles)) {
+              console.log('no role [3]')
+              // router.push({ name: '403' });
+            }
+          }
+        }
       } else {
         userStore.user = { ...UserObject }
         userStore.authOn = true
@@ -162,7 +164,7 @@ router.beforeEach((to) => {
       console.log('please log in [2]')
       // return { name: 'Login' }
     } else if (userStore.user !== null) {
-      if (!comparisonRoles(to.meta.roles as string, userStore.user.roles)) {
+      if (!comparisonRoles(to.meta.roles as string[], userStore.user.roles)) {
         console.log('no role [2]')
         // return { name: '403' }
       }
@@ -170,7 +172,7 @@ router.beforeEach((to) => {
   }
 })
 
-function comparisonRoles(routerRoles: string, userRoles: string[]): boolean {
+function comparisonRoles(routerRoles: string[], userRoles: string[]): boolean {
   if (!routerRoles) {
     return true
   }

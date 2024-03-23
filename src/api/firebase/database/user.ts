@@ -15,7 +15,7 @@ class UserFirebase extends Database {
   }
 
   //新註冊創建資料
-  async setUser(user: any, role: string[]) {
+  async setUser(user: any, role: string) {
     let today = new Date()
     profile = {
       displayName: user.displayName,
@@ -28,8 +28,8 @@ class UserFirebase extends Database {
       // enable,disabled,
       state: 'enable',
       createdAt: today.getTime(),
-      role: [...role],
-      roles: [...role],
+      role: role,
+      roles: [],
       updateAt: today.getTime(),
       operateAt: today.getTime()
     }
