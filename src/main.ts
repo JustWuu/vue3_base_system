@@ -51,6 +51,7 @@ import Divider from 'primevue/divider/Divider.vue'
 import Rating from 'primevue/rating'
 import InputNumber from 'primevue/inputnumber'
 import MultiSelect from 'primevue/multiselect'
+import Tree from 'primevue/tree'
 
 const app = createApp(App)
 
@@ -109,6 +110,7 @@ app.component('Divider', Divider)
 app.component('Rating', Rating)
 app.component('InputNumber', InputNumber)
 app.component('MultiSelect', MultiSelect)
+app.component('Tree', Tree)
 
 // 掛載 Global 的 VeeValidate 元件
 app.component('VField', Field)

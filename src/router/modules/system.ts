@@ -44,7 +44,7 @@ const systemRouter: NewRouteRecordRaw[] = [
     name: 'RoleList',
     component: () => import('@/views/system/role/RoleList.vue'),
     meta: {
-      title: '權限群組',
+      title: '權限管理',
       auth: true,
       hide: false,
       icon: 'pi pi-fw pi-sitemap',
@@ -55,7 +55,7 @@ const systemRouter: NewRouteRecordRaw[] = [
   {
     path: '/system/role/add',
     name: 'RoleAdd',
-    component: () => import('@/views/example/ExampleUniversal.vue'),
+    component: () => import('@/views/system/role/RoleAdd.vue'),
     meta: {
       title: '權限新增',
       auth: true,
@@ -68,7 +68,7 @@ const systemRouter: NewRouteRecordRaw[] = [
   {
     path: '/system/role/edit/:id(\\S+)',
     name: 'RoleEdit',
-    component: () => import('@/views/example/ExampleUniversal.vue'),
+    component: () => import('@/views/system/role/RoleEdit.vue'),
     meta: {
       title: '權限編輯',
       auth: true,
