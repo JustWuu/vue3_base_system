@@ -9,6 +9,7 @@ import {
   getDoc,
   getDocs,
   query,
+  where,
   serverTimestamp,
   runTransaction,
   onSnapshot
@@ -41,11 +42,12 @@ class Database {
     }
   }
   // 返回整個collection下的doc組成的陣列，有完整的查詢功能
-  // 該方法還有query、where一些資料庫查詢的功能，要用時需要import進來
-  // const q = query(collection(db, "cities"), where("capital", "==", true))
+  // 所有資料中都有state欄位，刪除時不會真刪除，而是設為delete做假刪除
   async array(id: string = ''): Promise<any> {
     try {
-      const querySnapshot = await getDocs(query(collection(db, `${this.child}/${id}`)))
+      const querySnapshot = await getDocs(
+        query(collection(db, `${this.child}/${id}`), where('state', '!=', 'delete'))
+      )
       const array: object[] = []
       querySnapshot.forEach((doc) => {
         if (doc.data()) {
@@ -71,7 +73,7 @@ class Database {
   // 在該doc建立資料，取名為亂數
   async add(params: object, id = ''): Promise<any> {
     try {
-      const docRef = await addDoc(collection(db, `${this.child}/${id}/`), params)
+      const docRef = await addDoc(collection(db, `${this.child}/${id}`), params)
       console.log('Document add with ID: ', docRef.id)
       return docRef.id
     } catch (error) {
