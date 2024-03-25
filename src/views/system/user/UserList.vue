@@ -19,7 +19,6 @@ const userFirebase = new UserFirebase()
 // data
 const dt = ref<NewVNodeRef>()
 const columns = ref([
-  { field: 'uid', header: 'UID', sortable: true, headerStyle: 'width:14%; min-width:10rem;' },
   {
     field: 'email',
     header: '帳號',
@@ -32,6 +31,13 @@ const columns = ref([
     sortable: false,
     headerStyle: 'width:14%; min-width:10rem;'
   },
+  {
+    field: 'role.displayName',
+    header: '權限身分',
+    sortable: true,
+    headerStyle: 'width:14%; min-width:10rem;'
+  },
+  { field: 'uid', header: 'UID', sortable: true, headerStyle: 'width:14%; min-width:10rem;' },
   {
     type: 'boolean',
     field: 'emailVerified',
@@ -47,7 +53,7 @@ const columns = ref([
       { value: 'disabled', severity: 'danger', text: '停用' }
     ],
     field: 'state',
-    header: '帳號狀態',
+    header: '狀態',
     sortable: true,
     headerStyle: 'width:14%; min-width:10rem;'
   },
@@ -64,7 +70,6 @@ const users = ref<User[]>([])
 const user = ref<User>()
 const selectedUsers = ref<User[]>([])
 
-const userDialog = ref(false)
 const deleteUserDialog = ref(false)
 const deleteUsersDialog = ref(false)
 
@@ -77,15 +82,13 @@ onMounted(() => {
 
 // methods
 const add = () => {
-  // router.push到add頁
   router.push('/system/user/add')
 }
 const edit = (editUser: User) => {
-  // router.push到edit頁
   router.push(`/system/user/edit/${editUser.uid}`)
-  user.value = { ...editUser }
-  console.log(user)
-  userDialog.value = true
+  // user.value = { ...editUser }
+  // console.log(user)
+  // userDialog.value = true
 }
 
 // dialog
@@ -117,7 +120,7 @@ const deleteSelectedUsers = () => {
 
 <template>
   <div class="grid">
-    <div class="col-12">
+    <div class="col-12 px-2">
       <div class="card">
         <Toast />
         <Toolbar class="mb-4">
@@ -138,8 +141,6 @@ const deleteSelectedUsers = () => {
             <Button label="Export" icon="pi pi-upload" class="p-button-help" @click="exportCSV()" />
           </template>
         </Toolbar>
-
-        {{ selectedUsers }}
 
         <universal-table
           ref="dt"

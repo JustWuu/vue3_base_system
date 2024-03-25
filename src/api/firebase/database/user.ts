@@ -15,7 +15,7 @@ class UserFirebase extends Database {
   }
 
   //新註冊創建資料
-  async setUser(user: any, role: string) {
+  async setUser(user: any, role: object) {
     let today = new Date()
     profile = {
       displayName: user.displayName,
@@ -25,7 +25,6 @@ class UserFirebase extends Database {
       phoneNumber: user.phoneNumber,
       photoURL: user.photoURL,
       uid: user.uid,
-      // enable,disabled,
       state: 'enable',
       createdAt: today.getTime(),
       role: role,

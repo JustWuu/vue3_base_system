@@ -6,9 +6,9 @@ export interface User {
   phoneNumber: string | null
   photoURL: string | null
   uid: string | null
-  state: string
+  state: 'enable' | 'disabled' | 'delete' | ''
   createdAt: number | null
-  role: string
+  role: object
   roles: string[]
   updateAt: number
   operateAt: number
@@ -23,7 +23,7 @@ export const UserObject: User = {
   uid: '',
   state: '',
   createdAt: 0,
-  role: '',
+  role: { displayName: '', key: '' },
   roles: [],
   updateAt: 0,
   operateAt: 0
