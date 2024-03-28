@@ -25,7 +25,9 @@ class Database {
   constructor(child: string) {
     this.child = child
   }
-  // 返回該collection下的該doc資料
+  /**
+   * 返回該collection下的該doc資料
+   */
   async get(id: string): Promise<any> {
     try {
       const docSnap = await getDoc(doc(db, this.child, id))
@@ -41,7 +43,9 @@ class Database {
       throw error
     }
   }
-  // 返回整個collection下的doc組成的陣列，有完整的查詢功能
+  /**
+   * 返回整個collection下的doc組成的陣列，有完整的查詢功能
+   */
   // 所有資料中都有state欄位，刪除時不會真刪除，而是設為delete做假刪除
   async array(id: string = ''): Promise<any> {
     try {
@@ -60,7 +64,9 @@ class Database {
       throw error
     }
   }
-  // 在該doc建立新資料，相同doc內的同id會被取代
+  /**
+   * 在該doc建立新資料，相同doc內的同id會被取代
+   */
   async set(id: string, params: object): Promise<any> {
     try {
       await setDoc(doc(db, this.child, id), params)
@@ -70,7 +76,9 @@ class Database {
       throw error
     }
   }
-  // 在該doc建立資料，取名為亂數
+  /**
+   * 在該doc建立資料，取名為亂數
+   */
   async add(params: object, id = ''): Promise<any> {
     try {
       const docRef = await addDoc(collection(db, `${this.child}/${id}`), params)
@@ -81,7 +89,9 @@ class Database {
       throw error
     }
   }
-  // 更新該doc資料
+  /**
+   * 更新該doc資料
+   */
   async update(id: string, params: object): Promise<any> {
     try {
       await updateDoc(doc(db, this.child, id), { ...params, timestamp: serverTimestamp() })
@@ -91,7 +101,9 @@ class Database {
       throw error
     }
   }
-  // 刪除doc
+  /**
+   * 刪除doc
+   */
   async delete(id: string): Promise<any> {
     try {
       await deleteDoc(doc(db, this.child, id))
