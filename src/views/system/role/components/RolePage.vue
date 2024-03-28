@@ -1,8 +1,16 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { Auth } from '@/api/firebase'
-import InputTextFloat from '@/components/form/InputTextFloat.vue'
+import { RoleFirebase } from '@/api/firebase'
+import { InputTextFloat, InputDropdownFloat } from '@/components/form'
+import type { TreeNode, TreeSelectionKeys } from 'primevue/tree'
+import type { Role } from '@/interface'
+import { StateArray } from '@/interface'
+import { Random } from '@/utils'
+import { useRoute, useRouter } from 'vue-router'
 
+const random = new Random()
+const route = useRoute()
+const router = useRouter()
 // props
 const props = defineProps({
   mode: {
@@ -12,118 +20,169 @@ const props = defineProps({
 })
 
 // firebase
+const roleFirebase = new RoleFirebase()
 
 //data
-const signupAccount = ref({
-  email: '',
-  password: ''
+const id = ref('')
+
+const role = ref<Role>({
+  displayName: '',
+  roles: [],
+  id: '',
+  state: 'enable'
 })
-const treeValue = ref<any>([
+const treeValue = ref<TreeNode[]>([
   {
     key: 'system',
     label: '系統',
-    data: 'Documents Folder',
+    data: 'system',
     icon: 'pi pi-fw pi-inbox',
     children: [
       {
         key: 'user',
         label: '帳號管理',
-        data: 'Work Folder',
+        data: 'user',
         icon: 'pi pi-fw pi-users',
         children: [
           {
             key: 'user:c',
             label: '新增',
             icon: 'pi pi-fw pi-file',
-            data: 'Expenses Document'
+            data: 'user:c'
           },
           {
             key: 'user:r',
             label: '查看',
             icon: 'pi pi-fw pi-eye',
-            data: 'Resume Document'
+            data: 'user:r'
           },
           {
             key: 'user:u',
             label: '更新',
             icon: 'pi pi-fw pi-pencil',
-            data: 'Resume Document'
+            data: 'user:u'
           },
           {
             key: 'user:d',
             label: '刪除',
             icon: 'pi pi-fw pi-trash',
-            data: 'Resume Document'
+            data: 'user:d'
           }
         ]
       },
       {
         key: 'role',
         label: '權限管理',
-        data: 'Home Folder',
+        data: 'role',
         icon: 'pi pi-fw pi-sitemap',
         children: [
           {
             key: 'role:c',
             label: '新增',
             icon: 'pi pi-fw pi-file',
-            data: 'Expenses Document'
+            data: 'role:c'
           },
           {
             key: 'role:r',
             label: '查看',
             icon: 'pi pi-fw pi-eye',
-            data: 'Resume Document'
+            data: 'role:r'
           },
           {
             key: 'role:u',
             label: '更新',
             icon: 'pi pi-fw pi-pencil',
-            data: 'Resume Document'
+            data: 'role:u'
           },
           {
             key: 'role:d',
             label: '刪除',
             icon: 'pi pi-fw pi-trash',
-            data: 'Resume Document'
+            data: 'role:d'
           }
         ]
       }
     ]
   }
 ])
-const selectedTreeValue = ref<any>({
-  'role:c': { checked: true, partialChecked: false },
-  role: { checked: false, partialChecked: true },
-  system: { checked: false, partialChecked: true },
-  'role:r': { checked: true, partialChecked: false },
-  'role:u': { checked: true, partialChecked: false }
-})
+const selectedTreeValue = ref<TreeSelectionKeys>({})
 
 //methods
+const submit = (params: object) => {
+  if (props.mode === 'add') {
+    id.value = random.generateRandomString(10)
+    role.value.id = id.value
+    role.value.roles = keysWithTrueChecked()
+    roleFirebase.set(id.value, params)
+  } else if (props.mode === 'edit') {
+    role.value.roles = keysWithTrueChecked()
+    roleFirebase.update(id.value, params)
+  }
+  router.push('/system/role/list')
+}
+
+// 轉換tree已選參數
+const keysWithTrueChecked = () => {
+  const keysWithTrueChecked = []
+  for (var key in selectedTreeValue.value) {
+    if (
+      Object.prototype.hasOwnProperty.call(selectedTreeValue.value, key) &&
+      selectedTreeValue.value[key].checked === true
+    ) {
+      keysWithTrueChecked.push(key)
+    }
+  }
+  return keysWithTrueChecked
+}
+
+// onMounted
+onMounted(() => {
+  if (props.mode === 'edit') {
+    id.value = route.params.id as string
+    roleFirebase.get(id.value).then((res) => {
+      role.value = res
+      // 設定tree已選項目
+      // 處理具有冒號的字串
+      for (var i = 0; i < res.roles.length; i++) {
+        if (res.roles[i].includes(':')) {
+          var key = res.roles[i].split(':')[0]
+          if (!selectedTreeValue.value[key]) {
+            selectedTreeValue.value[key] = { checked: false, partialChecked: true }
+          }
+        }
+      }
+      // 處理所有字串
+      for (var x = 0; x < res.roles.length; x++) {
+        selectedTreeValue.value[res.roles[x]] = { checked: true, partialChecked: false }
+      }
+    })
+  }
+})
 </script>
 
 <template>
   <div class="grid">
     <div class="col-12 px-2">
-      <VForm ref="signupForm" @submit="console.log('ok')">
-        <div v-if="mode === 'add'" class="card p-fluid">
-          <h5>新增權限身分</h5>
+      <VForm ref="signupForm" @submit="submit(role)" :key="role">
+        <div class="card p-fluid">
+          <h5 v-if="mode === 'add'">新增權限身分</h5>
+          <h5 v-else-if="mode === 'edit'">編輯權限身分</h5>
           <div class="grid p-fluid mt-3">
             <div class="field col-12 md:col-6">
               <input-text-float
                 label="名稱"
-                v-model="signupAccount.email"
-                name="email0"
-                rules="required|email"
+                v-model="role.displayName"
+                name="displayName"
+                rules="required"
               />
             </div>
             <div class="field col-12 md:col-6">
-              <input-text-float
+              <input-dropdown-float
                 label="狀態"
-                v-model="signupAccount.email"
-                name="email0"
-                rules="required|email"
+                :options="StateArray"
+                v-model="role.state"
+                name="state"
+                rules="required"
               />
             </div>
             <div class="field col-12">
@@ -132,11 +191,11 @@ const selectedTreeValue = ref<any>({
                 :value="treeValue"
                 selectionMode="checkbox"
                 v-model:selectionKeys="selectedTreeValue"
+                :expandedKeys="{ system: true, user: true, role: true }"
               ></Tree>
             </div>
           </div>
-          {{ selectedTreeValue }}
-          <Button label="建立" type="submit"></Button>
+          <Button label="送出" type="submit"></Button>
         </div>
       </VForm>
     </div>

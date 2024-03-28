@@ -2,7 +2,7 @@
 import { ref, onMounted, type VNodeRef } from 'vue'
 import { useRouter } from 'vue-router'
 import { useToast } from 'primevue/usetoast'
-import UniversalTable from '@/components/table/UniversalTable.vue'
+import { UniversalTable } from '@/components/table'
 import { RoleFirebase } from '@/api/firebase'
 import type { Role } from '@/interface'
 
@@ -71,7 +71,7 @@ const add = () => {
   router.push('/system/role/add')
 }
 const edit = (editRole: Role) => {
-  router.push(`/system/role/edit/${editRole.key}`)
+  router.push(`/system/role/edit/${editRole.id}`)
 }
 
 // dialog
