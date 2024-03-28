@@ -1,6 +1,9 @@
+/**
+ * 權限身分
+ */
 export interface Role {
-  displayName: string | null
+  displayName: string
   roles: string[]
-  key: string[]
-  state: 'enable' | 'disabled' | 'delete'
+  id: string
+  state: 'enable' | 'disabled' | 'delete' | ''
 }
