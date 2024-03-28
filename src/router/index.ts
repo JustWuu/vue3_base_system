@@ -128,7 +128,7 @@ router.beforeEach((to) => {
         try {
           const user = await userFirebase.get(res.uid)
           userStore.user = user
-          const role = await roleFirebase.get(user.role.key)
+          const role = await roleFirebase.get(user.role.id)
           userStore.user.roles = role.roles
           if (!comparisonRoles(to.meta.roles as string[], role.roles)) {
             console.log('no role [1]')
@@ -138,7 +138,7 @@ router.beforeEach((to) => {
           console.error(error)
           // 判斷無email，代表資料庫沒有
           if (userStore.user.email == '') {
-            await userFirebase.setUser(res, { displayName: '無', key: '' })
+            await userFirebase.setUser(res, { displayName: '無', id: '' })
             const newUser = await userFirebase.get(res.uid)
             userStore.user = newUser
             const role = await roleFirebase.get(newUser.role)

@@ -1,3 +1,7 @@
+interface Role {
+  displayName: string | null
+  id: string
+}
 export interface User {
   displayName: string | null
   email: string | null
@@ -8,7 +12,7 @@ export interface User {
   uid: string | null
   state: 'enable' | 'disabled' | 'delete' | ''
   createdAt: number | null
-  role: object
+  role: Role
   roles: string[]
   updateAt: number
   operateAt: number
@@ -23,7 +27,7 @@ export const UserObject: User = {
   uid: '',
   state: '',
   createdAt: 0,
-  role: { displayName: '', key: '' },
+  role: { displayName: '', id: '' },
   roles: [],
   updateAt: 0,
   operateAt: 0
