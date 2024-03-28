@@ -3,6 +3,11 @@ import { getFirestore, doc, setDoc } from 'firebase/firestore'
 import { getAuth } from 'firebase/auth'
 import type { User } from '@/interface'
 
+interface Role {
+  displayName: string | null
+  id: string
+}
+
 const db = getFirestore()
 const auth = getAuth()
 
@@ -15,7 +20,7 @@ class UserFirebase extends Database {
   }
 
   //新註冊創建資料
-  async setUser(user: any, role: object) {
+  async setUser(user: any, role: Role) {
     let today = new Date()
     profile = {
       displayName: user.displayName,

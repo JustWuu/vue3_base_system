@@ -57,7 +57,7 @@ class Auth {
       .then((userCredential) => {
         user = userCredential.user
         console.log(`${user.email} create OK`)
-        userFirebase.setUser(user, { displayName: '無', key: '' })
+        userFirebase.setUser(user, { displayName: '無', id: '' })
         signOut(secondaryAuth)
         return userCredential.user
       })
