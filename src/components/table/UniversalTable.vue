@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { ref, type PropType } from 'vue'
+import { ref, onBeforeMount, type PropType } from 'vue'
 import { FilterMatchMode } from 'primevue/api'
-import type { Columns, TypeItem } from '@/interface'
+import type { Columns, TypeItem, Filter } from '@/interface'
 import { ConvertDate } from '@/utils'
 
 const convertDate = new ConvertDate()
 
 // props
-defineProps({
+const props = defineProps({
   data: {
     type: [Object, Array] as PropType<any>
   },
@@ -43,12 +43,16 @@ defineProps({
   checkbox: {
     type: Boolean,
     default: false
+  },
+  filter: {
+    type: Array as PropType<Filter[]>,
+    default() {
+      return []
+    }
   }
 })
 // data
-const filters = ref({
-  global: { value: null, matchMode: FilterMatchMode.CONTAINS }
-})
+const filters = ref<any>({})
 const dt = ref()
 // methods
 const exportCSV = () => {
@@ -68,6 +72,15 @@ const getSeverity = (field: string, tag: TypeItem[] | undefined): string => {
 defineExpose({
   exportCSV
 })
+
+// onBeforeMount
+onBeforeMount(() => {
+  if (props.filter.length !== 0) {
+    for (const filter of props.filter) {
+      filters.value[filter.field] = { value: null, matchMode: FilterMatchMode.CONTAINS }
+    }
+  }
+})
 </script>
 
 <template>
@@ -85,11 +98,37 @@ defineExpose({
   >
     <template #header>
       <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-        <h5 class="m-0">{{ header }}</h5>
-        <span class="block mt-2 md:mt-0 p-input-icon-left">
-          <i class="pi pi-search" />
-          <InputText v-model="filters['global'].value" placeholder="Search..." />
-        </span>
+        <h5 class="m-0 w-8rem">{{ header }}</h5>
+        <div
+          class="flex flex-column flex-wrap w-full md:flex-row md:justify-content-end md:align-items-center"
+        >
+          <template v-for="obj of filter" :key="obj.field">
+            <Dropdown
+              v-if="obj.type === 'Dropdown'"
+              v-model="filters[obj.field].value"
+              :options="obj.options"
+              :placeholder="obj.placeholder"
+              class="mt-2 md:mt-0"
+              :class="obj.class"
+              optionLabel="text"
+              optionValue="value"
+              showClear
+            >
+            </Dropdown>
+            <span
+              v-if="obj.type === 'InputText'"
+              :class="obj.class"
+              class="block mt-2 md:mt-0 p-input-icon-left"
+            >
+              <i class="pi pi-search" />
+              <InputText
+                v-model="filters[obj.field].value"
+                :placeholder="obj.placeholder"
+                class="w-full"
+              />
+            </span>
+          </template>
+        </div>
       </div>
     </template>
     <Column v-if="checkbox" selectionMode="multiple" headerStyle="width: 3rem"></Column>

@@ -18,3 +18,21 @@ export interface TypeItem {
   severity: string
   text: string
 }
+/**
+ * type 'Dropdown' | 'InputText'
+ *
+ * 輸入該參數後，會依照所設參數生成不同的filter
+ *
+ * options type為options時才需要輸入
+ */
+export interface Filter {
+  type: string | undefined
+  options?: Options[] | undefined
+  placeholder: string
+  class?: string
+  field: string
+}
+export interface Options {
+  value: string
+  text: string
+}
