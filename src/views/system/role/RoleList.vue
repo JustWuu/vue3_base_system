@@ -4,7 +4,7 @@ import { useRouter } from 'vue-router'
 import { useToast } from 'primevue/usetoast'
 import { UniversalTable } from '@/components/table'
 import { RoleFirebase } from '@/api/firebase'
-import type { Role } from '@/interface'
+import type { Role, Filter } from '@/interface'
 
 const toast = useToast()
 const router = useRouter()
@@ -22,22 +22,9 @@ const columns = ref([
   {
     field: 'displayName',
     header: '名稱',
-    sortable: false,
-    headerStyle: 'width:35%; min-width:10rem;'
+    sortable: true,
+    headerStyle: 'width:75%; min-width:10rem;'
   },
-  {
-    field: 'roles',
-    header: '頁面權限',
-    sortable: false,
-    headerStyle: 'width:50%; min-width:10rem;'
-  },
-  // 晚點要在table元件製作針對role的轉換
-  // {type: 'role',
-  //   field: 'roles',
-  //   header: '頁面權限',
-  //   sortable: false,
-  //   headerStyle: 'width:50%; min-width:10rem;'
-  // },
   {
     type: 'tag',
     tag: [
@@ -47,7 +34,26 @@ const columns = ref([
     field: 'state',
     header: '狀態',
     sortable: true,
-    headerStyle: 'width:15%; min-width:10rem;'
+    headerStyle: 'width:25%; min-width:10rem;'
+  }
+])
+
+const filter = ref<Filter[]>([
+  {
+    type: 'Dropdown',
+    options: [
+      { value: 'enable', text: '啟用' },
+      { value: 'disabled', text: '停用' }
+    ],
+    placeholder: '狀態',
+    class: 'mr-1 w-4',
+    field: 'state'
+  },
+  {
+    type: 'InputText',
+    placeholder: 'Search...',
+    class: 'w-4',
+    field: 'displayName'
   }
 ])
 
@@ -62,7 +68,6 @@ const deleteRolesDialog = ref(false)
 onMounted(() => {
   roleFirebase.array().then((res: Role[]) => {
     roles.value = res
-    console.log(res)
   })
 })
 
@@ -124,6 +129,7 @@ const deleteSelectedRoles = () => {
           v-model:selection="selectedRoles"
           header="帳號管理"
           :checkbox="true"
+          :filter="filter"
         >
           <template #footer>
             <Column headerStyle="min-width:10rem;">

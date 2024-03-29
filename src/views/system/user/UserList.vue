@@ -2,9 +2,9 @@
 import { ref, onMounted, type VNodeRef } from 'vue'
 import { useRouter } from 'vue-router'
 import { useToast } from 'primevue/usetoast'
-import UniversalTable from '@/components/table/UniversalTable.vue'
+import { UniversalTable } from '@/components/table'
 import { UserFirebase } from '@/api/firebase'
-import type { User } from '@/interface'
+import type { User, Filter } from '@/interface'
 
 const toast = useToast()
 const router = useRouter()
@@ -63,6 +63,35 @@ const columns = ref([
     header: '上次操作時間',
     sortable: true,
     headerStyle: 'width:14%; min-width:10rem;'
+  }
+])
+
+const filter = ref<Filter[]>([
+  {
+    type: 'Dropdown',
+    options: [
+      { value: 'true', text: '已驗證' },
+      { value: 'false', text: '未驗證' }
+    ],
+    placeholder: '信箱驗證',
+    class: 'md:mr-1 md:w-3',
+    field: 'emailVerified'
+  },
+  {
+    type: 'Dropdown',
+    options: [
+      { value: 'enable', text: '啟用' },
+      { value: 'disabled', text: '停用' }
+    ],
+    placeholder: '狀態',
+    class: 'md:mr-1 md:w-3',
+    field: 'state'
+  },
+  {
+    type: 'InputText',
+    placeholder: 'Search...',
+    class: 'md:w-3',
+    field: 'displayName'
   }
 ])
 
@@ -149,6 +178,7 @@ const deleteSelectedUsers = () => {
           v-model:selection="selectedUsers"
           header="帳號管理"
           :checkbox="true"
+          :filter="filter"
         >
           <template #footer>
             <Column headerStyle="min-width:10rem;">
