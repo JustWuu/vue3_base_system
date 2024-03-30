@@ -54,6 +54,7 @@ import MultiSelect from 'primevue/multiselect'
 import Tree from 'primevue/tree'
 
 const app = createApp(App)
+export { app }
 
 // 使用 Object.keys 將 AllRules 轉為陣列並使用 forEach 迴圈將驗證規則加入 VeeValidate
 Object.keys(rules).forEach((rule) => {
