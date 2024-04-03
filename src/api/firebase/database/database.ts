@@ -2,10 +2,6 @@ import {
   getFirestore,
   collection,
   doc,
-  setDoc,
-  addDoc,
-  updateDoc,
-  deleteDoc,
   getDoc,
   getDocs,
   query,
@@ -14,8 +10,20 @@ import {
   runTransaction,
   onSnapshot
 } from 'firebase/firestore'
+import type { StringObject } from '@/interface'
+import { Syslog } from '@/interface'
+import { Random } from '@/utils'
+import { default as Ipify } from '../../axios/ipify'
 
+const ipify = new Ipify()
+const random = new Random()
 const db = getFirestore()
+
+const ip = ipify.get()
+
+const errorMessage: StringObject = {
+  'permission-denied': '權限不足'
+}
 
 class Database {
   /**
@@ -32,15 +40,13 @@ class Database {
     try {
       const docSnap = await getDoc(doc(db, this.child, id))
       if (docSnap.exists()) {
-        // console.log('Document data:', docSnap.data())
         return docSnap.data()
       } else {
-        // console.log('No such document!')
         throw 'No such document!'
       }
-    } catch (error) {
-      console.error('Error set document: ', error)
-      throw error
+    } catch (error: any) {
+      const errorCode = error.code
+      throw errorMessage[`${errorCode}`]
     }
   }
   /**
@@ -59,58 +65,130 @@ class Database {
         }
       })
       return array
-    } catch (error) {
-      console.error('Error set document: ', error)
-      throw error
+    } catch (error: any) {
+      const errorCode = error.code
+      throw errorMessage[`${errorCode}`]
     }
   }
   /**
    * 在該doc建立新資料，相同doc內的同id會被取代
    */
   async set(id: string, params: object): Promise<any> {
+    const useAuthModule = await import('@/api/firebase/utils/useAuth')
+    const useAuth = new useAuthModule.default()
+    const { user } = useAuth.getUser()
+
+    const today = new Date()
     try {
-      await setDoc(doc(db, this.child, id), params)
-      console.log('Document set with ID: ', this.child, '/', id)
-    } catch (error) {
-      console.error('Error set document: ', error)
-      throw error
+      await runTransaction(db, async (transaction) => {
+        transaction.set(doc(db, this.child, id), params)
+        transaction.set(doc(db, 'syslog', `${today.getTime()}`), {
+          ...new Syslog(
+            this.child,
+            'set',
+            today.getTime(),
+            user.value.uid,
+            user.value.email,
+            await ip
+          )
+        })
+      })
+      return `${this.child}/${id} Set`
+    } catch (error: any) {
+      const errorCode = error.code
+      console.log(errorCode)
+      throw errorMessage[`${errorCode}`]
     }
   }
   /**
    * 在該doc建立資料，取名為亂數
    */
-  async add(params: object, id = ''): Promise<any> {
+  async add(params: object): Promise<any> {
+    const useAuthModule = await import('@/api/firebase/utils/useAuth')
+    const useAuth = new useAuthModule.default()
+    const { user } = useAuth.getUser()
+
+    const today = new Date()
     try {
-      const docRef = await addDoc(collection(db, `${this.child}/${id}`), params)
-      console.log('Document add with ID: ', docRef.id)
-      return docRef.id
-    } catch (error) {
-      console.error('Error add document: ', error)
-      throw error
+      const randomId = random.generateRandomString(10)
+      await runTransaction(db, async (transaction) => {
+        transaction.set(doc(db, this.child, randomId), params)
+        transaction.set(doc(db, 'syslog', `${today.getTime()}`), {
+          ...new Syslog(
+            this.child,
+            'add',
+            today.getTime(),
+            user.value.uid,
+            user.value.email,
+            await ip
+          )
+        })
+      })
+      return `${this.child}/${randomId} Add`
+    } catch (error: any) {
+      const errorCode = error.code
+      console.log(errorCode)
+      throw errorMessage[`${errorCode}`]
     }
   }
   /**
    * 更新該doc資料
    */
   async update(id: string, params: object): Promise<any> {
+    const useAuthModule = await import('@/api/firebase/utils/useAuth')
+    const useAuth = new useAuthModule.default()
+    const { user } = useAuth.getUser()
+
+    const today = new Date()
     try {
-      await updateDoc(doc(db, this.child, id), { ...params, timestamp: serverTimestamp() })
-      console.log('Document update with ID: ', this.child, '/', id)
-    } catch (error) {
-      console.error('Error update document: ', error)
-      throw error
+      await runTransaction(db, async (transaction) => {
+        transaction.update(doc(db, this.child, id), { ...params, timestamp: serverTimestamp() })
+        transaction.set(doc(db, 'syslog', `${today.getTime()}`), {
+          ...new Syslog(
+            this.child,
+            'update',
+            today.getTime(),
+            user.value.uid,
+            user.value.email,
+            await ip
+          )
+        })
+      })
+      return `${this.child}/${id} Update`
+    } catch (error: any) {
+      const errorCode = error.code
+      console.log(errorCode)
+      throw errorMessage[`${errorCode}`]
     }
   }
   /**
    * 刪除doc
    */
   async delete(id: string): Promise<any> {
+    const useAuthModule = await import('@/api/firebase/utils/useAuth')
+    const useAuth = new useAuthModule.default()
+    const { user } = useAuth.getUser()
+
+    const today = new Date()
     try {
-      await deleteDoc(doc(db, this.child, id))
-      console.log('Document delete with ID: ', this.child, '/', id)
-    } catch (error) {
-      console.error('Error delete document: ', error)
-      throw error
+      await runTransaction(db, async (transaction) => {
+        transaction.delete(doc(db, this.child, id))
+        transaction.set(doc(db, 'syslog', `${today.getTime()}`), {
+          ...new Syslog(
+            this.child,
+            'delete',
+            today.getTime(),
+            user.value.uid,
+            user.value.email,
+            await ip
+          )
+        })
+      })
+      return `${this.child}/${id} Delete`
+    } catch (error: any) {
+      const errorCode = error.code
+      console.log(errorCode)
+      throw errorMessage[`${errorCode}`]
     }
   }
   // 使用transaction進行更新，批量寫入，操作只有都成功或都不應用，不會只有部分寫成功
@@ -130,8 +208,10 @@ class Database {
         transaction.update(doc(db, this.child, id), { ...params, d: newPopulation })
       })
       console.log('Transaction successfully committed!')
-    } catch (error) {
-      console.log('Transaction failed: ', error)
+    } catch (error: any) {
+      const errorCode = error.code
+      console.log(errorCode)
+      throw errorMessage[`${errorCode}`]
     }
   }
   // 以下兩種監聽都是僅執行不停止，因為停止需要呼叫原函式
@@ -140,7 +220,6 @@ class Database {
   onSnapshot(id: string, callback: Function) {
     console.log(`onSnapshot: ${this.child}/${id} start`)
     onSnapshot(doc(db, this.child, id), (snapshot) => {
-      console.log(snapshot)
       // 本地進行update時也會被此監聽到，但是會處於Local狀態(代表未寫入資料庫)
       // 轉變為Server時代表寫入完成
       // const source = snapshot.metadata.hasPendingWrites ? 'Local' : 'Server'

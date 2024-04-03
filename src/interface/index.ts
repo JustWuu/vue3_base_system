@@ -6,4 +6,4 @@ export type { LayoutConfig, LayoutState } from './Layout'
 export type { NewRouteRecordRaw } from './Router'
 
 export { UserObject } from './User'
-export { StateArray } from './Universal'
+export { StateArray, Syslog } from './Universal'
