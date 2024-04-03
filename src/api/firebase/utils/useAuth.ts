@@ -15,7 +15,7 @@ import {
 } from 'firebase/auth'
 import { UserStore } from '@/stores'
 import { storeToRefs } from 'pinia'
-import { UserFirebase } from '@/api/firebase'
+import { UserFirebase } from '@/api'
 import type { StringObject } from '@/interface'
 
 // 註冊使用
