@@ -3,7 +3,7 @@ import { ref, onMounted, type VNodeRef } from 'vue'
 import { useRouter } from 'vue-router'
 import { useToast } from 'primevue/usetoast'
 import { UniversalTable } from '@/components/table'
-import { UserFirebase } from '@/api/firebase'
+import { UserFirebase } from '@/api'
 import type { User, Filter } from '@/interface'
 
 const toast = useToast()
@@ -151,7 +151,6 @@ const deleteSelectedUsers = () => {
   <div class="grid">
     <div class="col-12 px-2">
       <div class="card">
-        <Toast />
         <Toolbar class="mb-4">
           <template v-slot:start>
             <div class="my-2">
