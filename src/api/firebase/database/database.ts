@@ -11,8 +11,9 @@ import {
   onSnapshot
 } from 'firebase/firestore'
 import type { StringObject } from '@/interface'
-import { Syslog } from '@/interface'
+import { SyslogClass } from '@/interface'
 import { Random } from '@/utils'
+// 這邊不用@做import是因為會跳Cannot access 'Ipify' before initialization錯誤
 import { default as Ipify } from '../../axios/ipify'
 
 const ipify = new Ipify()
@@ -83,13 +84,15 @@ class Database {
       await runTransaction(db, async (transaction) => {
         transaction.set(doc(db, this.child, id), params)
         transaction.set(doc(db, 'syslog', `${today.getTime()}`), {
-          ...new Syslog(
+          ...new SyslogClass(
             this.child,
+            id,
             'set',
             today.getTime(),
             user.value.uid,
             user.value.email,
-            await ip
+            await ip,
+            'enable'
           )
         })
       })
@@ -114,13 +117,15 @@ class Database {
       await runTransaction(db, async (transaction) => {
         transaction.set(doc(db, this.child, randomId), params)
         transaction.set(doc(db, 'syslog', `${today.getTime()}`), {
-          ...new Syslog(
+          ...new SyslogClass(
             this.child,
+            randomId,
             'add',
             today.getTime(),
             user.value.uid,
             user.value.email,
-            await ip
+            await ip,
+            'enable'
           )
         })
       })
@@ -144,13 +149,15 @@ class Database {
       await runTransaction(db, async (transaction) => {
         transaction.update(doc(db, this.child, id), { ...params, timestamp: serverTimestamp() })
         transaction.set(doc(db, 'syslog', `${today.getTime()}`), {
-          ...new Syslog(
+          ...new SyslogClass(
             this.child,
+            id,
             'update',
             today.getTime(),
             user.value.uid,
             user.value.email,
-            await ip
+            await ip,
+            'enable'
           )
         })
       })
@@ -174,13 +181,15 @@ class Database {
       await runTransaction(db, async (transaction) => {
         transaction.delete(doc(db, this.child, id))
         transaction.set(doc(db, 'syslog', `${today.getTime()}`), {
-          ...new Syslog(
+          ...new SyslogClass(
             this.child,
+            id,
             'delete',
             today.getTime(),
             user.value.uid,
             user.value.email,
-            await ip
+            await ip,
+            'enable'
           )
         })
       })
