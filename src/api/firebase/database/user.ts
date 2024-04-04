@@ -1,6 +1,4 @@
 import Database from './database'
-import { getFirestore, doc, setDoc } from 'firebase/firestore'
-import { getAuth } from 'firebase/auth'
 import type { User } from '@/interface'
 
 interface Role {
@@ -8,10 +6,6 @@ interface Role {
   id: string
 }
 
-const db = getFirestore()
-const auth = getAuth()
-
-let user: User
 let profile: User
 
 class UserFirebase extends Database {
@@ -37,20 +31,19 @@ class UserFirebase extends Database {
       updateAt: today.getTime(),
       operateAt: today.getTime()
     }
-    setDoc(doc(db, this.child, user.uid), profile)
+    this.set(user.uid, profile)
   }
   // 使用者更新資料
   async updateUser(profileData: User) {
     let today = new Date()
-    user = auth.currentUser as unknown as User
     profile = {
-      displayName: user.displayName,
-      email: user.email,
-      emailVerified: user.emailVerified,
-      isAnonymous: user.isAnonymous,
-      phoneNumber: user.phoneNumber,
-      photoURL: user.photoURL,
-      uid: user.uid,
+      displayName: profileData.displayName,
+      email: profileData.email,
+      emailVerified: profileData.emailVerified,
+      isAnonymous: profileData.isAnonymous,
+      phoneNumber: profileData.phoneNumber,
+      photoURL: profileData.photoURL,
+      uid: profileData.uid,
       state: profileData.state,
       createdAt: profileData.createdAt,
       role: profileData.role,
@@ -58,7 +51,7 @@ class UserFirebase extends Database {
       updateAt: today.getTime(),
       operateAt: today.getTime()
     }
-    // update(ref(db, `${this.child}/${profile.uid}`), profile)
+    this.update(profileData.uid, profile)
   }
 }
 
