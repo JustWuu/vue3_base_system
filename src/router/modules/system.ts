@@ -49,7 +49,7 @@ const systemRouter: NewRouteRecordRaw[] = [
       hide: false,
       icon: 'pi pi-fw pi-sitemap',
       theme: 'role',
-      roles: ['role']
+      roles: ['role:r']
     }
   },
   {
@@ -62,7 +62,7 @@ const systemRouter: NewRouteRecordRaw[] = [
       hide: true,
       icon: 'pi pi-fw pi-sitemap',
       theme: 'role',
-      roles: ['role']
+      roles: ['role:r']
     }
   },
   {
@@ -75,7 +75,20 @@ const systemRouter: NewRouteRecordRaw[] = [
       hide: true,
       icon: 'pi pi-fw pi-sitemap',
       theme: 'role',
-      roles: ['role']
+      roles: ['role:r']
+    }
+  },
+  {
+    path: '/system/syslog/list',
+    name: 'syslogList',
+    component: () => import('@/views/system/syslog/SyslogList.vue'),
+    meta: {
+      title: '操作紀錄',
+      auth: true,
+      hide: false,
+      icon: 'pi pi-fw pi-wrench',
+      theme: 'syslog',
+      roles: ['syslog:r']
     }
   }
 ]
