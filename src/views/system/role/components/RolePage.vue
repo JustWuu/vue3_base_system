@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { RoleFirebase } from '@/api/firebase'
+import { RoleFirebase } from '@/api'
 import { InputTextFloat, InputDropdownFloat } from '@/components/form'
 import type { TreeNode, TreeSelectionKeys } from 'primevue/tree'
 import type { Role } from '@/interface'
 import { StateArray } from '@/interface'
 import { Random } from '@/utils'
 import { useRoute, useRouter } from 'vue-router'
+import { success, error } from '@/utils'
 
 const random = new Random()
 const route = useRoute()
@@ -101,6 +102,38 @@ const treeValue = ref<TreeNode[]>([
             data: 'role:d'
           }
         ]
+      },
+      {
+        key: 'syslog',
+        label: '操作紀錄',
+        data: 'syslog',
+        icon: 'pi pi-fw pi-wrench',
+        children: [
+          {
+            key: 'syslog:c',
+            label: '新增',
+            icon: 'pi pi-fw pi-file',
+            data: 'syslog:c'
+          },
+          {
+            key: 'syslog:r',
+            label: '查看',
+            icon: 'pi pi-fw pi-eye',
+            data: 'syslog:r'
+          },
+          {
+            key: 'syslog:u',
+            label: '更新',
+            icon: 'pi pi-fw pi-pencil',
+            data: 'syslog:u'
+          },
+          {
+            key: 'syslog:d',
+            label: '刪除',
+            icon: 'pi pi-fw pi-trash',
+            data: 'syslog:d'
+          }
+        ]
       }
     ]
   }
@@ -108,17 +141,32 @@ const treeValue = ref<TreeNode[]>([
 const selectedTreeValue = ref<TreeSelectionKeys>({})
 
 //methods
-const submit = (params: object) => {
+const submit = async (params: object) => {
   if (props.mode === 'add') {
     id.value = random.generateRandomString(10)
     role.value.id = id.value
     role.value.roles = keysWithTrueChecked()
-    roleFirebase.set(id.value, params)
+    roleFirebase
+      .set(id.value, params)
+      .then((res) => {
+        success(res)
+        router.push('/system/role/list')
+      })
+      .catch((e) => {
+        error(e)
+      })
   } else if (props.mode === 'edit') {
     role.value.roles = keysWithTrueChecked()
-    roleFirebase.update(id.value, params)
+    roleFirebase
+      .update(id.value, params)
+      .then((res) => {
+        success(res)
+        router.push('/system/role/list')
+      })
+      .catch((e) => {
+        error(e)
+      })
   }
-  router.push('/system/role/list')
 }
 
 // 轉換tree已選參數

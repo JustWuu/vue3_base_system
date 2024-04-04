@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { ref, onMounted, type VNodeRef } from 'vue'
 import { useRouter } from 'vue-router'
-import { useToast } from 'primevue/usetoast'
 import { UniversalTable } from '@/components/table'
-import { RoleFirebase } from '@/api/firebase'
+import { RoleFirebase } from '@/api'
 import type { Role, Filter } from '@/interface'
+import { error } from '@/utils'
 
-const toast = useToast()
 const router = useRouter()
+
 // interface
 type NewVNodeRef = VNodeRef & {
   exportCSV: Function
@@ -62,13 +62,17 @@ const role = ref<Role>()
 const selectedRoles = ref<Role[]>([])
 
 const deleteRoleDialog = ref(false)
-const deleteRolesDialog = ref(false)
 
 // onMounted
 onMounted(() => {
-  roleFirebase.array().then((res: Role[]) => {
-    roles.value = res
-  })
+  roleFirebase
+    .array()
+    .then((res: Role[]) => {
+      roles.value = res
+    })
+    .catch((e) => {
+      error(e)
+    })
 })
 
 // methods
@@ -88,17 +92,6 @@ const confirmDeleteRole = (editRole: Role) => {
 const deleteRole = () => {
   // roles.value = roles.value.filter((val: Role) => val.uid !== role.value.uid)
   deleteRoleDialog.value = false
-  toast.add({ severity: 'success', summary: 'Successful', detail: 'Role Deleted', life: 3000 })
-}
-
-const confirmDeleteSelected = () => {
-  deleteRolesDialog.value = true
-}
-const deleteSelectedRoles = () => {
-  roles.value = roles.value.filter((val) => !selectedRoles.value.includes(val))
-  deleteRolesDialog.value = false
-  selectedRoles.value = []
-  toast.add({ severity: 'success', summary: 'Successful', detail: 'Roles Deleted', life: 3000 })
 }
 </script>
 
@@ -106,18 +99,17 @@ const deleteSelectedRoles = () => {
   <div class="grid">
     <div class="col-12 px-2">
       <div class="card">
-        <Toast />
         <Toolbar class="mb-4">
           <template v-slot:start>
             <div class="my-2">
               <Button label="新增" icon="pi pi-plus" class="p-button-success mr-2" @click="add" />
-              <Button
+              <!-- <Button
                 label="刪除"
                 icon="pi pi-trash"
                 class="p-button-danger"
                 @click="confirmDeleteSelected"
                 :disabled="!selectedRoles || !selectedRoles.length"
-              />
+              /> -->
             </div>
           </template>
         </Toolbar>
@@ -127,7 +119,7 @@ const deleteSelectedRoles = () => {
           :data="roles"
           :columns="columns"
           v-model:selection="selectedRoles"
-          header="帳號管理"
+          header="權限管理"
           :checkbox="true"
           :filter="filter"
         >
@@ -169,32 +161,6 @@ const deleteSelectedRoles = () => {
               @click="deleteRoleDialog = false"
             />
             <Button label="Yes" icon="pi pi-check" class="p-button-text" @click="deleteRole" />
-          </template>
-        </Dialog>
-
-        <Dialog
-          v-model:visible="deleteRolesDialog"
-          :style="{ width: '450px' }"
-          header="Confirm"
-          :modal="true"
-        >
-          <div class="flex align-items-center justify-content-center">
-            <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
-            <span>你確定要刪除所選的帳號嗎?</span>
-          </div>
-          <template #footer>
-            <Button
-              label="No"
-              icon="pi pi-times"
-              class="p-button-text"
-              @click="deleteRolesDialog = false"
-            />
-            <Button
-              label="Yes"
-              icon="pi pi-check"
-              class="p-button-text"
-              @click="deleteSelectedRoles"
-            />
           </template>
         </Dialog>
       </div>
