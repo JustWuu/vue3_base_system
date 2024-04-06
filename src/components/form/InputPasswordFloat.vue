@@ -26,6 +26,9 @@ defineProps({
   toggleMask: {
     type: Boolean,
     default: true
+  },
+  disabled: {
+    type: Boolean
   }
 })
 </script>
@@ -57,6 +60,7 @@ defineProps({
         weakLabel="非常簡單"
         mediumLabel="中等複雜"
         strongLabel="複雜的密碼"
+        :disabled="disabled"
       >
         <template #footer>
           <Divider />

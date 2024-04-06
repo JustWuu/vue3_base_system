@@ -19,6 +19,9 @@ defineProps({
   },
   options: {
     type: Array
+  },
+  disabled: {
+    type: Boolean
   }
 })
 </script>
@@ -44,8 +47,9 @@ defineProps({
         :placeholder="placeholder"
         :id="name"
         :options="options"
-        optionLabel="name"
+        optionLabel="text"
         optionValue="value"
+        :disabled="disabled"
       ></Dropdown>
       <label :for="name">{{ label }}</label>
     </span>

@@ -16,6 +16,9 @@ defineProps({
   },
   rules: {
     type: String
+  },
+  disabled: {
+    type: Boolean
   }
 })
 </script>
@@ -41,6 +44,7 @@ defineProps({
         :placeholder="placeholder"
         :id="name"
         :type="type"
+        :disabled="disabled"
       />
       <label :for="name">{{ label }}</label>
     </span>
