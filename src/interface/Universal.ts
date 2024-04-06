@@ -4,7 +4,7 @@ export interface StringObject {
 }
 
 export const StateArray: object[] = [
-  { name: '啟用', value: 'enable' },
-  { name: '停用', value: 'disabled' }
-  // { name: '刪除', value: 'delete' }
+  { text: '啟用', value: 'enable' },
+  { text: '停用', value: 'disabled' }
+  // { text: '刪除', value: 'delete' }
 ]

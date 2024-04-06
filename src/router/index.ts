@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import { UserStore } from '@/stores'
 import AppLayout from '@/layout/AppLayout.vue'
 import { UserObject } from '@/interface'
+import type { Account } from '@/interface'
 
 // router
 import systemRouter from './modules/system'
@@ -28,6 +29,7 @@ getAnalytics(firebaseConfig)
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
 const auth = getAuth()
 
+// ***********************************router start********************************************************
 // 路由編寫要參考範例寫法，否則layout選單可能出現錯誤
 // meta中的them代表該頁面主題，例如path有/system/auth/list、/system/auth/add
 // 這些都同屬auth主題，那在這些頁面時auth主題的選單都會判斷為點選中
@@ -110,12 +112,13 @@ const router = createRouter({
     }
   ]
 })
+// ***********************************router end********************************************************
 
 // https://book.vue.tw/CH4/4-4-navigation-guards.html
 // 路由守衛
 router.beforeEach((to) => {
   const userStore = UserStore()
-  document.title = `${to.meta.title} ▷One Bird WEB◁`
+  document.title = `${to.meta.title} ▷One System◁`
   if (!userStore.authOn) {
     onAuthStateChanged(auth, async (res) => {
       if (res) {
@@ -126,8 +129,10 @@ router.beforeEach((to) => {
         const userFirebase = new userModule.default()
         const roleFirebase = new roleModule.default()
         try {
+          // 取得帳號資料並儲存
           const user = await userFirebase.get(res.uid)
           userStore.user = user
+          // 取得帳號權限並儲存
           const role = await roleFirebase.get(user.role.id)
           userStore.user.roles = role.roles
           if (!comparisonRoles(to.meta.roles as string[], role.roles)) {
@@ -136,15 +141,29 @@ router.beforeEach((to) => {
           }
         } catch (error) {
           console.error(error)
-          // 判斷無email，代表資料庫沒有
-          if (userStore.user.email == '') {
-            await userFirebase.setUser(res, { displayName: '無', id: '' })
+          // 這裡要想一下是否有必要，因為這裡是後台，新建帳號必須警慎
+          // 如果資料庫無這帳號，可能在新建流程中有錯誤，要考慮該帳號是否作廢
+          // 乾脆從新建立一個比較好
+          // 但如果是前台，要求用戶重新建立又感覺不太好，所以或許這功能留前台就好
+
+          // 如果出錯且判斷無uid，代表資料庫沒有這個帳號
+          if (userStore.user.uid == '') {
+            const account: Account = {
+              displayName: '',
+              email: '',
+              password: '',
+              state: 'enable',
+              role: { displayName: '無', id: '' },
+              photoURL: ''
+            }
+            // 加入資料庫
+            await userFirebase.setUser(res, account)
             const newUser = await userFirebase.get(res.uid)
             userStore.user = newUser
             const role = await roleFirebase.get(newUser.role)
             userStore.user.roles = role.roles
 
-            if (!comparisonRoles(to.meta.roles as string[], userStore.user.roles)) {
+            if (!comparisonRoles(to.meta.roles as string[], role.roles)) {
               console.log('no role [3]')
               // router.push({ name: '403' });
             }
@@ -160,12 +179,12 @@ router.beforeEach((to) => {
       }
     })
   } else {
-    if (to.meta.auth && userStore.user === null) {
-      console.log('please log in [2]')
+    if (to.meta.auth && userStore.user.uid == '') {
+      console.log('please log in [4]')
       // return { name: 'Login' }
-    } else if (userStore.user !== null) {
+    } else if (userStore.user.uid !== '') {
       if (!comparisonRoles(to.meta.roles as string[], userStore.user.roles)) {
-        console.log('no role [2]')
+        console.log('no role [4]')
         // return { name: '403' }
       }
     }

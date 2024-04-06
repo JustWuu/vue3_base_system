@@ -4,12 +4,12 @@ interface Role {
 }
 export interface User {
   displayName: string | null
-  email: string | null
+  email: string
   emailVerified: string | null
   isAnonymous: string | null
   phoneNumber: string | null
   photoURL: string | null
-  uid: string | null
+  uid: string
   state: 'enable' | 'disabled' | 'delete' | ''
   createdAt: number | null
   role: Role
@@ -17,6 +17,16 @@ export interface User {
   updateAt: number
   operateAt: number
 }
+
+export interface Account {
+  displayName: string
+  email: string
+  photoURL: string
+  state: 'enable' | 'disabled' | 'delete' | ''
+  role: Role
+  password: string
+}
+
 export const UserObject: User = {
   displayName: '',
   email: '',

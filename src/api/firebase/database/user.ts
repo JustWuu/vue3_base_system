@@ -1,10 +1,5 @@
 import Database from './database'
-import type { User } from '@/interface'
-
-interface Role {
-  displayName: string | null
-  id: string
-}
+import type { User, Account } from '@/interface'
 
 let profile: User
 
@@ -12,26 +7,32 @@ class UserFirebase extends Database {
   constructor() {
     super('user')
   }
-
   //新註冊創建資料
-  async setUser(user: any, role: Role) {
+  async setUser(user: any, account: Account) {
     let today = new Date()
     profile = {
-      displayName: user.displayName,
-      email: user.email,
+      uid: user.uid,
       emailVerified: user.emailVerified,
       isAnonymous: user.isAnonymous,
       phoneNumber: user.phoneNumber,
-      photoURL: user.photoURL,
-      uid: user.uid,
-      state: 'enable',
       createdAt: today.getTime(),
-      role: role,
-      roles: [],
       updateAt: today.getTime(),
-      operateAt: today.getTime()
+      operateAt: today.getTime(),
+      roles: [],
+      // 註冊時可當下設定的值
+      displayName: account.displayName,
+      email: user.email,
+      photoURL: account.photoURL,
+      state: account.state,
+      role: account.role
     }
-    this.set(user.uid, profile)
+    return this.set(user.uid, profile)
+      .then((res) => {
+        return res
+      })
+      .catch((error) => {
+        throw error
+      })
   }
   // 使用者更新資料
   async updateUser(profileData: User) {
@@ -51,7 +52,13 @@ class UserFirebase extends Database {
       updateAt: today.getTime(),
       operateAt: today.getTime()
     }
-    this.update(profileData.uid, profile)
+    return this.update(profileData.uid, profile)
+      .then((res) => {
+        return res
+      })
+      .catch((error) => {
+        throw error
+      })
   }
 }
 
