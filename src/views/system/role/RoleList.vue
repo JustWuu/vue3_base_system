@@ -46,13 +46,13 @@ const filter = ref<Filter[]>([
       { value: 'disabled', text: '停用' }
     ],
     placeholder: '狀態',
-    class: 'mr-1 w-4',
+    class: 'md:mr-1 md:w-3',
     field: 'state'
   },
   {
     type: 'InputText',
     placeholder: 'Search...',
-    class: 'w-4',
+    class: 'md:w-3',
     field: 'displayName'
   }
 ])

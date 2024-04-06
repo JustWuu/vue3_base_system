@@ -216,15 +216,16 @@ onMounted(() => {
           <h5 v-if="mode === 'add'">新增權限身分</h5>
           <h5 v-else-if="mode === 'edit'">編輯權限身分</h5>
           <div class="grid p-fluid mt-3">
-            <div class="field col-12 md:col-6">
+            <div class="col-12 md:col-6">
               <input-text-float
                 label="名稱"
                 v-model="role.displayName"
                 name="displayName"
                 rules="required"
+                :disabled="mode !== 'add'"
               />
             </div>
-            <div class="field col-12 md:col-6">
+            <div class="col-12 md:col-6">
               <input-dropdown-float
                 label="狀態"
                 :options="StateArray"
@@ -233,13 +234,13 @@ onMounted(() => {
                 rules="required"
               />
             </div>
-            <div class="field col-12">
+            <div class="col-12">
               <h5>權限設定</h5>
               <Tree
                 :value="treeValue"
                 selectionMode="checkbox"
                 v-model:selectionKeys="selectedTreeValue"
-                :expandedKeys="{ system: true, user: true, role: true }"
+                :expandedKeys="{ system: true, user: true, role: true, syslog: true }"
               ></Tree>
             </div>
           </div>
