@@ -1,10 +1,6 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { RoleFirebase } from '@/api'
-import type { Role } from '@/interface'
-
-// firebase
-const roleFirebase = new RoleFirebase()
+import { ref } from 'vue'
+import { StateArray } from '@/interface'
 
 //define
 defineProps({
@@ -12,7 +8,7 @@ defineProps({
   type: { type: String, default: 'text' },
   label: {
     type: String,
-    default: '權限'
+    default: '狀態'
   },
   name: {
     type: String,
@@ -30,14 +26,7 @@ defineProps({
 })
 
 // data
-const options = ref<object[]>([{ id: '', displayName: '無' }])
-
-// onMounted
-onMounted(() => {
-  roleFirebase.array().then((res: Role[]) => {
-    res.filter((item) => options.value.push({ id: item.id, displayName: item.displayName }))
-  })
-})
+const options = ref<object[]>([...StateArray])
 </script>
 
 <template>
@@ -61,7 +50,8 @@ onMounted(() => {
         :placeholder="placeholder"
         :id="name"
         :options="options"
-        optionLabel="displayName"
+        optionLabel="text"
+        optionValue="value"
         :disabled="disabled"
       ></Dropdown>
       <label :for="name">{{ label }}</label>
