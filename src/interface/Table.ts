@@ -11,7 +11,8 @@ export interface Columns {
   field: string
   header: string
   sortable?: boolean
-  headerStyle?: string
+  style?: string
+  class?: string
 }
 export interface TypeItem {
   value: string

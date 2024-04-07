@@ -139,14 +139,24 @@ onBeforeMount(() => {
         :field="col.field"
         :header="col.header"
         :sortable="col.sortable"
-        :headerStyle="col.headerStyle"
+        :headerStyle="col.style"
+        :bodyStyle="col.style"
+        :footerStyle="col.style"
+        :headerClass="col.class"
+        :bodyClass="col.class"
+        :footerClass="col.class"
       ></Column>
       <Column
         v-if="col.type === 'date'"
         :field="col.field"
         :header="col.header"
         :sortable="col.sortable"
-        :headerStyle="col.headerStyle"
+        :headerStyle="col.style"
+        :bodyStyle="col.style"
+        :footerStyle="col.style"
+        :headerClass="col.class"
+        :bodyClass="col.class"
+        :footerClass="col.class"
         class="white-space-nowrap"
       >
         <template #body="{ data }">
@@ -158,7 +168,12 @@ onBeforeMount(() => {
         :field="col.field"
         :header="col.header"
         :sortable="col.sortable"
-        :headerStyle="col.headerStyle"
+        :headerStyle="col.style"
+        :bodyStyle="col.style"
+        :footerStyle="col.style"
+        :headerClass="col.class"
+        :bodyClass="col.class"
+        :footerClass="col.class"
         dataType="boolean"
       >
         <template #body="{ data }">
@@ -176,7 +191,12 @@ onBeforeMount(() => {
         :field="col.field"
         :header="col.header"
         :sortable="col.sortable"
-        :headerStyle="col.headerStyle"
+        :headerStyle="col.style"
+        :bodyStyle="col.style"
+        :footerStyle="col.style"
+        :headerClass="col.class"
+        :bodyClass="col.class"
+        :footerClass="col.class"
       >
         <template #body="{ data }">
           <Tag
@@ -191,4 +211,18 @@ onBeforeMount(() => {
   </DataTable>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+@media screen and (min-width: 768px) {
+  ::v-deep() {
+    th.p-frozen-column {
+      z-index: 1 !important;
+      position: sticky;
+    }
+    td.p-frozen-column {
+      z-index: 1 !important;
+      position: sticky;
+      background: inherit;
+    }
+  }
+}
+</style>
