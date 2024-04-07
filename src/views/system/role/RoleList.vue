@@ -23,7 +23,7 @@ const columns = ref([
     field: 'displayName',
     header: '名稱',
     sortable: true,
-    headerStyle: 'width:75%; min-width:10rem;'
+    style: 'width:75%; min-width:10rem;'
   },
   {
     type: 'tag',
@@ -34,7 +34,7 @@ const columns = ref([
     field: 'state',
     header: '狀態',
     sortable: true,
-    headerStyle: 'width:25%; min-width:10rem;'
+    style: 'width:25%; min-width:10rem;'
   }
 ])
 
