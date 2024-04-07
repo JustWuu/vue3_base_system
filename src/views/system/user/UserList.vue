@@ -23,27 +23,27 @@ const columns = ref([
     field: 'email',
     header: '帳號',
     sortable: false,
-    headerStyle: 'width:14%; min-width:10rem;'
+    style: 'min-width:10rem;'
   },
   {
     field: 'displayName',
     header: '名稱',
     sortable: false,
-    headerStyle: 'width:14%; min-width:10rem;'
+    style: 'min-width:10rem;'
   },
   {
     field: 'role.displayName',
     header: '權限身分',
     sortable: true,
-    headerStyle: 'width:14%; min-width:10rem;'
+    style: 'min-width:10rem;'
   },
-  { field: 'uid', header: 'UID', sortable: true, headerStyle: 'width:14%; min-width:10rem;' },
+  { field: 'uid', header: 'UID', sortable: true, style: 'min-width:10rem;' },
   {
     type: 'boolean',
     field: 'emailVerified',
     header: '信箱驗證',
     sortable: true,
-    headerStyle: 'width:14%; min-width:10rem;'
+    style: 'min-width:8rem;'
   },
   {
     type: 'tag',
@@ -55,14 +55,14 @@ const columns = ref([
     field: 'state',
     header: '狀態',
     sortable: true,
-    headerStyle: 'width:14%; min-width:10rem;'
+    style: 'min-width:6rem;'
   },
   {
     type: 'date',
     field: 'operateAt',
     header: '上次操作時間',
     sortable: true,
-    headerStyle: 'width:14%; min-width:10rem;'
+    style: 'min-width:10rem;'
   }
 ])
 
@@ -180,7 +180,7 @@ const deleteSelectedUsers = () => {
           :filter="filter"
         >
           <template #footer>
-            <Column headerStyle="min-width:10rem;">
+            <Column headerStyle="min-width:10rem;" header="操作" alignFrozen="right" frozen>
               <template #body="slotProps">
                 <Button
                   icon="pi pi-pencil"
