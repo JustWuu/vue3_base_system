@@ -10,7 +10,7 @@ const systemRouter: NewRouteRecordRaw[] = [
       hide: false,
       icon: 'pi pi-fw pi-users',
       theme: 'user',
-      roles: ['user']
+      roles: ['user:r']
     }
   },
   {
@@ -23,7 +23,7 @@ const systemRouter: NewRouteRecordRaw[] = [
       hide: true,
       icon: 'pi pi-fw pi-users',
       theme: 'user',
-      roles: ['user']
+      roles: ['user:c']
     }
   },
   {
@@ -36,7 +36,7 @@ const systemRouter: NewRouteRecordRaw[] = [
       hide: true,
       icon: 'pi pi-fw pi-users',
       theme: 'user',
-      roles: ['user']
+      roles: ['user:u']
     }
   },
   {
@@ -62,7 +62,7 @@ const systemRouter: NewRouteRecordRaw[] = [
       hide: true,
       icon: 'pi pi-fw pi-sitemap',
       theme: 'role',
-      roles: ['role:r']
+      roles: ['role:c']
     }
   },
   {
@@ -75,7 +75,7 @@ const systemRouter: NewRouteRecordRaw[] = [
       hide: true,
       icon: 'pi pi-fw pi-sitemap',
       theme: 'role',
-      roles: ['role:r']
+      roles: ['role:u']
     }
   },
   {
