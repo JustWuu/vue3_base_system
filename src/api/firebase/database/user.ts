@@ -1,5 +1,5 @@
 import Database from './database'
-import type { User, Account } from '@/interface'
+import type { User } from '@/interface'
 
 let profile: User
 
@@ -8,7 +8,7 @@ class UserFirebase extends Database {
     super('user')
   }
   //新註冊創建資料
-  async setUser(user: any, account: Account) {
+  async setUser(user: any, account: User) {
     let today = new Date()
     profile = {
       uid: user.uid,
@@ -35,24 +35,24 @@ class UserFirebase extends Database {
       })
   }
   // 使用者更新資料
-  async updateUser(profileData: User) {
+  async updateUser(user: User) {
     let today = new Date()
     profile = {
-      displayName: profileData.displayName,
-      email: profileData.email,
-      emailVerified: profileData.emailVerified,
-      isAnonymous: profileData.isAnonymous,
-      phoneNumber: profileData.phoneNumber,
-      photoURL: profileData.photoURL,
-      uid: profileData.uid,
-      state: profileData.state,
-      createdAt: profileData.createdAt,
-      role: profileData.role,
-      roles: profileData.roles,
+      displayName: user.displayName,
+      email: user.email,
+      emailVerified: user.emailVerified,
+      isAnonymous: user.isAnonymous,
+      phoneNumber: user.phoneNumber,
+      photoURL: user.photoURL,
+      uid: user.uid,
+      state: user.state,
+      createdAt: user.createdAt,
+      role: user.role,
+      roles: user.roles,
       updateAt: today.getTime(),
       operateAt: today.getTime()
     }
-    return this.update(profileData.uid, profile)
+    return this.update(user.uid, profile)
       .then((res) => {
         return res
       })

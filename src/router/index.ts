@@ -2,7 +2,6 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import { UserStore } from '@/stores'
 import AppLayout from '@/layout/AppLayout.vue'
 import { UserObject } from '@/interface'
-import type { Account } from '@/interface'
 
 // router
 import systemRouter from './modules/system'
@@ -148,16 +147,8 @@ router.beforeEach((to) => {
 
           // 如果出錯且判斷無uid，代表資料庫沒有這個帳號
           if (userStore.user.uid == '') {
-            const account: Account = {
-              displayName: '',
-              email: '',
-              password: '',
-              state: 'enable',
-              role: { displayName: '無', id: '' },
-              photoURL: ''
-            }
             // 加入資料庫
-            await userFirebase.setUser(res, account)
+            await userFirebase.setUser(res, UserObject)
             const newUser = await userFirebase.get(res.uid)
             userStore.user = newUser
             const role = await roleFirebase.get(newUser.role)

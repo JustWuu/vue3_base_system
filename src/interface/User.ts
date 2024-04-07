@@ -3,12 +3,12 @@ interface Role {
   id: string
 }
 export interface User {
-  displayName: string | null
+  displayName: string
   email: string
-  emailVerified: string | null
+  emailVerified: boolean
   isAnonymous: string | null
   phoneNumber: string | null
-  photoURL: string | null
+  photoURL: string
   uid: string
   state: 'enable' | 'disabled' | 'delete' | ''
   createdAt: number | null
@@ -16,28 +16,20 @@ export interface User {
   roles: string[]
   updateAt: number
   operateAt: number
-}
-
-export interface Account {
-  displayName: string
-  email: string
-  photoURL: string
-  state: 'enable' | 'disabled' | 'delete' | ''
-  role: Role
-  password: string
+  password?: string
 }
 
 export const UserObject: User = {
   displayName: '',
   email: '',
-  emailVerified: '',
+  emailVerified: false,
   isAnonymous: '',
   phoneNumber: '',
   photoURL: '',
   uid: '',
-  state: '',
+  state: 'enable',
   createdAt: 0,
-  role: { displayName: '', id: '' },
+  role: { displayName: '無', id: '' },
   roles: [],
   updateAt: 0,
   operateAt: 0

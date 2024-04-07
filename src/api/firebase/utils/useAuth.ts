@@ -16,7 +16,7 @@ import {
 import { UserStore } from '@/stores'
 import { storeToRefs } from 'pinia'
 import { UserFirebase } from '@/api'
-import type { StringObject, Account } from '@/interface'
+import type { StringObject, User } from '@/interface'
 
 // 註冊使用
 import { initializeApp } from 'firebase/app'
@@ -43,8 +43,9 @@ const authMessage: StringObject = {
 
 class Auth {
   constructor() {}
+  // 管理帳號使用(不需依當前登入的帳號來做動)
   // 創建帳戶(不會直接登入)
-  async createUser(account: Account) {
+  async createUser(account: User) {
     // 建立臨時實例
     const config = {
       apiKey: import.meta.env.VITE_API_KEY,
@@ -53,7 +54,7 @@ class Auth {
     const secondaryApp = initializeApp(config, 'Secondary')
     const secondaryAuth = getAuth(secondaryApp)
     // 開始建立帳戶
-    return await createUserWithEmailAndPassword(secondaryAuth, account.email, account.password)
+    return await createUserWithEmailAndPassword(secondaryAuth, account.email, account.password!)
       .then((userCredential) => {
         user = userCredential.user
         console.log(`${user.email} create OK`)
@@ -83,6 +84,8 @@ class Auth {
   //       // ..
   //     })
   // }
+
+  // 當前帳號使用(需依當前登入的帳號來做動)
   //登入
   async signIn(email: string, password: string) {
     return await signInWithEmailAndPassword(auth, email, password)
