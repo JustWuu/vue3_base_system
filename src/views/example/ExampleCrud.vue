@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { Auth, CRUDFirebase, UserFirebase } from '@/api/firebase'
+import { Auth, CRUDFirebase, UserFirebase, Ipify } from '@/api'
 import { Storage, Encryp } from '@/utils'
 import InputTextFloat from '@/components/form/InputTextFloat.vue'
 import InputPasswordFloat from '@/components/form/InputPasswordFloat.vue'
+import { success, error } from '@/utils'
 
 const storage = new Storage()
 const encryp = new Encryp()
@@ -12,8 +13,11 @@ const auth = new Auth()
 const crudFirebase = new CRUDFirebase()
 const userFirebase = new UserFirebase()
 const { user } = auth.getUser()
+const ipify = new Ipify()
 
 //data
+const ip = ref('')
+
 const signupAccount = ref({
   email: '',
   password: ''
@@ -53,14 +57,12 @@ const signup = () => {
     .then((res) => {
       if (res) {
         console.log(res)
-        // emit('showSuccess', '完成註冊，登入成功')
-        // message.sendSystemMail(mail.value)
-        // router.push('/')
+        success(`${res}`)
       }
     })
-    .catch((error) => {
-      console.log(error)
-      // emit('showError', error)
+    .catch((e) => {
+      error(e)
+      console.log(e)
     })
 }
 
@@ -76,13 +78,11 @@ const signin = () => {
         } else {
           storage.removeLocalStorage('account')
         }
-        // emit('showSuccess', '登入成功')
-        // router.push('/')
+        success(`${res}`)
       }
     })
-    .catch((error) => {
-      console.log(error)
-      // emit('showError', error)
+    .catch((e) => {
+      error(e)
     })
 }
 
@@ -92,21 +92,24 @@ const signOut = () => {
     .then((res) => {
       if (res) {
         console.log(res)
+        success(`${res}`)
       }
     })
-    .catch((error) => {
-      console.log(error)
+    .catch((e) => {
+      error(e)
     })
 }
 
 const getUid = (uid: string) => {
   userFirebase.get(uid).then((res) => {
+    success(`${res}`)
     console.log(res)
   })
 }
 
 const getArray = () => {
   crudFirebase.array().then((res) => {
+    success(`${res}`)
     curdTest.value.array = res
     console.log(curdTest.value.array)
   })
@@ -115,6 +118,7 @@ const getArray = () => {
 const get = (doc: string) => {
   crudFirebase.get(doc).then((res) => {
     console.log('資料：', res)
+    success(`${res}`)
   })
 }
 
@@ -125,21 +129,50 @@ const set = (id: string, params: object) => {
       .add(params)
       .then((res) => {
         console.log(res)
+        success(`${res}`)
       })
-      .catch((error) => {
-        console.log(error)
+      .catch((e) => {
+        console.log(e)
+        error(e)
       })
   } else {
-    crudFirebase.set(id, params)
+    crudFirebase
+      .set(id, params)
+      .then((res) => {
+        console.log(res)
+        success(`${res}`)
+      })
+      .catch((e) => {
+        console.log(e)
+        error(e)
+      })
   }
 }
 
 const update = (id: string, params: object) => {
-  crudFirebase.update(id, params)
+  crudFirebase
+    .update(id, params)
+    .then((res) => {
+      console.log(res)
+      success(`${res}`)
+    })
+    .catch((e) => {
+      console.log(e)
+      error(e)
+    })
 }
 
 const remove = (id: string) => {
-  crudFirebase.delete(id)
+  crudFirebase
+    .delete(id)
+    .then((res) => {
+      console.log(res)
+      success(`${res}`)
+    })
+    .catch((e) => {
+      console.log(e)
+      error(e)
+    })
 }
 
 // 下方onSnapshot寫法，必須搭配一個callback
@@ -162,6 +195,9 @@ onMounted(() => {
     signinAccount.value = storage.getLocalStorage('account')
     signinAccount.value.password = encryp.aesDecrypt(signinAccount.value.password)
   }
+  ipify.get().then((res) => {
+    ip.value = res
+  })
 })
 </script>
 
@@ -243,6 +279,8 @@ onMounted(() => {
             <p class="mb-0">名稱：{{ user?.displayName }}</p>
             <p class="mb-0">狀態：{{ user?.state }}</p>
             <p class="mb-0">驗證：{{ user?.emailVerified }}</p>
+            <p class="mb-0">權限：{{ user?.role.displayName }}</p>
+            <p class="mb-0">IP：{{ ip }}</p>
           </div>
           <Button label="登出" severity="danger" type="submit"></Button>
         </VForm>
