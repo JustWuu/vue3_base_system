@@ -4,16 +4,18 @@ import { Auth, UserFirebase } from '@/api'
 import {
   InputPasswordFloat,
   InputTextFloat,
-  InputDropdownFloat,
-  RoleDropdownFloat
+  RoleDropdownFloat,
+  StateDropdownFloat
 } from '@/components/form'
-import type { Account } from '@/interface'
-import { StateArray } from '@/interface'
+import { UserObject } from '@/interface'
+import type { User } from '@/interface'
 import { useRoute, useRouter } from 'vue-router'
-import { success, error } from '@/utils'
+import { success, error, ConvertDate } from '@/utils'
 
 const route = useRoute()
 const router = useRouter()
+
+const convertDate = new ConvertDate()
 // props
 const props = defineProps({
   mode: {
@@ -29,17 +31,10 @@ const userFirebase = new UserFirebase()
 //data
 const id = ref('')
 
-const account = ref<Account>({
-  displayName: '',
-  email: '',
-  password: '',
-  state: 'enable',
-  role: { displayName: '無', id: '' },
-  photoURL: ''
-})
+const user = ref<User>({ ...UserObject })
 
 //methods
-const submit = async (params: Account) => {
+const submit = async (params: User) => {
   if (props.mode === 'add') {
     auth
       .createUser(params)
@@ -54,7 +49,7 @@ const submit = async (params: Account) => {
       })
   } else if (props.mode === 'edit') {
     userFirebase
-      .update(id.value, params)
+      .updateUser(params)
       .then((res) => {
         success(res)
         router.push('/system/user/list')
@@ -71,7 +66,7 @@ onMounted(() => {
     id.value = route.params.id as string
     userFirebase.get(id.value).then((res) => {
       console.log(res)
-      account.value = res
+      user.value = res
     })
   }
 })
@@ -80,15 +75,62 @@ onMounted(() => {
 <template>
   <div class="grid">
     <div class="col-12 px-2">
-      <VForm ref="signupForm" @submit="submit(account)" :key="account">
+      <VForm ref="signupForm" @submit="submit(user)" :key="user">
         <div class="card p-fluid">
-          <h5 v-if="mode === 'add'">新增帳號</h5>
-          <h5 v-else-if="mode === 'edit'">編輯帳號</h5>
+          <div class="flex">
+            <div class="flex align-items-center">
+              <h5 v-if="mode === 'add'">新增帳號</h5>
+              <h5 v-else-if="mode === 'edit'" class="m-0">編輯帳號</h5>
+            </div>
+            <div v-if="mode === 'edit'" class="flex-1">
+              <div class="flex justify-content-end align-items-center">
+                <span class="mr-1">{{ user.emailVerified ? '已驗證信箱' : '未驗證信箱' }}</span>
+
+                <i
+                  id="emailVerified"
+                  class="pi"
+                  :class="{
+                    'pi-check-circle text-green-500': user.emailVerified,
+                    'pi-times-circle text-red-400': !user.emailVerified
+                  }"
+                ></i>
+              </div>
+              <div class="flex justify-content-end">
+                <span>上次操作時間 {{ convertDate.convertDate(user.operateAt) }}</span>
+              </div>
+            </div>
+          </div>
+
           <div class="grid p-fluid mt-3">
             <div class="col-12 md:col-6">
               <input-text-float
+                label="信箱"
+                v-model="user.email"
+                name="email"
+                rules="required|email"
+                :disabled="mode === 'edit'"
+              />
+            </div>
+            <div class="col-12 md:col-6">
+              <input-password-float
+                v-if="mode === 'add'"
+                label="密碼"
+                v-model="user.password"
+                name="password"
+                rules="required"
+              />
+              <input-text-float
+                v-if="mode === 'edit'"
+                label="UID"
+                v-model="user.uid"
+                name="uid"
+                disabled
+              />
+            </div>
+            <div class="col-12 md:col-6">
+              <input-text-float
                 label="名稱"
-                v-model="account.displayName"
+                v-model="user.displayName"
                 name="displayName"
                 rules="required"
               />
@@ -96,44 +138,16 @@ onMounted(() => {
             <div class="col-12 md:col-6">
               <input-text-float
                 label="照片"
-                v-model="account.photoURL"
+                v-model="user.photoURL"
                 name="photoURL"
                 rules="required"
               />
             </div>
             <div class="col-12 md:col-6">
-              <input-text-float
-                label="信箱"
-                v-model="account.email"
-                name="email"
-                rules="required|email"
-              />
+              <state-dropdown-float v-model="user.state" name="state" rules="required" />
             </div>
-            <div class="col-12 md:col-6">
-              <input-password-float
-                v-if="mode === 'add'"
-                label="密碼"
-                v-model="account.password"
-                name="password"
-                rules="required"
-              />
-            </div>
-            <div class="col-12 md:col-6">
-              <input-dropdown-float
-                label="狀態"
-                :options="StateArray"
-                v-model="account.state"
-                name="state"
-                rules="required"
-              />
-            </div>
-            <div class="col-12 md:col-6">
-              <role-dropdown-float
-                label="權限"
-                v-model="account.role"
-                name="role"
-                rules="required"
-              />
+            <div v-role="['role:r']" class="col-12 md:col-6">
+              <role-dropdown-float v-model="user.role" name="role" rules="required" />
             </div>
           </div>
           <Button label="送出" type="submit"></Button>
@@ -141,26 +155,6 @@ onMounted(() => {
       </VForm>
     </div>
   </div>
-
-  <!-- <div class="grid">
-    <div v-role="['user:c']" class="col-12 md:col-6 px-2">
-      <div v-if="mode === 'add'" class="card p-fluid">
-        <VForm ref="signupForm" @submit="submit(account)">
-          <h5>登入信箱及密碼</h5>
-          <div class="field mt-5">
-            
-          </div>
-          <div class="field mt-5">
-            
-          </div>
-          <div class="field mt-5">
-            
-          </div>
-          <Button label="建立" type="submit"></Button>
-        </VForm>
-      </div>
-    </div>
-  </div> -->
 </template>
 
 <style lang="scss" scoped></style>
