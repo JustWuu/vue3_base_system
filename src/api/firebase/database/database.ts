@@ -81,9 +81,10 @@ class Database {
 
     const today = new Date()
     try {
+      const syslogID = random.generateRandomString(10)
       await runTransaction(db, async (transaction) => {
         transaction.set(doc(db, this.child, id), params)
-        transaction.set(doc(db, 'syslog', `${today.getTime()}`), {
+        transaction.set(doc(db, 'syslog', syslogID), {
           ...new SyslogClass(
             this.child,
             id,
@@ -92,7 +93,8 @@ class Database {
             user.value.uid,
             user.value.email,
             await ip,
-            'enable'
+            'enable',
+            syslogID
           )
         })
       })
@@ -113,10 +115,11 @@ class Database {
 
     const today = new Date()
     try {
+      const syslogID = random.generateRandomString(10)
       const randomId = random.generateRandomString(10)
       await runTransaction(db, async (transaction) => {
         transaction.set(doc(db, this.child, randomId), params)
-        transaction.set(doc(db, 'syslog', `${today.getTime()}`), {
+        transaction.set(doc(db, 'syslog', syslogID), {
           ...new SyslogClass(
             this.child,
             randomId,
@@ -125,7 +128,8 @@ class Database {
             user.value.uid,
             user.value.email,
             await ip,
-            'enable'
+            'enable',
+            syslogID
           )
         })
       })
@@ -146,9 +150,10 @@ class Database {
 
     const today = new Date()
     try {
+      const syslogID = random.generateRandomString(10)
       await runTransaction(db, async (transaction) => {
         transaction.update(doc(db, this.child, id), { ...params, timestamp: serverTimestamp() })
-        transaction.set(doc(db, 'syslog', `${today.getTime()}`), {
+        transaction.set(doc(db, 'syslog', syslogID), {
           ...new SyslogClass(
             this.child,
             id,
@@ -157,7 +162,8 @@ class Database {
             user.value.uid,
             user.value.email,
             await ip,
-            'enable'
+            'enable',
+            syslogID
           )
         })
       })
@@ -178,9 +184,10 @@ class Database {
 
     const today = new Date()
     try {
+      const syslogID = random.generateRandomString(10)
       await runTransaction(db, async (transaction) => {
         transaction.delete(doc(db, this.child, id))
-        transaction.set(doc(db, 'syslog', `${today.getTime()}`), {
+        transaction.set(doc(db, 'syslog', syslogID), {
           ...new SyslogClass(
             this.child,
             id,
@@ -189,7 +196,8 @@ class Database {
             user.value.uid,
             user.value.email,
             await ip,
-            'enable'
+            'enable',
+            syslogID
           )
         })
       })
