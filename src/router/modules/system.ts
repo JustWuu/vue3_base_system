@@ -80,12 +80,25 @@ const systemRouter: NewRouteRecordRaw[] = [
   },
   {
     path: '/system/syslog/list',
-    name: 'syslogList',
+    name: 'SyslogList',
     component: () => import('@/views/system/syslog/SyslogList.vue'),
     meta: {
       title: '操作紀錄',
       auth: true,
       hide: false,
+      icon: 'pi pi-fw pi-wrench',
+      theme: 'syslog',
+      roles: ['syslog:r']
+    }
+  },
+  {
+    path: '/system/syslog/read/:id(\\S+)',
+    name: 'SyslogRead',
+    component: () => import('@/views/system/syslog/SyslogRead.vue'),
+    meta: {
+      title: '操作紀錄',
+      auth: true,
+      hide: true,
       icon: 'pi pi-fw pi-wrench',
       theme: 'syslog',
       roles: ['syslog:r']
