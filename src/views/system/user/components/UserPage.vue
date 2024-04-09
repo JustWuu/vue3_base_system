@@ -5,8 +5,9 @@ import {
   InputPasswordFloat,
   InputTextFloat,
   RoleDropdownFloat,
-  StateDropdownFloat
-} from '@/components/form'
+  StateDropdownFloat,
+  FloatText
+} from '@/components'
 import { UserObject } from '@/interface'
 import type { User } from '@/interface'
 import { useRoute, useRouter } from 'vue-router'
@@ -96,7 +97,7 @@ onMounted(() => {
                 ></i>
               </div>
               <div class="flex justify-content-end">
-                <span>上次操作時間 {{ convertDate.convertDate(user.operateAt) }}</span>
+                <span>上次登入時間 {{ convertDate.convertDate(user.operateAt) }}</span>
               </div>
             </div>
           </div>
@@ -104,12 +105,13 @@ onMounted(() => {
           <div class="grid p-fluid mt-3">
             <div class="col-12 md:col-6">
               <input-text-float
+                v-if="mode === 'add'"
                 label="信箱"
                 v-model="user.email"
                 name="email"
                 rules="required|email"
-                :disabled="mode === 'edit'"
               />
+              <float-text v-if="mode === 'edit'" label="信箱" :text="user.email" disabled />
             </div>
             <div class="col-12 md:col-6">
               <input-password-float
@@ -119,13 +121,7 @@ onMounted(() => {
                 name="password"
                 rules="required"
               />
-              <input-text-float
-                v-if="mode === 'edit'"
-                label="UID"
-                v-model="user.uid"
-                name="uid"
-                disabled
-              />
+              <float-text v-if="mode === 'edit'" label="UID" :text="user.uid" disabled />
             </div>
             <div class="col-12 md:col-6">
               <input-text-float

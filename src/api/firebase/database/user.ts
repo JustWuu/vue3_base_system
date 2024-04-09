@@ -39,20 +39,13 @@ class UserFirebase extends Database {
     let today = new Date()
     profile = {
       displayName: user.displayName,
-      email: user.email,
-      emailVerified: user.emailVerified,
-      isAnonymous: user.isAnonymous,
       phoneNumber: user.phoneNumber,
       photoURL: user.photoURL,
-      uid: user.uid,
       state: user.state,
-      createdAt: user.createdAt,
       role: user.role,
-      roles: user.roles,
-      updateAt: today.getTime(),
-      operateAt: today.getTime()
+      updateAt: today.getTime()
     }
-    return this.update(user.uid, profile)
+    return this.update(user.uid!, profile)
       .then((res) => {
         return res
       })

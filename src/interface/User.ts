@@ -4,18 +4,18 @@ interface Role {
 }
 export interface User {
   displayName: string
-  email: string
-  emailVerified: boolean
-  isAnonymous: string | null
+  email?: string
+  emailVerified?: boolean
+  isAnonymous?: boolean
   phoneNumber: string | null
   photoURL: string
-  uid: string
+  uid?: string
   state: 'enable' | 'disabled' | 'delete' | ''
-  createdAt: number | null
+  createdAt?: number | null
   role: Role
-  roles: string[]
+  roles?: string[]
   updateAt: number
-  operateAt: number
+  operateAt?: number
   password?: string
 }
 
@@ -23,7 +23,7 @@ export const UserObject: User = {
   displayName: '',
   email: '',
   emailVerified: false,
-  isAnonymous: '',
+  isAnonymous: false,
   phoneNumber: '',
   photoURL: '',
   uid: '',
