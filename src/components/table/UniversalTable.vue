@@ -49,10 +49,27 @@ const props = defineProps({
     default() {
       return []
     }
+  },
+  tableStyle: {
+    type: String,
+    default: ''
+  },
+  fixed: {
+    type: Boolean,
+    default: false
+  },
+  sortField: {
+    type: String,
+    default: ''
+  },
+  resizableColumns: {
+    type: Boolean,
+    default: false
   }
 })
 // data
 const filters = ref<any>({})
+const style = ref('')
 const dt = ref()
 // methods
 const exportCSV = () => {
@@ -80,6 +97,11 @@ onBeforeMount(() => {
       filters.value[filter.field] = { value: null, matchMode: FilterMatchMode.CONTAINS }
     }
   }
+  if (props.fixed) {
+    style.value = 'table-layout: fixed;' + props.tableStyle
+  } else {
+    style.value = props.tableStyle
+  }
 })
 </script>
 
@@ -87,7 +109,6 @@ onBeforeMount(() => {
   <DataTable
     ref="dt"
     :value="data"
-    tableStyle="min-width: 50rem"
     :paginator="paginator"
     :rows="rows"
     :filters="filters"
@@ -95,6 +116,11 @@ onBeforeMount(() => {
     :rowsPerPageOptions="rowsPer"
     currentPageReportTemplate="{first} - {last} 共 {totalRecords} 項目"
     responsiveLayout="scroll"
+    :responsive="true"
+    :tableStyle="style"
+    :sortField="sortField"
+    :sortOrder="-1"
+    :resizableColumns="resizableColumns"
   >
     <template #header>
       <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
@@ -139,24 +165,16 @@ onBeforeMount(() => {
         :field="col.field"
         :header="col.header"
         :sortable="col.sortable"
-        :headerStyle="col.style"
-        :bodyStyle="col.style"
-        :footerStyle="col.style"
-        :headerClass="col.class"
-        :bodyClass="col.class"
-        :footerClass="col.class"
+        :style="col.style"
+        :class="[col.class, { 'text-overflow-ellipsis overflow-hidden': fixed }]"
       ></Column>
       <Column
         v-if="col.type === 'date'"
         :field="col.field"
         :header="col.header"
         :sortable="col.sortable"
-        :headerStyle="col.style"
-        :bodyStyle="col.style"
-        :footerStyle="col.style"
-        :headerClass="col.class"
-        :bodyClass="col.class"
-        :footerClass="col.class"
+        :style="col.style"
+        :class="[col.class, { 'text-overflow-ellipsis overflow-hidden': fixed }]"
         class="white-space-nowrap"
       >
         <template #body="{ data }">
@@ -168,12 +186,8 @@ onBeforeMount(() => {
         :field="col.field"
         :header="col.header"
         :sortable="col.sortable"
-        :headerStyle="col.style"
-        :bodyStyle="col.style"
-        :footerStyle="col.style"
-        :headerClass="col.class"
-        :bodyClass="col.class"
-        :footerClass="col.class"
+        :style="col.style"
+        :class="[col.class, { 'text-overflow-ellipsis overflow-hidden': fixed }]"
         dataType="boolean"
       >
         <template #body="{ data }">
@@ -191,12 +205,8 @@ onBeforeMount(() => {
         :field="col.field"
         :header="col.header"
         :sortable="col.sortable"
-        :headerStyle="col.style"
-        :bodyStyle="col.style"
-        :footerStyle="col.style"
-        :headerClass="col.class"
-        :bodyClass="col.class"
-        :footerClass="col.class"
+        :style="col.style"
+        :class="[col.class, { 'text-overflow-ellipsis overflow-hidden': fixed }]"
       >
         <template #body="{ data }">
           <Tag
