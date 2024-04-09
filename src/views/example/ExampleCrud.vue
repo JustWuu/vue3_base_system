@@ -18,11 +18,6 @@ const ipify = new Ipify()
 //data
 const ip = ref('')
 
-const signupAccount = ref({
-  email: '',
-  password: ''
-})
-
 const signinAccount = ref({
   email: '',
   password: '',
@@ -51,21 +46,6 @@ const curdTest = ref<CRUDTest>({
 })
 
 //methods
-const signup = () => {
-  auth
-    .createUser(signupAccount.value.email, signupAccount.value.password)
-    .then((res) => {
-      if (res) {
-        console.log(res)
-        success(`${res}`)
-      }
-    })
-    .catch((e) => {
-      error(e)
-      console.log(e)
-    })
-}
-
 const signin = () => {
   auth
     .signIn(signinAccount.value.email, signinAccount.value.password)
@@ -205,29 +185,6 @@ onMounted(() => {
   <div class="grid">
     <div class="col-12 md:col-6 px-2">
       <div class="card p-fluid">
-        <VForm ref="signupForm" @submit="signup()">
-          <h5>註冊</h5>
-          <div class="field mt-5">
-            <input-text-float
-              label="信箱"
-              v-model="signupAccount.email"
-              name="email0"
-              rules="required|email"
-            />
-          </div>
-          <div class="field mt-5">
-            <input-password-float
-              label="密碼"
-              v-model="signupAccount.password"
-              name="password0"
-              rules="required"
-            />
-          </div>
-          <Button label="註冊" type="submit"></Button>
-        </VForm>
-      </div>
-      <!--  -->
-      <div class="card p-fluid">
         <VForm ref="signinForm" @submit="signin()" :key="signinAccount">
           <h5>登入</h5>
           <div class="field mt-5">
@@ -267,9 +224,6 @@ onMounted(() => {
           <Button label="登入" type="submit"></Button>
         </VForm>
       </div>
-    </div>
-
-    <div class="col-12 md:col-6 px-2">
       <div class="card p-fluid">
         <VForm ref="formRef" @submit="signOut()">
           <h5>當前用戶</h5>
@@ -285,7 +239,9 @@ onMounted(() => {
           <Button label="登出" severity="danger" type="submit"></Button>
         </VForm>
       </div>
+    </div>
 
+    <div class="col-12 md:col-6 px-2">
       <div class="card p-fluid">
         <VForm ref="signupForm" @submit="getUid(uidText)">
           <h5>撈取指定用戶資料</h5>
