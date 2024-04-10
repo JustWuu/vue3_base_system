@@ -23,7 +23,8 @@ const db = getFirestore()
 const ip = ipify.get()
 
 const errorMessage: StringObject = {
-  'permission-denied': '權限不足'
+  'permission-denied': '權限不足',
+  'no-such-document': '查無資料'
 }
 
 class Database {
@@ -43,9 +44,12 @@ class Database {
       if (docSnap.exists()) {
         return docSnap.data()
       } else {
-        throw 'No such document!'
+        throw 'no-such-document'
       }
     } catch (error: any) {
+      if (error === 'no-such-document') {
+        throw errorMessage[`${error}`] + `(${this.child}/${id})`
+      }
       const errorCode = error.code
       throw errorMessage[`${errorCode}`]
     }
@@ -63,10 +67,15 @@ class Database {
       querySnapshot.forEach((doc) => {
         if (doc.data()) {
           array.push(doc.data())
+        } else {
+          throw 'no-such-document'
         }
       })
       return array
     } catch (error: any) {
+      if (error === 'no-such-document') {
+        throw errorMessage[`${error}`] + `(${this.child}/${id})`
+      }
       const errorCode = error.code
       throw errorMessage[`${errorCode}`]
     }
@@ -90,8 +99,8 @@ class Database {
             id,
             'set',
             today.getTime(),
-            user.value.uid,
-            user.value.email,
+            user.value.uid!,
+            user.value.email!,
             await ip,
             'enable',
             syslogID
@@ -125,8 +134,8 @@ class Database {
             randomId,
             'add',
             today.getTime(),
-            user.value.uid,
-            user.value.email,
+            user.value.uid!,
+            user.value.email!,
             await ip,
             'enable',
             syslogID
@@ -159,8 +168,8 @@ class Database {
             id,
             'update',
             today.getTime(),
-            user.value.uid,
-            user.value.email,
+            user.value.uid!,
+            user.value.email!,
             await ip,
             'enable',
             syslogID
@@ -193,8 +202,8 @@ class Database {
             id,
             'delete',
             today.getTime(),
-            user.value.uid,
-            user.value.email,
+            user.value.uid!,
+            user.value.email!,
             await ip,
             'enable',
             syslogID

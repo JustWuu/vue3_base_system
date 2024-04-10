@@ -140,7 +140,7 @@ router.beforeEach((to) => {
           }
         } catch (error) {
           console.error(error)
-          // 這裡要想一下是否有必要，因為這裡是後台，新建帳號必須警慎
+          // 這裡要想一下是否有必要，因為這裡是後台，新建帳號必須謹慎
           // 如果資料庫無這帳號，可能在新建流程中有錯誤，要考慮該帳號是否作廢
           // 乾脆從新建立一個比較好
           // 但如果是前台，要求用戶重新建立又感覺不太好，所以或許這功能留前台就好
@@ -174,7 +174,7 @@ router.beforeEach((to) => {
       console.log('please log in [4]')
       // return { name: 'Login' }
     } else if (userStore.user.uid !== '') {
-      if (!comparisonRoles(to.meta.roles as string[], userStore.user.roles)) {
+      if (!comparisonRoles(to.meta.roles as string[], userStore.user.roles!)) {
         console.log('no role [4]')
         // return { name: '403' }
       }
