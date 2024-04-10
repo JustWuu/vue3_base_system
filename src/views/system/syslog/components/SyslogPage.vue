@@ -5,11 +5,10 @@ import { FloatText } from '@/components'
 import { SyslogFirebase } from '@/api'
 import type { Syslog } from '@/interface'
 import { SyslogClass } from '@/interface'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import { ConvertDate } from '@/utils'
 
 const route = useRoute()
-const router = useRouter()
 
 const convertDate = new ConvertDate()
 // props
@@ -55,25 +54,25 @@ onMounted(() => {
 
           <div class="grid p-fluid mt-3">
             <div class="col-12 md:col-6">
-              <float-text label="集合" :text="syslog.collection" />
+              <float-text label="集合" :content="syslog.collection" />
             </div>
             <div class="col-12 md:col-6">
-              <float-text label="文件" :text="syslog.document" />
+              <float-text label="文件" :content="syslog.document" />
             </div>
             <div class="col-12 md:col-6">
-              <float-text label="操作" :text="syslog.methods" />
+              <float-text label="操作" :content="syslog.methods" />
             </div>
             <div class="col-12 md:col-6">
-              <float-text label="操作者帳號" :text="syslog.useremail" />
+              <float-text label="操作者帳號" :content="syslog.useremail" />
             </div>
             <div class="col-12 md:col-6">
-              <float-text label="操作者UID" :text="syslog.useruid" />
+              <float-text label="操作者UID" :content="syslog.useruid" copy-button />
             </div>
             <div class="col-12 md:col-6">
-              <float-text label="操作者IP" :text="syslog.userip" />
+              <float-text label="操作者IP" :content="syslog.userip" />
             </div>
             <div class="col-12 md:col-6">
-              <float-text label="操作時間" :text="syslog.timestamp" />
+              <float-text label="操作時間" :content="convertDate.convertDate(syslog.timestamp)" />
             </div>
           </div>
           <!-- <Button label="送出" type="submit"></Button> -->

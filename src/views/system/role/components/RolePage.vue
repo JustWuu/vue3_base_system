@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { RoleFirebase } from '@/api'
-import { InputTextFloat, InputDropdownFloat } from '@/components/form'
+import { InputTextFloat, InputDropdownFloat, FloatText } from '@/components'
 import type { TreeNode, TreeSelectionKeys } from 'primevue/tree'
 import type { Role } from '@/interface'
 import { StateArray } from '@/interface'
@@ -218,12 +218,13 @@ onMounted(() => {
           <div class="grid p-fluid mt-3">
             <div class="col-12 md:col-6">
               <input-text-float
+                v-if="mode === 'add'"
                 label="名稱"
                 v-model="role.displayName"
                 name="displayName"
                 rules="required"
-                :disabled="mode !== 'add'"
               />
+              <float-text v-if="mode === 'edit'" label="名稱" :content="role.displayName" />
             </div>
             <div class="col-12 md:col-6">
               <input-dropdown-float

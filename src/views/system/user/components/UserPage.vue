@@ -111,7 +111,7 @@ onMounted(() => {
                 name="email"
                 rules="required|email"
               />
-              <float-text v-if="mode === 'edit'" label="信箱" :text="user.email" disabled />
+              <float-text v-if="mode === 'edit'" label="信箱" :content="user.email" />
             </div>
             <div class="col-12 md:col-6">
               <input-password-float
@@ -121,7 +121,7 @@ onMounted(() => {
                 name="password"
                 rules="required"
               />
-              <float-text v-if="mode === 'edit'" label="UID" :text="user.uid" disabled />
+              <float-text v-if="mode === 'edit'" label="UID" :content="user.uid" />
             </div>
             <div class="col-12 md:col-6">
               <input-text-float
