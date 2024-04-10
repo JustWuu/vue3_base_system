@@ -29,3 +29,6 @@ module.exports = {
     'prettier/prettier': ['error', { endOfLine: 'auto' }]
   }
 }
+
+// https://ithelp.ithome.com.tw/articles/10231505
+//  ESLint + Prettier 整理程式碼，在VScode的settings.json設定

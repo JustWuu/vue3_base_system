@@ -21,6 +21,7 @@
     "@vee-validate/i18n": "^4.12.5",
     "@vee-validate/rules": "^4.12.5",
     "@vitest/ui": "^1.3.1",
+    "@vueuse/core": "^10.9.0",
     "axios": "^1.6.7",
     "chart.js": "^4.4.1",
     "crypto-js": "^4.2.0",
