@@ -1,15 +1,69 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount, type VNodeRef } from 'vue'
 import { useLayout } from '@/layout/composables/layout'
 import { useRouter } from 'vue-router'
+
+import { Auth } from '@/api'
+import { success, error } from '@/utils'
+
+const router = useRouter()
+
+const auth = new Auth()
+
+// interface
+type NewVNodeRef = VNodeRef & {
+  toggle: Function
+}
+
+// data
+const { user } = auth.getUser()
+
+const outMenuItems = ref([
+  {
+    label: '登入',
+    icon: 'pi pi-sign-in',
+    to: '/auth/login'
+  },
+  {
+    label: '註冊',
+    icon: 'pi pi-user-edit',
+    to: '/auth/register'
+  }
+])
+const displayConfirmation = ref(false)
+const menu = ref<NewVNodeRef>()
+
+// methods
+const signOut = () => {
+  auth
+    .signOut()
+    .then((res) => {
+      success(`${res}`)
+      displayConfirmation.value = false
+      router.push('/')
+    })
+    .catch((e) => {
+      error(e)
+    })
+}
+
+const openConfirmation = () => {
+  displayConfirmation.value = true
+}
+const closeConfirmation = () => {
+  displayConfirmation.value = false
+}
+
+const toggleMenu = (event: any) => {
+  menu.value!.toggle(event)
+}
 
 const { layoutConfig, onMenuToggle } = useLayout()
 
 const outsideClickListener = ref<any>(null)
 const topbarMenuActive = ref(false)
-const router = useRouter()
 
-onMounted(() => {
+onMounted(async () => {
   bindOutsideClickListener()
 })
 
@@ -96,8 +150,65 @@ const isOutsideClicked = (event: any) => {
         <i class="pi pi-cog"></i>
         <span>Settings</span>
       </button>
+      <button @click="toggleMenu" class="layout-topbar-button">
+        <Avatar
+          :image="user !== null ? user.photoURL : 'src/assets/logo.svg'"
+          size="large"
+          shape="circle"
+        ></Avatar>
+        <Menu
+          ref="menu"
+          :model="
+            user.uid !== ''
+              ? [
+                  {
+                    label: user.displayName,
+                    to: '/system/user/userprofile'
+                  },
+                  {
+                    separator: true
+                  },
+                  {
+                    label: '登出',
+                    icon: 'pi pi-sign-out',
+                    command: () => {
+                      openConfirmation()
+                    }
+                  }
+                ]
+              : outMenuItems
+          "
+          :popup="true"
+        />
+      </button>
+
+      <Dialog
+        header="確認"
+        v-model:visible="displayConfirmation"
+        :style="{ width: '350px' }"
+        :modal="true"
+      >
+        <div class="flex align-items-center justify-content-center">
+          <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
+          <span>是否登出？</span>
+        </div>
+        <template #footer>
+          <Button
+            label="No"
+            icon="pi pi-times"
+            @click="closeConfirmation"
+            class="p-button-text"
+            autofocus
+          />
+          <Button label="Yes" icon="pi pi-check" @click="signOut()" class="p-button-text" />
+        </template>
+      </Dialog>
     </div>
   </div>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.p-sidebar-bottom .p-sidebar {
+  height: 50vh !important;
+}
+</style>
