@@ -1,11 +1,11 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import { UserStore } from '@/stores'
-import AppLayout from '@/layout/AppLayout.vue'
 import { UserObject } from '@/interface'
 
 // router
 import systemRouter from './modules/system'
 import exampleRouter from './modules/example'
+import authRouter from './modules/auth'
 // import exampleSubmenuRouter from './modules/example-submenu'
 
 // 在渲染的生命週期中，路由似乎比main還早
@@ -39,7 +39,7 @@ const router = createRouter({
     {
       path: '/',
       redirect: '/dashboard',
-      component: AppLayout,
+      component: () => import('@/layout/AppLayout.vue'),
       meta: {
         title: '首頁',
         hide: false
@@ -61,7 +61,7 @@ const router = createRouter({
     },
     {
       path: '/ccc',
-      component: AppLayout,
+      component: () => import('@/layout/AppLayout.vue'),
       meta: {
         title: '模擬前台設定',
         hide: false
@@ -70,7 +70,7 @@ const router = createRouter({
     },
     {
       path: '/system',
-      component: AppLayout,
+      component: () => import('@/layout/AppLayout.vue'),
       meta: {
         title: '系統',
         hide: false
@@ -79,16 +79,22 @@ const router = createRouter({
     },
     {
       path: '/example',
-      component: AppLayout,
+      component: () => import('@/layout/AppLayout.vue'),
       meta: {
         title: '範例',
         hide: false
       },
       children: [...exampleRouter]
     },
-
     // 放這邊沒layout
-    // authRouter,
+    {
+      path: '/auth',
+      meta: {
+        title: '帳號',
+        hide: true
+      },
+      children: [...authRouter]
+    },
     {
       path: '/:404(.*)*',
       name: '404',

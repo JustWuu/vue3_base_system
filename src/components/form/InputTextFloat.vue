@@ -19,6 +19,9 @@ defineProps({
   },
   disabled: {
     type: Boolean
+  },
+  inputClass: {
+    type: String
   }
 })
 </script>
@@ -37,7 +40,7 @@ defineProps({
     <span class="p-float-label">
       <InputText
         class="w-full"
-        :class="{ 'p-filled': modelValue }"
+        :class="[inputClass, { 'p-filled': modelValue }]"
         v-bind="field"
         :modelValue="modelValue"
         :value="modelValue"

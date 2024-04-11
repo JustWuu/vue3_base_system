@@ -29,6 +29,9 @@ defineProps({
   },
   disabled: {
     type: Boolean
+  },
+  inputClass: {
+    type: String
   }
 })
 </script>
@@ -47,7 +50,7 @@ defineProps({
     <span class="p-float-label">
       <Password
         class="w-full"
-        :class="{ 'p-filled': modelValue }"
+        :class="[inputClass, { 'p-filled': modelValue }]"
         v-bind="field"
         :modelValue="field.value"
         :placeholder="placeholder"

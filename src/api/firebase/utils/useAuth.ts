@@ -54,7 +54,7 @@ class Auth {
     const secondaryApp = initializeApp(config, 'Secondary')
     const secondaryAuth = getAuth(secondaryApp)
     // 開始建立帳戶
-    return await createUserWithEmailAndPassword(secondaryAuth, account.email, account.password!)
+    return await createUserWithEmailAndPassword(secondaryAuth, account.email!, account.password!)
       .then((userCredential) => {
         user = userCredential.user
         console.log(`${user.email} create OK`)
@@ -91,7 +91,7 @@ class Auth {
     return await signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         user = userCredential.user
-        return userCredential.user
+        return `Sign-in ${userCredential.user.email}`
       })
       .catch((error) => {
         const errorCode = error.code
@@ -102,7 +102,7 @@ class Auth {
   async signOut() {
     return await signOut(auth)
       .then(() => {
-        // Sign-out successful.
+        return 'Sign-out successful'
       })
       .catch((error) => {
         const errorMessage = error.message
@@ -228,6 +228,7 @@ class Auth {
   //取得當前用戶
   //storeToRefs只會淺監聽，所以改裡面得值並不會重給值
   //需設成null再從給值才能監聽到變化，ex：修改帳戶資料
+  // 使用storeToRefs可以確保資料為響應式，資料皆為最新的值
   getUser() {
     return storeToRefs(userStore)
   }
