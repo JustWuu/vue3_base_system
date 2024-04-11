@@ -11,13 +11,13 @@ export default {
   mounted(el: ElType, binding: DirectiveBinding) {
     const userStore = UserStore()
     const { value } = binding
-    // 這邊做定時是因為在生命週期中，這裡會比roles取得還快，導致判斷一直為false
-    // 由於設為500毫秒，如果是沒有權限的人會短時間看到後才消失
-    // 但低於500毫秒，可能有權限的人在拿到權限之前就被判斷沒權限了
     watchEffect(() => {
+      // 4/11，若沒有權限，會短暫看到後才消失
+      // 可能是role尚未取得所以預設顯示之後才判斷完成
+      // 需要處理一下
       // 等auth資料取得後再取得資料
-      if (userStore.user.roles.length > 0) {
-        const roles = userStore.user.roles
+      if (userStore.roleOn) {
+        const roles = userStore.user.roles!
         if (value && value instanceof Array && value.length > 0) {
           const requiredRoles = value
           const hasRole = roles.some((role) => {

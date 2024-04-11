@@ -134,6 +134,7 @@ router.beforeEach((to) => {
           // 取得帳號權限並儲存
           const role = await roleFirebase.get(user.role.id)
           userStore.user.roles = role.roles
+          userStore.roleOn = true
           if (!comparisonRoles(to.meta.roles as string[], role.roles)) {
             console.log('no role [1]')
             // router.push({ name: '403' });
@@ -153,11 +154,14 @@ router.beforeEach((to) => {
             userStore.user = newUser
             const role = await roleFirebase.get(newUser.role)
             userStore.user.roles = role.roles
+            userStore.roleOn = true
 
             if (!comparisonRoles(to.meta.roles as string[], role.roles)) {
               console.log('no role [3]')
               // router.push({ name: '403' });
             }
+          } else {
+            userStore.roleOn = true
           }
         }
       } else {
