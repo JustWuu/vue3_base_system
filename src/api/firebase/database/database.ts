@@ -51,7 +51,7 @@ class Database {
         throw errorMessage[`${error}`] + `(${this.child}/${id})`
       }
       const errorCode = error.code
-      throw errorMessage[`${errorCode}`]
+      throw errorMessage[`${errorCode}`] + `(${this.child}/${id})`
     }
   }
   /**
@@ -77,7 +77,7 @@ class Database {
         throw errorMessage[`${error}`] + `(${this.child}/${id})`
       }
       const errorCode = error.code
-      throw errorMessage[`${errorCode}`]
+      throw errorMessage[`${errorCode}`] + `(${this.child}/${id})`
     }
   }
   /**
@@ -111,7 +111,7 @@ class Database {
     } catch (error: any) {
       const errorCode = error.code
       console.log(errorCode)
-      throw errorMessage[`${errorCode}`]
+      throw errorMessage[`${errorCode}`] + `(${this.child}/${id})`
     }
   }
   /**
@@ -146,7 +146,7 @@ class Database {
     } catch (error: any) {
       const errorCode = error.code
       console.log(errorCode)
-      throw errorMessage[`${errorCode}`]
+      throw errorMessage[`${errorCode}`] + `(${this.child})`
     }
   }
   /**
@@ -180,7 +180,7 @@ class Database {
     } catch (error: any) {
       const errorCode = error.code
       console.log(errorCode)
-      throw errorMessage[`${errorCode}`]
+      throw errorMessage[`${errorCode}`] + `(${this.child}/${id})`
     }
   }
   /**
@@ -214,7 +214,7 @@ class Database {
     } catch (error: any) {
       const errorCode = error.code
       console.log(errorCode)
-      throw errorMessage[`${errorCode}`]
+      throw errorMessage[`${errorCode}`] + `(${this.child}/${id})`
     }
   }
   // 使用transaction進行更新，批量寫入，操作只有都成功或都不應用，不會只有部分寫成功
@@ -237,7 +237,7 @@ class Database {
     } catch (error: any) {
       const errorCode = error.code
       console.log(errorCode)
-      throw errorMessage[`${errorCode}`]
+      throw errorMessage[`${errorCode}`] + `(${this.child}/${id})`
     }
   }
   // 以下兩種監聽都是僅執行不停止，因為停止需要呼叫原函式
