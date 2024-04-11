@@ -5,6 +5,8 @@ declare module '*.vue' {
   export default component
 }
 
+declare module 'lodash-es'
+
 // declare module '*.vue' {
 //   import { defineComponent } from 'vue'
 //   const component: ReturnType<typeof defineComponent>
