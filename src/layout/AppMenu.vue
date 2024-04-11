@@ -1,10 +1,54 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watchEffect } from 'vue'
 import { useRouter } from 'vue-router'
 import AppMenuItem from './AppMenuItem.vue'
+import { UserStore } from '@/stores'
+import type { RouteRecordRaw } from 'vue-router'
+import { cloneDeep } from 'lodash-es'
 
+const userStore = UserStore()
 const router = useRouter()
-const allRouter = ref(router.options.routes)
+
+// data
+const allRouter = ref<RouteRecordRaw[]>([])
+const roles = ref(userStore.user.roles!)
+
+// methods
+function roleHide(children: any) {
+  children.forEach((child: any) => {
+    if (child.meta.roles && child.meta.roles.length > 0) {
+      const hasRole = roles.value.some((role) => {
+        return child.meta.roles.includes(role)
+      })
+      if (!hasRole) {
+        child.meta.hide = true
+      }
+    }
+    if (child.children && child.children.length > 0) {
+      roleHide(child.children)
+    }
+  })
+}
+
+// watchEffect
+watchEffect(() => {
+  allRouter.value = cloneDeep([...router.options.routes])
+  roles.value = userStore.user.roles!
+
+  allRouter.value.forEach((obj: any) => {
+    if (obj.meta.roles && obj.meta.roles.length > 0) {
+      const hasRole = roles.value.some((role) => {
+        return obj.meta.roles.includes(role)
+      })
+      if (!hasRole) {
+        obj.meta.hide = true
+      }
+    }
+    if (obj.children && obj.children.length > 0) {
+      roleHide(obj.children)
+    }
+  })
+})
 </script>
 
 <template>
