@@ -20,7 +20,7 @@ const signinAccount = ref({
   checked: false
 })
 
-const displayConfirmation = ref(false)
+// const displayConfirmation = ref(false)
 
 //methods
 const signin = () => {
@@ -60,13 +60,13 @@ const signin = () => {
 //     })
 // }
 
-const openConfirmation = () => {
-  displayConfirmation.value = true
-}
+// const openConfirmation = () => {
+//   displayConfirmation.value = true
+// }
 
-const closeConfirmation = () => {
-  displayConfirmation.value = false
-}
+// const closeConfirmation = () => {
+//   displayConfirmation.value = false
+// }
 
 // onMounted
 onMounted(() => {
@@ -91,7 +91,7 @@ onMounted(() => {
           background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%);
         "
       >
-        <div class="w-full surface-card py-8 px-5 sm:px-5" style="border-radius: 53px">
+        <div class="w-full surface-card py-8 px-5 sm:px-8" style="border-radius: 53px">
           <div class="text-center mb-4">
             <div class="text-900 text-3xl font-medium mb-3">帳戶登入</div>
             <router-link
@@ -109,7 +109,7 @@ onMounted(() => {
           </div>
 
           <div>
-            <div class="field mt-5">
+            <div class="field mt-6">
               <input-text-float
                 label="信箱"
                 v-model="signinAccount.email"
@@ -118,8 +118,7 @@ onMounted(() => {
                 input-class="md:w-30rem"
               />
             </div>
-
-            <div class="field mt-5" :key="signinAccount">
+            <div class="field mt-6">
               <input-password-float
                 label="密碼"
                 v-model="signinAccount.password"
@@ -130,7 +129,7 @@ onMounted(() => {
               />
             </div>
 
-            <div class="flex align-items-center justify-content-between mb-4 gap-5">
+            <div class="flex align-items-center justify-content-between my-4 gap-5">
               <div class="flex align-items-center">
                 <Checkbox
                   v-model="signinAccount.checked"

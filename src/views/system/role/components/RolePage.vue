@@ -211,7 +211,7 @@ onMounted(() => {
 <template>
   <div class="grid">
     <div class="col-12 px-2">
-      <VForm ref="signupForm" @submit="submit(role)" :key="role">
+      <VForm ref="signupForm" @submit="submit(role)">
         <div class="card p-fluid">
           <h5 v-if="mode === 'add'">新增權限身分</h5>
           <h5 v-else-if="mode === 'edit'">編輯權限身分</h5>

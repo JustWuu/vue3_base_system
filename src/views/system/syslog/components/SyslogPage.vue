@@ -44,7 +44,7 @@ onMounted(() => {
 <template>
   <div class="grid">
     <div class="col-12 px-2">
-      <VForm ref="signupForm" :key="syslog">
+      <VForm ref="signupForm">
         <div class="card p-fluid">
           <div class="flex">
             <div class="flex align-items-center">

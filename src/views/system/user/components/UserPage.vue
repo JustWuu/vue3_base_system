@@ -76,7 +76,7 @@ onMounted(() => {
 <template>
   <div class="grid">
     <div class="col-12 px-2">
-      <VForm ref="signupForm" @submit="submit(user)" :key="user">
+      <VForm ref="signupForm" @submit="submit(user)">
         <div class="card p-fluid">
           <div class="flex">
             <div class="flex align-items-center">

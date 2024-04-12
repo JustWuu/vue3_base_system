@@ -185,7 +185,7 @@ onMounted(() => {
   <div class="grid">
     <div class="col-12 md:col-6 px-2">
       <div class="card p-fluid">
-        <VForm ref="signinForm" @submit="signin()" :key="signinAccount">
+        <VForm ref="signinForm" @submit="signin()">
           <h5>登入</h5>
           <div class="field mt-5">
             <input-text-float
