@@ -31,17 +31,25 @@ defineProps({
 
 // data
 const options = ref<object[]>([{ id: '', displayName: '無' }])
+// data
+const key = ref(0)
 
 // onMounted
 onMounted(() => {
   roleFirebase.array().then((res: Role[]) => {
     res.filter((item) => options.value.push({ id: item.id, displayName: item.displayName }))
   })
+  setTimeout(() => {
+    if (key.value == 0) {
+      key.value++
+    }
+  }, 200)
 })
 </script>
 
 <template>
   <VField
+    :key="key"
     v-slot="{ field }"
     :name="name"
     :label="label"

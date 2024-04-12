@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref, onMounted } from 'vue'
 //define
 defineProps({
   modelValue: [String, Number],
@@ -24,10 +25,22 @@ defineProps({
     type: Boolean
   }
 })
+// data
+const key = ref(0)
+
+// onMounted
+onMounted(() => {
+  setTimeout(() => {
+    if (key.value == 0) {
+      key.value++
+    }
+  }, 200)
+})
 </script>
 
 <template>
   <VField
+    :key="key"
     v-slot="{ field }"
     :name="name"
     :label="label"

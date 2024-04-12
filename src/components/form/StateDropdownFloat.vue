@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { StateArray } from '@/interface'
 
 //define
@@ -27,10 +27,21 @@ defineProps({
 
 // data
 const options = ref<object[]>([...StateArray])
+const key = ref(0)
+
+// onMounted
+onMounted(() => {
+  setTimeout(() => {
+    if (key.value == 0) {
+      key.value++
+    }
+  }, 200)
+})
 </script>
 
 <template>
   <VField
+    :key="key"
     v-slot="{ field }"
     :name="name"
     :label="label"
