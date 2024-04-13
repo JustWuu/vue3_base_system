@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { RoleFirebase } from '@/api'
-import { InputTextFloat, InputDropdownFloat, FloatText } from '@/components'
+import { InputTextFloat, InputDropdownFloat, FloatText, DebounceButton } from '@/components'
 import type { TreeNode, TreeSelectionKeys } from 'primevue/tree'
 import type { Role } from '@/interface'
 import { StateArray } from '@/interface'
@@ -245,7 +245,7 @@ onMounted(() => {
               ></Tree>
             </div>
           </div>
-          <Button label="送出" type="submit"></Button>
+          <debounce-button label="送出" type="submit" />
         </div>
       </VForm>
     </div>

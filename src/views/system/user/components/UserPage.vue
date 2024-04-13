@@ -6,7 +6,8 @@ import {
   InputTextFloat,
   RoleDropdownFloat,
   StateDropdownFloat,
-  FloatText
+  FloatText,
+  DebounceButton
 } from '@/components'
 import { UserObject } from '@/interface'
 import type { User } from '@/interface'
@@ -146,7 +147,7 @@ onMounted(() => {
               <role-dropdown-float v-model="user.role" name="role" rules="required" />
             </div>
           </div>
-          <Button label="送出" type="submit"></Button>
+          <debounce-button label="送出" type="submit" />
         </div>
       </VForm>
     </div>
