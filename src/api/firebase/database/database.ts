@@ -15,6 +15,9 @@ import { SyslogClass } from '@/interface'
 import { Random } from '@/utils'
 // 這邊不用@做import是因為會跳Cannot access 'Ipify' before initialization錯誤
 import { default as Ipify } from '../../axios/ipify'
+import { DebounceStore } from '@/stores'
+
+const debounceStore = DebounceStore()
 
 const ipify = new Ipify()
 const random = new Random()
@@ -39,14 +42,17 @@ class Database {
    * 返回該collection下的該doc資料
    */
   async get(id: string): Promise<any> {
+    debounceStore.debounce = true
     try {
       const docSnap = await getDoc(doc(db, this.child, id))
       if (docSnap.exists()) {
+        debounceStore.debounce = false
         return docSnap.data()
       } else {
         throw 'no-such-document'
       }
     } catch (error: any) {
+      debounceStore.debounce = false
       if (error === 'no-such-document') {
         throw errorMessage[`${error}`] + `(${this.child}/${id})`
       }
@@ -59,6 +65,7 @@ class Database {
    */
   // 所有資料中都有state欄位，刪除時不會真刪除，而是設為delete做假刪除
   async array(id: string = ''): Promise<any> {
+    debounceStore.debounce = true
     try {
       const querySnapshot = await getDocs(
         query(collection(db, `${this.child}/${id}`), where('state', '!=', 'delete'))
@@ -71,8 +78,10 @@ class Database {
           throw 'no-such-document'
         }
       })
+      debounceStore.debounce = false
       return array
     } catch (error: any) {
+      debounceStore.debounce = false
       if (error === 'no-such-document') {
         throw errorMessage[`${error}`] + `(${this.child}/${id})`
       }
@@ -84,6 +93,7 @@ class Database {
    * 在該doc建立新資料，相同doc內的同id會被取代
    */
   async set(id: string, params: object): Promise<any> {
+    debounceStore.debounce = true
     const useAuthModule = await import('@/api/firebase/utils/useAuth')
     const useAuth = new useAuthModule.default()
     const { user } = useAuth.getUser()
@@ -107,10 +117,12 @@ class Database {
           )
         })
       })
+      debounceStore.debounce = false
       return `${this.child}/${id} Set`
     } catch (error: any) {
       const errorCode = error.code
       console.log(errorCode)
+      debounceStore.debounce = false
       throw errorMessage[`${errorCode}`] + `(${this.child}/${id})`
     }
   }
@@ -118,6 +130,7 @@ class Database {
    * 在該doc建立資料，取名為亂數
    */
   async add(params: object): Promise<any> {
+    debounceStore.debounce = true
     const useAuthModule = await import('@/api/firebase/utils/useAuth')
     const useAuth = new useAuthModule.default()
     const { user } = useAuth.getUser()
@@ -142,10 +155,12 @@ class Database {
           )
         })
       })
+      debounceStore.debounce = false
       return `${this.child}/${randomId} Add`
     } catch (error: any) {
       const errorCode = error.code
       console.log(errorCode)
+      debounceStore.debounce = false
       throw errorMessage[`${errorCode}`] + `(${this.child})`
     }
   }
@@ -153,6 +168,7 @@ class Database {
    * 更新該doc資料
    */
   async update(id: string, params: object): Promise<any> {
+    debounceStore.debounce = true
     const useAuthModule = await import('@/api/firebase/utils/useAuth')
     const useAuth = new useAuthModule.default()
     const { user } = useAuth.getUser()
@@ -176,10 +192,12 @@ class Database {
           )
         })
       })
+      debounceStore.debounce = false
       return `${this.child}/${id} Update`
     } catch (error: any) {
       const errorCode = error.code
       console.log(errorCode)
+      debounceStore.debounce = false
       throw errorMessage[`${errorCode}`] + `(${this.child}/${id})`
     }
   }
@@ -187,6 +205,7 @@ class Database {
    * 刪除doc
    */
   async delete(id: string): Promise<any> {
+    debounceStore.debounce = true
     const useAuthModule = await import('@/api/firebase/utils/useAuth')
     const useAuth = new useAuthModule.default()
     const { user } = useAuth.getUser()
@@ -210,10 +229,12 @@ class Database {
           )
         })
       })
+      debounceStore.debounce = false
       return `${this.child}/${id} Delete`
     } catch (error: any) {
       const errorCode = error.code
       console.log(errorCode)
+      debounceStore.debounce = false
       throw errorMessage[`${errorCode}`] + `(${this.child}/${id})`
     }
   }
