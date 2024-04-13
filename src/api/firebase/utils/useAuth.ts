@@ -19,6 +19,9 @@ import { UserStore } from '@/stores'
 import { storeToRefs } from 'pinia'
 import { UserFirebase } from '@/api'
 import type { StringObject, User } from '@/interface'
+import { DebounceStore } from '@/stores'
+
+const debounceStore = DebounceStore()
 
 // 註冊使用
 import { initializeApp } from 'firebase/app'
@@ -48,6 +51,7 @@ class Auth {
   // 管理帳號使用(不需依當前登入的帳號來做動)
   // 創建帳戶(不會直接登入)
   async createUser(account: User) {
+    debounceStore.debounce = true
     // 建立臨時實例
     const config = {
       apiKey: import.meta.env.VITE_API_KEY,
@@ -90,20 +94,24 @@ class Auth {
   // 當前帳號使用(需依當前登入的帳號來做動)
   //登入
   async signIn(email: string, password: string) {
+    debounceStore.debounce = true
     return await setPersistence(auth, browserSessionPersistence)
       .then(() => {
         return signInWithEmailAndPassword(auth, email, password)
           .then((userCredential) => {
             user = userCredential.user
+            debounceStore.debounce = false
             return `Sign-in ${userCredential.user.email}`
           })
           .catch((error) => {
             const errorCode = error.code
+            debounceStore.debounce = false
             throw authMessage[`${errorCode}`]
           })
       })
       .catch((error) => {
         const errorCode = error.code
+        debounceStore.debounce = false
         throw authMessage[`${errorCode}`]
       })
     // return await signInWithEmailAndPassword(auth, email, password)
@@ -118,24 +126,30 @@ class Auth {
   }
   //登入
   async keepSignIn(email: string, password: string) {
+    debounceStore.debounce = true
     return await signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         user = userCredential.user
+        debounceStore.debounce = false
         return `Sign-in ${userCredential.user.email}`
       })
       .catch((error) => {
         const errorCode = error.code
+        debounceStore.debounce = false
         throw authMessage[`${errorCode}`]
       })
   }
   //登出
   async signOut() {
+    debounceStore.debounce = true
     return await signOut(auth)
       .then(() => {
+        debounceStore.debounce = false
         return 'Sign-out successful'
       })
       .catch((error) => {
         const errorMessage = error.message
+        debounceStore.debounce = false
         return errorMessage
       })
   }
