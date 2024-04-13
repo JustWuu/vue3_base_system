@@ -17,31 +17,47 @@ const auth = new Auth()
 const signinAccount = ref({
   email: '',
   password: '',
-  checked: false
+  checked: false,
+  keepSignIn: true
 })
 
 // const displayConfirmation = ref(false)
 
 //methods
 const signin = () => {
-  auth
-    .signIn(signinAccount.value.email, signinAccount.value.password)
-    .then((res) => {
-      if (res) {
-        console.log(res)
-        if (signinAccount.value.checked) {
-          signinAccount.value.password = encryp.aesEncryp(signinAccount.value.password)
-          storage.setLocalStorage('account', signinAccount.value)
-        } else {
-          storage.removeLocalStorage('account')
+  if (signinAccount.value.keepSignIn) {
+    auth
+      .keepSignIn(signinAccount.value.email, signinAccount.value.password)
+      .then((res) => {
+        if (res) {
+          setLocalStorage(res)
         }
-        success(`${res}`)
-        router.push('/')
-      }
-    })
-    .catch((e) => {
-      error(e)
-    })
+      })
+      .catch((e) => {
+        error(e)
+      })
+  } else {
+    auth
+      .signIn(signinAccount.value.email, signinAccount.value.password)
+      .then((res) => {
+        if (res) {
+          setLocalStorage(res)
+        }
+      })
+      .catch((e) => {
+        error(e)
+      })
+  }
+}
+function setLocalStorage(response: any) {
+  if (signinAccount.value.checked) {
+    signinAccount.value.password = encryp.aesEncryp(signinAccount.value.password)
+    storage.setLocalStorage('account', signinAccount.value)
+  } else {
+    storage.removeLocalStorage('account')
+  }
+  success(`${response}`)
+  router.push('/')
 }
 
 // const signInAnonymously = () => {
@@ -73,6 +89,7 @@ onMounted(() => {
   if (storage.getLocalStorage('account')) {
     signinAccount.value = storage.getLocalStorage('account')
     signinAccount.value.password = encryp.aesDecrypt(signinAccount.value.password)
+    signinAccount.value.keepSignIn = true
   }
 })
 </script>
@@ -135,9 +152,16 @@ onMounted(() => {
                   v-model="signinAccount.checked"
                   id="rememberme1"
                   binary
-                  class="mr-2"
+                  class="mr-1"
                 ></Checkbox>
-                <label for="rememberme1">記住帳密</label>
+                <label for="rememberme1" class="mr-3">記住帳密</label>
+                <Checkbox
+                  v-model="signinAccount.keepSignIn"
+                  id="rememberme1"
+                  binary
+                  class="mr-1"
+                ></Checkbox>
+                <label for="rememberme1">保持登入狀態</label>
               </div>
               <router-link
                 class="font-medium no-underline ml-2 text-right cursor-pointer"

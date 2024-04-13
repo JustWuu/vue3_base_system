@@ -1,5 +1,7 @@
 import {
   getAuth,
+  setPersistence,
+  browserSessionPersistence,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut
@@ -88,6 +90,34 @@ class Auth {
   // 當前帳號使用(需依當前登入的帳號來做動)
   //登入
   async signIn(email: string, password: string) {
+    return await setPersistence(auth, browserSessionPersistence)
+      .then(() => {
+        return signInWithEmailAndPassword(auth, email, password)
+          .then((userCredential) => {
+            user = userCredential.user
+            return `Sign-in ${userCredential.user.email}`
+          })
+          .catch((error) => {
+            const errorCode = error.code
+            throw authMessage[`${errorCode}`]
+          })
+      })
+      .catch((error) => {
+        const errorCode = error.code
+        throw authMessage[`${errorCode}`]
+      })
+    // return await signInWithEmailAndPassword(auth, email, password)
+    //   .then((userCredential) => {
+    //     user = userCredential.user
+    //     return `Sign-in ${userCredential.user.email}`
+    //   })
+    //   .catch((error) => {
+    //     const errorCode = error.code
+    //     throw authMessage[`${errorCode}`]
+    //   })
+  }
+  //登入
+  async keepSignIn(email: string, password: string) {
     return await signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         user = userCredential.user
