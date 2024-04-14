@@ -34,7 +34,7 @@ function roleHide(children: any) {
 watchEffect(() => {
   allRouter.value = cloneDeep([...router.options.routes])
   roles.value = userStore.user.roles!
-
+  // 判斷權限
   allRouter.value.forEach((obj: any) => {
     if (obj.meta.roles && obj.meta.roles.length > 0) {
       const hasRole = roles.value.some((role) => {
@@ -46,6 +46,13 @@ watchEffect(() => {
     }
     if (obj.children && obj.children.length > 0) {
       roleHide(obj.children)
+    }
+  })
+  // 判斷子項目是否皆為hide
+  allRouter.value.forEach((obj: any) => {
+    if (obj.children && obj.children.length > 0) {
+      const allChildrenHidden = obj.children.every((child: any) => child.meta && child.meta.hide)
+      obj.meta.hide = allChildrenHidden
     }
   })
 })
