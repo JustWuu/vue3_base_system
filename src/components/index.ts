@@ -10,6 +10,7 @@ import DebounceButton from './form/DebounceButton.vue'
 import UniversalTable from './table/UniversalTable.vue'
 // universal
 import FloatText from './universal/FloatText.vue'
+import PageMenu from './universal/PageMenu.vue'
 
 export {
   InputDropdownFloat,
@@ -19,5 +20,6 @@ export {
   StateDropdownFloat,
   DebounceButton,
   UniversalTable,
-  FloatText
+  FloatText,
+  PageMenu
 }
