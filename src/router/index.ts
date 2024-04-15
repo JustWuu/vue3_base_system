@@ -3,6 +3,7 @@ import { UserStore, LoadingStore } from '@/stores'
 import { UserObject } from '@/interface'
 
 // router
+import frontRouter from './modules/front'
 import systemRouter from './modules/system'
 import exampleRouter from './modules/example'
 import authRouter from './modules/auth'
@@ -65,10 +66,10 @@ const router = createRouter({
       path: '/ccc',
       component: () => import('@/layout/AppLayout.vue'),
       meta: {
-        title: '模擬前台設定',
+        title: '前台設定',
         hide: false
       },
-      children: []
+      children: [...frontRouter]
     },
     {
       path: '/system',
