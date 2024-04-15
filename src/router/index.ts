@@ -1,11 +1,13 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import { UserStore } from '@/stores'
+import { UserStore, LoadingStore } from '@/stores'
 import { UserObject } from '@/interface'
 
 // router
 import systemRouter from './modules/system'
 import exampleRouter from './modules/example'
 import authRouter from './modules/auth'
+
+import accountRouter from './modules/account'
 // import exampleSubmenuRouter from './modules/example-submenu'
 
 // 在渲染的生命週期中，路由似乎比main還早
@@ -78,6 +80,15 @@ const router = createRouter({
       children: [...systemRouter]
     },
     {
+      path: '/account',
+      component: () => import('@/layout/AppLayout.vue'),
+      meta: {
+        title: '帳戶',
+        hide: true
+      },
+      children: [...accountRouter]
+    },
+    {
       path: '/example',
       component: () => import('@/layout/AppLayout.vue'),
       meta: {
@@ -123,8 +134,10 @@ const router = createRouter({
 // 路由守衛
 router.beforeEach((to) => {
   const userStore = UserStore()
+  const loadingStore = LoadingStore()
   document.title = `${to.meta.title} ▷One System◁`
   if (!userStore.authOn) {
+    loadingStore.appLoading = true
     onAuthStateChanged(auth, async (res) => {
       if (res) {
         console.log(`sign in ${res.email}`)
@@ -178,6 +191,7 @@ router.beforeEach((to) => {
           // router.push('/auth/login')
         }
       }
+      loadingStore.appLoading = false
     })
   } else {
     if (to.meta.auth && userStore.user.uid == '') {
