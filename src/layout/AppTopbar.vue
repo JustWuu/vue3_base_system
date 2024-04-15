@@ -2,6 +2,7 @@
 import { ref, computed, onMounted, onBeforeUnmount, type VNodeRef } from 'vue'
 import { useLayout } from '@/layout/composables/layout'
 import { useRouter } from 'vue-router'
+import AppTopbarConfig from './AppTopbarConfig.vue'
 
 import { Auth } from '@/api'
 import { success, error } from '@/utils'
@@ -78,10 +79,10 @@ const logoUrl = computed(() => {
 const onTopBarMenuButton = () => {
   topbarMenuActive.value = !topbarMenuActive.value
 }
-const onSettingsClick = () => {
-  topbarMenuActive.value = false
-  router.push('/documentation')
-}
+// const onSettingsClick = () => {
+//   topbarMenuActive.value = false
+//   router.push('/documentation')
+// }
 const topbarMenuClasses = computed(() => {
   return {
     'layout-topbar-menu-mobile-active': topbarMenuActive.value
@@ -142,17 +143,18 @@ const isOutsideClicked = (event: any) => {
         <i class="pi pi-calendar"></i>
         <span>Calendar</span>
       </button>
-      <button @click="onTopBarMenuButton()" class="p-link layout-topbar-button">
+      <!-- <button @click="onTopBarMenuButton()" class="p-link layout-topbar-button">
         <i class="pi pi-user"></i>
         <span>Profile</span>
-      </button>
-      <button @click="onSettingsClick()" class="p-link layout-topbar-button">
+      </button> -->
+      <!-- <button @click="onSettingsClick()" class="p-link layout-topbar-button">
         <i class="pi pi-cog"></i>
         <span>Settings</span>
-      </button>
+      </button> -->
+      <app-topbar-config></app-topbar-config>
       <button @click="toggleMenu" class="layout-topbar-button">
         <Avatar
-          :image="user !== null ? user.photoURL : 'src/assets/logo.svg'"
+          :image="user.uid !== '' ? user.photoURL : 'src/assets/user.svg'"
           size="large"
           shape="circle"
         ></Avatar>
@@ -163,7 +165,7 @@ const isOutsideClicked = (event: any) => {
               ? [
                   {
                     label: user.displayName,
-                    to: '/system/user/userprofile'
+                    to: '/account/myaccount'
                   },
                   {
                     separator: true
