@@ -1,2 +1,4 @@
-export { UserStore } from './user'
-export { DebounceStore } from './debounce'
+import { UserStore } from './user'
+import { LoadingStore } from './loading'
+
+export { UserStore, LoadingStore }

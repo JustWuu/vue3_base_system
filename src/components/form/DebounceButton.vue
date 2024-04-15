@@ -1,9 +1,9 @@
 <script setup lang="ts">
 // import { ref, onMounted } from 'vue'
-import { DebounceStore } from '@/stores'
+import { LoadingStore } from '@/stores'
 import { storeToRefs } from 'pinia'
 
-const debounceStore = DebounceStore()
+const loadingStore = LoadingStore()
 
 //define
 defineProps({
@@ -23,7 +23,7 @@ defineProps({
 })
 
 // data
-const loading = storeToRefs(debounceStore)
+const loading = storeToRefs(loadingStore)
 </script>
 
 <template>
