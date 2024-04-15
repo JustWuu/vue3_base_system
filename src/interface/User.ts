@@ -17,6 +17,7 @@ export interface User {
   updateAt: number
   operateAt?: number
   password?: string
+  stateValue?: string
 }
 
 export const UserObject: User = {
