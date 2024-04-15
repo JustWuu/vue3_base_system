@@ -12,7 +12,7 @@ const loading = storeToRefs(loadingStore)
 <template>
   <Toast />
   <router-view />
-  <Loading v-model:active="loading.appLoading.value" opacity="0.7" />
+  <Loading v-model:active="loading.appLoading.value" :opacity="0.7" />
 </template>
 
 <style scoped></style>
