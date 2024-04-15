@@ -34,7 +34,7 @@ onMounted(() => {
     if (key.value == 0) {
       key.value++
     }
-  }, 200)
+  }, 500)
 })
 </script>
 
