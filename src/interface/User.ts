@@ -10,9 +10,9 @@ export interface User {
   phoneNumber: string | null
   photoURL: string
   uid?: string
-  state: 'enable' | 'disabled' | 'delete' | ''
+  state?: 'enable' | 'disabled' | 'delete' | ''
   createdAt?: number | null
-  role: Role
+  role?: Role
   roles?: string[]
   updateAt: number
   operateAt?: number

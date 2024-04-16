@@ -34,7 +34,7 @@ class UserFirebase extends Database {
         throw error
       })
   }
-  // 使用者更新資料
+  // 修改使用者資料
   async updateUser(user: User) {
     let today = new Date()
     profile = {
@@ -43,6 +43,23 @@ class UserFirebase extends Database {
       photoURL: user.photoURL,
       state: user.state,
       role: user.role,
+      updateAt: today.getTime()
+    }
+    return this.update(user.uid!, profile)
+      .then((res) => {
+        return res
+      })
+      .catch((error) => {
+        throw error
+      })
+  }
+  // 使用者更新自己資料
+  async updateAccount(user: User) {
+    let today = new Date()
+    profile = {
+      displayName: user.displayName,
+      phoneNumber: user.phoneNumber,
+      photoURL: user.photoURL,
       updateAt: today.getTime()
     }
     return this.update(user.uid!, profile)

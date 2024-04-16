@@ -18,7 +18,7 @@ import {
 import { UserStore } from '@/stores'
 import { storeToRefs } from 'pinia'
 import { UserFirebase } from '@/api'
-import { type StringObject, type User, UserObject } from '@/interface'
+import { type StringObject, type User } from '@/interface'
 import { LoadingStore } from '@/stores'
 
 const loadingStore = LoadingStore()
@@ -91,7 +91,7 @@ class Auth {
   //     })
   // }
 
-  // 當前帳號使用(需依當前登入的帳號來做動)
+  // 以下為當前帳號使用(需依當前登入的帳號來做動)
   // 登入
   async signIn(email: string, password: string) {
     loadingStore.debounce = true
@@ -181,19 +181,25 @@ class Auth {
   }
   // 修改帳戶資料
   async update(profile: User) {
-    console.log(profile)
+    loadingStore.debounce = true
     user = auth.currentUser
+    // 先修改auth中的資料
     return await updateProfile(user!, profile)
-      .then(() => {
-        userStore.user = UserObject
-        userStore.user = { ...profile }
-        console.log(`${user!.email} update-profile`)
-        userFirebase.update(user!.uid, profile)
-        return true
+      .then(async () => {
+        // 在修改資料庫
+        try {
+          await userFirebase.updateAccount(profile)
+          const newUser = await userFirebase.get(user!.uid)
+          userStore.user = { ...newUser, roles: userStore.user.roles }
+          console.log(`${user!.email} update-profile`)
+          return '帳戶資料更新成功'
+        } catch (error) {
+          console.log(error)
+          throw '帳戶資料庫更新失敗'
+        }
       })
-      .catch((error) => {
-        const errorCode = error.code
-        throw authMessage[`${errorCode}`]
+      .catch(() => {
+        throw '帳戶資料更新失敗'
       })
   }
   // 刪除帳號，刪除帳號並不會連同資料一起刪除
