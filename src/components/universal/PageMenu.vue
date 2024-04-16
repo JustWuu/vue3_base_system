@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, type PropType } from 'vue'
-import { type MenuItem } from 'primevue/menuitem/MenuItem'
+import { type MenuItem } from 'primevue/menuitem/MenuItem.js'
 //define
 const props = defineProps({
   modelValue: [Number],
