@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { ref, watchEffect } from 'vue'
-import { Auth, UserFirebase } from '@/api'
-import { InputTextFloat, FloatText, DebounceButton } from '@/components'
+import { Auth, FireStorage, UserFirebase } from '@/api'
+import { InputTextFloat, FloatText, DebounceButton, CropperDialog } from '@/components'
 import { success, error } from '@/utils'
 import { type User, UserObject } from '@/interface'
 
 // firebase
 const auth = new Auth()
+const fireStorage = new FireStorage()
 const userFirebase = new UserFirebase()
 const { user } = auth.getUser()
 
@@ -26,6 +27,10 @@ const update = () => {
     .catch((e) => {
       error(e)
     })
+}
+const cropper = (file: File) => {
+  // console.log('file', f)
+  fireStorage.upload(file)
 }
 
 // watchEffect
@@ -47,24 +52,7 @@ watchEffect(() => {
           <Image :src="account?.photoURL" alt="" width="200" height="200" />
         </div>
       </div>
-      <div class="field">
-        <FileUpload
-          name="demo[]"
-          @uploader="uploadProfilePhoto(file)"
-          @select="selectFile($event)"
-          :fileLimit="1"
-          accept="image/*"
-          :maxFileSize="1000000"
-          customUpload
-          chooseLabel="選擇"
-          uploadLabel="上傳"
-          cancelLabel="取消"
-        >
-          <template #empty>
-            <p>將圖片拖移到此處上傳</p>
-          </template>
-        </FileUpload>
-      </div>
+      <cropper-dialog @cropper="cropper" />
     </div>
   </div>
 
@@ -87,7 +75,7 @@ watchEffect(() => {
           <float-text label="UID" :content="account.uid" />
         </div>
         <div class="field mt-5">
-          <float-text label="權限" :content="account.role.displayName!" />
+          <float-text label="權限" :content="account.role!.displayName!" />
         </div>
         <div class="field mt-5">
           <float-text label="狀態" :content="account.stateValue" />
