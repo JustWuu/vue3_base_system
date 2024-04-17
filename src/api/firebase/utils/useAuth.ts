@@ -180,7 +180,7 @@ class Auth {
       })
   }
   // 修改帳戶資料
-  async update(profile: User) {
+  async update(profile: any) {
     loadingStore.debounce = true
     user = auth.currentUser
     // 先修改auth中的資料
@@ -188,7 +188,7 @@ class Auth {
       .then(async () => {
         // 在修改資料庫
         try {
-          await userFirebase.updateAccount(profile)
+          await userFirebase.updateAccount(user!.uid, profile)
           const newUser = await userFirebase.get(user!.uid)
           userStore.user = { ...newUser, roles: userStore.user.roles }
           console.log(`${user!.email} update-profile`)

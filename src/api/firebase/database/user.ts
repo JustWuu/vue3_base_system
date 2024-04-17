@@ -54,15 +54,13 @@ class UserFirebase extends Database {
       })
   }
   // 使用者更新自己資料
-  async updateAccount(user: User) {
+  async updateAccount(uid: string, user: User) {
     let today = new Date()
     profile = {
-      displayName: user.displayName,
-      phoneNumber: user.phoneNumber,
-      photoURL: user.photoURL,
+      ...user,
       updateAt: today.getTime()
     }
-    return this.update(user.uid!, profile)
+    return this.update(uid, profile)
       .then((res) => {
         return res
       })
@@ -70,6 +68,22 @@ class UserFirebase extends Database {
         throw error
       })
   }
+  // async updateAccount(user: User) {
+  //   let today = new Date()
+  //   profile = {
+  //     displayName: user.displayName,
+  //     phoneNumber: user.phoneNumber,
+  //     photoURL: user.photoURL,
+  //     updateAt: today.getTime()
+  //   }
+  //   return this.update(user.uid!, profile)
+  //     .then((res) => {
+  //       return res
+  //     })
+  //     .catch((error) => {
+  //       throw error
+  //     })
+  // }
 }
 
 export default UserFirebase
