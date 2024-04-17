@@ -158,8 +158,8 @@ function reset() {
     </div>
 
     <template #footer>
-      <Button label="Cancel" icon="pi pi-times" class="p-button-text" @click="hideDialog" />
-      <Button label="Save" icon="pi pi-check" class="p-button-text" @click="getResult" />
+      <Button label="取消" icon="pi pi-times" class="p-button-text" @click="hideDialog" />
+      <Button label="確定" icon="pi pi-check" class="p-button-text" @click="getResult" />
     </template>
   </Dialog>
 </template>
