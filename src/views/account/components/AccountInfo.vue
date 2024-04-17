@@ -20,7 +20,7 @@ const account = ref<User>({
 const update = () => {
   // 更新auth及data
   auth
-    .update(account.value)
+    .update({ displayName: account.value.displayName })
     .then((res) => {
       success(`${res}`)
     })
@@ -30,7 +30,9 @@ const update = () => {
 }
 const cropper = (file: File) => {
   // console.log('file', f)
-  fireStorage.upload(file)
+  fireStorage.uploadProfilePhoto(file).then((res) => {
+    success(`${res}`)
+  })
 }
 
 // watchEffect
@@ -52,7 +54,7 @@ watchEffect(() => {
           <Image :src="account?.photoURL" alt="" width="200" height="200" />
         </div>
       </div>
-      <cropper-dialog @cropper="cropper" />
+      <cropper-dialog chooseLabel="變更大頭照" header="設定大頭照" @cropper="cropper" />
     </div>
   </div>
 
