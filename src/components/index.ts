@@ -12,6 +12,9 @@ import UniversalTable from './table/UniversalTable.vue'
 import FloatText from './universal/FloatText.vue'
 import PageMenu from './universal/PageMenu.vue'
 
+// dialog
+import CropperDialog from './dialog/CropperDialog.vue'
+
 export {
   InputDropdownFloat,
   InputPasswordFloat,
@@ -21,5 +24,6 @@ export {
   DebounceButton,
   UniversalTable,
   FloatText,
-  PageMenu
+  PageMenu,
+  CropperDialog
 }
