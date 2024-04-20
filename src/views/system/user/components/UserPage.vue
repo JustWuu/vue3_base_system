@@ -32,8 +32,9 @@ const userFirebase = new UserFirebase()
 
 //data
 const id = ref('')
-
 const user = ref<User>({ ...UserObject })
+
+const displayConfirmation = ref(false)
 
 //methods
 const submit = async (params: User) => {
@@ -60,6 +61,29 @@ const submit = async (params: User) => {
         error(e)
       })
   }
+}
+
+const sendPassword = () => {
+  auth
+    .sendPassword(user.value.email!)
+    .then((res) => {
+      if (res) {
+        displayConfirmation.value = false
+        success('重設密碼信件已寄出')
+      }
+    })
+    .catch((e) => {
+      displayConfirmation.value = false
+      error(e)
+    })
+}
+
+const openConfirmation = () => {
+  displayConfirmation.value = true
+}
+
+const closeConfirmation = () => {
+  displayConfirmation.value = false
 }
 
 // onMounted
@@ -146,12 +170,43 @@ onMounted(() => {
             <div v-role="['role:r']" class="col-12 md:col-6">
               <role-dropdown-float v-model="user.role" name="role" rules="required" />
             </div>
+            <div class="md:col-6"></div>
+            <div class="col-12 md:col-6">
+              <debounce-button
+                label="重設密碼"
+                type="button"
+                severity="warning"
+                @click="openConfirmation()"
+              />
+            </div>
           </div>
           <debounce-button label="送出" type="submit" />
         </div>
       </VForm>
     </div>
   </div>
+
+  <Dialog
+    header="確認"
+    v-model:visible="displayConfirmation"
+    :style="{ width: '350px' }"
+    :modal="true"
+  >
+    <div class="flex align-items-center justify-content-center">
+      <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
+      <span>是否發送重設密碼信件？</span>
+    </div>
+    <template #footer>
+      <Button
+        label="No"
+        icon="pi pi-times"
+        @click="closeConfirmation"
+        class="p-button-text"
+        autofocus
+      />
+      <Button label="Yes" icon="pi pi-check" @click="sendPassword()" class="p-button-text" />
+    </template>
+  </Dialog>
 </template>
 
 <style lang="scss" scoped></style>
