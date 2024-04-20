@@ -1,5 +1,5 @@
 <script setup lang="ts">
-// import { ref, onMounted } from 'vue'
+import { type PropType } from 'vue'
 import { LoadingStore } from '@/stores'
 import { storeToRefs } from 'pinia'
 
@@ -19,6 +19,14 @@ defineProps({
   },
   disabled: {
     type: Boolean
+  },
+  severity: {
+    type: String,
+    default: ''
+  },
+  type: {
+    type: String as PropType<'submit' | 'reset' | 'button'>,
+    default: 'submit'
   }
 })
 
@@ -31,7 +39,8 @@ const loading = storeToRefs(loadingStore)
     :icon="icon"
     :label="label"
     :class="buttonClass"
-    type="submit"
+    :type="type"
     :loading="loading.debounce.value"
+    :severity="severity"
   ></Button>
 </template>
