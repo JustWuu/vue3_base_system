@@ -43,7 +43,7 @@ const authMessage: StringObject = {
   'auth/missing-email': '請輸入信箱',
   'auth/user-not-7': '找不到該帳號',
   'auth/user-disabled': '該帳號已停權',
-  'auth/invalid-credential': '無效憑證'
+  'auth/invalid-credential': '驗證失敗'
 }
 
 class Auth {
@@ -101,12 +101,10 @@ class Auth {
           .then((userCredential) => {
             user = userCredential.user
             loadingStore.debounce = false
-            return `Sign-in ${userCredential.user.email}`
+            return `登入：${userCredential.user.email}`
           })
           .catch((error) => {
-            const errorCode = error.code
-            loadingStore.debounce = false
-            throw authMessage[`${errorCode}`]
+            throw error
           })
       })
       .catch((error) => {
@@ -122,7 +120,7 @@ class Auth {
       .then((userCredential) => {
         user = userCredential.user
         loadingStore.debounce = false
-        return `Sign-in ${userCredential.user.email}`
+        return `登入：${userCredential.user.email}`
       })
       .catch((error) => {
         const errorCode = error.code
@@ -136,7 +134,7 @@ class Auth {
     return await signOut(auth)
       .then(() => {
         loadingStore.debounce = false
-        return 'Sign-out successful'
+        return '登出成功'
       })
       .catch((error) => {
         const errorMessage = error.message
@@ -153,8 +151,7 @@ class Auth {
         return userCredential.user
       })
       .catch((error) => {
-        const errorCode = error.code
-        throw authMessage[`${errorCode}`]
+        throw error
       })
   }
   // 變更密碼
@@ -166,11 +163,10 @@ class Auth {
         return updatePassword(user!, newPassword)
           .then(() => {
             console.log(`${user!.email} update-password`)
-            return true
+            return '完成變更密碼'
           })
           .catch((error) => {
-            const errorCode = error.code
-            throw authMessage[`${errorCode}`]
+            throw error
           })
       })
       .catch((error) => {
