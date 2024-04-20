@@ -65,6 +65,19 @@ const exampleRouter: NewRouteRecordRaw[] = [
       theme: 'no-login'
     }
   },
+  // WebSocket
+  {
+    path: '/example/websocket',
+    name: 'ExampleWebSocket',
+    component: () => import('@/views/example/ExampleWebSocket.vue'),
+    meta: {
+      title: 'WebSocket',
+      auth: false,
+      hide: false,
+      icon: 'pi pi-fw pi-send',
+      theme: 'websocket'
+    }
+  },
   // 外部連結+class
   // 空path及component是必要的，在RouteRecordRaw中該值
   {
