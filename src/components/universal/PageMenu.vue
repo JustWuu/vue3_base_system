@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import { ref, type PropType } from 'vue'
-import { type MenuItem } from 'primevue/menuitem/MenuItem.js'
 //define
 const props = defineProps({
   modelValue: [Number],
   model: {
-    type: Array as PropType<MenuItem[]>,
+    type: Array as PropType<[]>,
     //
     default() {
       return []
