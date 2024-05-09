@@ -56,6 +56,9 @@ const copyContent = (value: string) => {
   // pointer-events: none;
   // border: none;
   border: 1px dashed #d1d5db;
+  span {
+    text-wrap: nowrap;
+  }
 }
 .p-inputtext::-webkit-scrollbar {
   width: 5px;
