@@ -1,42 +1,42 @@
 import type { NewRouteRecordRaw } from '@/interface'
 const frontRouter: NewRouteRecordRaw[] = [
   {
-    path: '/front/member/list',
-    name: 'MemberList',
-    component: () => import('@/views/front/member/MemberList.vue'),
+    path: '/system/user/list',
+    name: 'UserList',
+    component: () => import('@/views/system/user/UserList.vue'),
     meta: {
-      title: '會員管理',
+      title: '(帳號管理)',
       auth: true,
       hide: false,
       icon: 'pi pi-fw pi-users',
-      theme: 'member'
-      // roles: ['member:r']
+      theme: 'user',
+      roles: ['user:r']
     }
   },
   {
-    path: '/front/member/add',
-    name: 'MemberAdd',
-    component: () => import('@/views/front/member/MemberAdd.vue'),
+    path: '/system/user/add',
+    name: 'UserAdd',
+    component: () => import('@/views/system/user/UserAdd.vue'),
     meta: {
-      title: '會員新增',
+      title: '帳號新增',
       auth: true,
       hide: true,
       icon: 'pi pi-fw pi-users',
-      theme: 'member'
-      // roles: ['member:c']
+      theme: 'user',
+      roles: ['user:c']
     }
   },
   {
-    path: '/front/member/edit/:id(\\S+)',
-    name: 'MemberEdit',
-    component: () => import('@/views/front/member/MemberEdit.vue'),
+    path: '/system/user/edit/:id(\\S+)',
+    name: 'UserEdit',
+    component: () => import('@/views/system/user/UserEdit.vue'),
     meta: {
-      title: '會員編輯',
+      title: '帳號編輯',
       auth: true,
       hide: true,
       icon: 'pi pi-fw pi-users',
-      theme: 'member'
-      // roles: ['member:u']
+      theme: 'user',
+      roles: ['user:u']
     }
   }
 ]

@@ -127,11 +127,13 @@ const deleteRole = () => {
             <Column headerStyle="min-width:10rem;">
               <template #body="slotProps">
                 <Button
+                  v-role="['role:u']"
                   icon="pi pi-pencil"
                   class="p-button-rounded p-button-success mr-2"
                   @click="edit(slotProps.data)"
                 />
                 <Button
+                  v-role="['role:d']"
                   icon="pi pi-trash"
                   class="p-button-rounded p-button-warning mt-2"
                   @click="confirmDeleteRole(slotProps.data)"

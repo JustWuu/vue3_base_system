@@ -184,7 +184,7 @@ onMounted(() => {
 <template>
   <div class="grid">
     <div class="col-12 md:col-6 px-2">
-      <div class="card p-fluid">
+      <!-- <div class="card p-fluid">
         <VForm ref="signinForm" @submit="signin()">
           <h5>登入</h5>
           <div class="field mt-5">
@@ -223,7 +223,7 @@ onMounted(() => {
           </div>
           <Button label="登入" type="submit"></Button>
         </VForm>
-      </div>
+      </div> -->
       <div class="card p-fluid">
         <VForm ref="formRef" @submit="signOut()">
           <h5>當前用戶</h5>

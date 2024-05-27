@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import { ref, onMounted, type VNodeRef } from 'vue'
 import { useRouter } from 'vue-router'
-import { useToast } from 'primevue/usetoast'
 import { UniversalTable } from '@/components/table'
 import { UserFirebase } from '@/api'
 import type { User, Filter } from '@/interface'
+import { success, error } from '@/utils'
 
-const toast = useToast()
 const router = useRouter()
 // interface
 type NewVNodeRef = VNodeRef & {
@@ -125,25 +124,22 @@ const confirmDeleteUser = (editUser: User) => {
   user.value = editUser
   deleteUserDialog.value = true
 }
-// 確定刪除
-const deleteUser = () => {
-  // users.value = users.value.filter((val: User) => val.uid !== user.value.uid)
+
+const deleteUser = async () => {
+  await userFirebase
+    .update(user.value!.uid, { state: 'delete' })
+    .then((res) => {
+      success(res)
+      router.push('/system/user/list')
+    })
+    .catch((e) => {
+      error(e)
+    })
   deleteUserDialog.value = false
-  toast.add({ severity: 'success', summary: 'Successful', detail: 'User Deleted', life: 3000 })
 }
 
 const exportCSV = () => {
   dt.value!.exportCSV()
-}
-
-const confirmDeleteSelected = () => {
-  deleteUsersDialog.value = true
-}
-const deleteSelectedUsers = () => {
-  users.value = users.value.filter((val) => !selectedUsers.value.includes(val))
-  deleteUsersDialog.value = false
-  selectedUsers.value = []
-  toast.add({ severity: 'success', summary: 'Successful', detail: 'Users Deleted', life: 3000 })
 }
 </script>
 
@@ -155,13 +151,6 @@ const deleteSelectedUsers = () => {
           <template v-slot:start>
             <div class="my-2">
               <Button label="新增" icon="pi pi-plus" class="p-button-success mr-2" @click="add" />
-              <Button
-                label="刪除"
-                icon="pi pi-trash"
-                class="p-button-danger"
-                @click="confirmDeleteSelected"
-                :disabled="!selectedUsers || !selectedUsers.length"
-              />
             </div>
           </template>
 
@@ -183,11 +172,13 @@ const deleteSelectedUsers = () => {
             <Column headerStyle="min-width:10rem;" header="操作" alignFrozen="right" frozen>
               <template #body="slotProps">
                 <Button
+                  v-role="['user:u']"
                   icon="pi pi-pencil"
                   class="p-button-rounded p-button-success mr-2"
                   @click="edit(slotProps.data)"
                 />
                 <Button
+                  v-role="['user:d']"
                   icon="pi pi-trash"
                   class="p-button-rounded p-button-warning mt-2"
                   @click="confirmDeleteUser(slotProps.data)"

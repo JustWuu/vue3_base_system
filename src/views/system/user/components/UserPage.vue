@@ -167,7 +167,7 @@ onMounted(() => {
             <div class="col-12 md:col-6">
               <state-dropdown-float v-model="user.state" name="state" rules="required" />
             </div>
-            <div v-role="['role:r']" class="col-12 md:col-6">
+            <div v-role="['role:u']" class="col-12 md:col-6">
               <role-dropdown-float v-model="user.role" name="role" rules="required" />
             </div>
             <div class="md:col-6"></div>

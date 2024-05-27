@@ -54,7 +54,7 @@ const router = createRouter({
           component: () => import('@/views/Dashboard.vue'),
           meta: {
             title: 'Dashboard',
-            auth: false,
+            auth: true,
             hide: false,
             icon: 'pi pi-fw pi-home',
             theme: 'dashboard'
@@ -136,7 +136,7 @@ const router = createRouter({
 router.beforeEach((to) => {
   const userStore = UserStore()
   const loadingStore = LoadingStore()
-  document.title = `${to.meta.title} ▷One System◁`
+  document.title = `${to.meta.title} - One System`
   if (!userStore.authOn) {
     loadingStore.appLoading = true
     onAuthStateChanged(auth, async (res) => {
@@ -163,31 +163,21 @@ router.beforeEach((to) => {
           userStore.roleOn = true
           if (!comparisonRoles(to.meta.roles as string[], role.roles)) {
             console.log('no role [1]')
-            // router.push({ name: '403' });
+            router.push({ name: '403' })
           }
         } catch (error) {
           console.error(error)
-          // 這裡要想一下是否有必要，因為這裡是後台，新建帳號必須謹慎
-          // 如果資料庫無這帳號，可能在新建流程中有錯誤，要考慮該帳號是否作廢
-          // 乾脆從新建立一個比較好
-          // 但如果是前台，要求用戶重新建立又感覺不太好，所以或許這功能留前台就好
-
           // 如果出錯且判斷無uid，代表資料庫沒有這個帳號
-          if (userStore.user.uid == '') {
-            // 加入資料庫
+          // 代表他是會員帳號而不是後台帳號
+          if (
+            userStore.user.uid == '' &&
+            (res.email == 'rty21785@gmail.com' || res.email == 'animestorehouse100@gmail.com')
+          ) {
+            console.log('偵測到指定帳號異常，自動執行系統初始化。')
             await userFirebase.setUser(res, UserObject)
-            const newUser = await userFirebase.get(res.uid)
-            userStore.user = newUser
-            const role = await roleFirebase.get(newUser.role)
-            if (role.state === 'enable') {
-              userStore.user.roles = role.roles
-            }
-            userStore.roleOn = true
-
-            if (!comparisonRoles(to.meta.roles as string[], role.roles)) {
-              console.log('no role [3]')
-              // router.push({ name: '403' });
-            }
+          } else if (userStore.user.uid == '') {
+            console.log('no auth [1]')
+            router.push({ name: '403' })
           } else {
             userStore.roleOn = true
           }
@@ -197,7 +187,7 @@ router.beforeEach((to) => {
         userStore.authOn = true
         if (to.meta.auth && userStore.user.uid === '') {
           console.log('please log in [1]')
-          // router.push('/auth/login')
+          router.push('/auth/login')
         }
       }
       loadingStore.appLoading = false
@@ -205,11 +195,11 @@ router.beforeEach((to) => {
   } else {
     if (to.meta.auth && userStore.user.uid == '') {
       console.log('please log in [4]')
-      // return { name: 'Login' }
+      return { name: 'AuthLogin' }
     } else if (userStore.user.uid !== '') {
       if (!comparisonRoles(to.meta.roles as string[], userStore.user.roles!)) {
         console.log('no role [4]')
-        // return { name: '403' }
+        return { name: '403' }
       }
     }
   }
