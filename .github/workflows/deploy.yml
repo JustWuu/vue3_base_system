@@ -10,8 +10,10 @@ permissions:
 
 jobs:
   deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    environment: main
 
     steps:
       - name: Checkout Repository
@@ -30,6 +32,16 @@ jobs:
 
       - name: Generate Static Site
         run: pnpm build # 生成静态站点的命令
+        env:
+          VITE_API_KEY: ${{ secrets.VITE_API_KEY }}
+          VITE_AUTH_DOMAIN: ${{ secrets.VITE_AUTH_DOMAIN }}
+          VITE_PROJECT_ID: ${{ secrets.VITE_PROJECT_ID }}
+          VITE_STORAGE_BUCKET: ${{ secrets.VITE_STORAGE_BUCKET }}
+          VITE_MESSAGING_SENDER_ID: ${{ secrets.VITE_MESSAGING_SENDER_ID }}
+          VITE_APP_ID: ${{ secrets.VITE_APP_ID }}
+          VITE_MEASUREMENT_ID: ${{ secrets.VITE_MEASUREMENT_ID }}
+          VITE_ENCRYP_KEY: ${{ secrets.VITE_ENCRYP_KEY }}
+          VITE_ENCRYP_IV: ${{ secrets.VITE_ENCRYP_IV }}
 
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4 # 这个 action 能将你的构建产物，作为新增内容提交到 gh-pages 分支
