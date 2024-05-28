@@ -68,9 +68,9 @@ onMounted(() => {
             <div class="col-12 md:col-6">
               <float-text label="操作者UID" :content="syslog.useruid" copy-button />
             </div>
-            <div class="col-12 md:col-6">
+            <!-- <div class="col-12 md:col-6">
               <float-text label="操作者IP" :content="syslog.userip" />
-            </div>
+            </div> -->
             <div class="col-12 md:col-6">
               <float-text label="操作時間" :content="convertDate.convertDate(syslog.timestamp)" />
             </div>
