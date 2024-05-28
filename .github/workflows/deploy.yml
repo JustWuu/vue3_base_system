@@ -32,3 +32,5 @@ jobs:
 
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4 # 这个 action 能将你的构建产物，作为新增内容提交到 gh-pages 分支
+        with:
+          folder: dist
