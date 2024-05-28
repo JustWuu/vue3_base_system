@@ -24,24 +24,32 @@ const signinAccount = ref({
 // const displayConfirmation = ref(false)
 
 //methods
-const signin = () => {
+const signin = async () => {
   if (signinAccount.value.keepSignIn) {
-    auth
+    await auth
       .keepSignIn(signinAccount.value.email, signinAccount.value.password)
       .then((res) => {
         if (res) {
-          setLocalStorage(res)
+          setLocalStorage()
+          success(`${res}`)
+          setTimeout(() => {
+            router.push('/')
+          }, 700)
         }
       })
       .catch((e) => {
         error(e)
       })
   } else {
-    auth
+    await auth
       .signIn(signinAccount.value.email, signinAccount.value.password)
       .then((res) => {
         if (res) {
-          setLocalStorage(res)
+          setLocalStorage()
+          success(`${res}`)
+          setTimeout(() => {
+            router.push('/')
+          }, 700)
         }
       })
       .catch((e) => {
@@ -49,15 +57,13 @@ const signin = () => {
       })
   }
 }
-function setLocalStorage(response: any) {
+function setLocalStorage() {
   if (signinAccount.value.checked) {
     signinAccount.value.password = encryp.aesEncryp(signinAccount.value.password)
     storage.setLocalStorage('account', signinAccount.value)
   } else {
     storage.removeLocalStorage('account')
   }
-  success(`${response}`)
-  router.push('/')
 }
 
 // const signInAnonymously = () => {
