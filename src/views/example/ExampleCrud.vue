@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue'
 import { Auth, CRUDFirebase, UserFirebase, Ipify } from '@/api'
 import { Storage, Encryp } from '@/utils'
 import InputTextFloat from '@/components/form/InputTextFloat.vue'
-import InputPasswordFloat from '@/components/form/InputPasswordFloat.vue'
+// import InputPasswordFloat from '@/components/form/InputPasswordFloat.vue'
 import { success, error } from '@/utils'
 
 const storage = new Storage()
@@ -46,25 +46,25 @@ const curdTest = ref<CRUDTest>({
 })
 
 //methods
-const signin = () => {
-  auth
-    .signIn(signinAccount.value.email, signinAccount.value.password)
-    .then((res) => {
-      if (res) {
-        console.log(res)
-        if (signinAccount.value.checked) {
-          signinAccount.value.password = encryp.aesEncryp(signinAccount.value.password)
-          storage.setLocalStorage('account', signinAccount.value)
-        } else {
-          storage.removeLocalStorage('account')
-        }
-        success(`${res}`)
-      }
-    })
-    .catch((e) => {
-      error(e)
-    })
-}
+// const signin = () => {
+//   auth
+//     .signIn(signinAccount.value.email, signinAccount.value.password)
+//     .then((res) => {
+//       if (res) {
+//         console.log(res)
+//         if (signinAccount.value.checked) {
+//           signinAccount.value.password = encryp.aesEncryp(signinAccount.value.password)
+//           storage.setLocalStorage('account', signinAccount.value)
+//         } else {
+//           storage.removeLocalStorage('account')
+//         }
+//         success(`${res}`)
+//       }
+//     })
+//     .catch((e) => {
+//       error(e)
+//     })
+// }
 
 const signOut = () => {
   auth
@@ -233,7 +233,7 @@ onMounted(() => {
             <p class="mb-0">名稱：{{ user?.displayName }}</p>
             <p class="mb-0">狀態：{{ user?.state }}</p>
             <p class="mb-0">驗證：{{ user?.emailVerified }}</p>
-            <p class="mb-0">權限：{{ user?.role.displayName }}</p>
+            <p class="mb-0">權限：{{ user?.role!.displayName }}</p>
             <p class="mb-0">IP：{{ ip }}</p>
           </div>
           <Button label="登出" severity="danger" type="submit"></Button>

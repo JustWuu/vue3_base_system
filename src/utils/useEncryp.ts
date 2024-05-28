@@ -1,12 +1,14 @@
 import CryptoJS from 'crypto-js'
 
 class Encryp {
+  KEY: any
+  IV: any
   constructor() {
     this.KEY = import.meta.env.VITE_ENCRYP_KEY
     this.IV = import.meta.env.VITE_ENCRYP_IV
   }
   // AES 加密
-  aesEncryp(value) {
+  aesEncryp(value: string) {
     const KEY = this.base64Decrypt(this.KEY)
     const IV = this.base64Decrypt(this.IV)
     //
@@ -25,7 +27,7 @@ class Encryp {
   }
 
   // AES 解密
-  aesDecrypt(value) {
+  aesDecrypt(value: string) {
     const KEY = this.base64Decrypt(this.KEY)
     const IV = this.base64Decrypt(this.IV)
     //
@@ -45,13 +47,13 @@ class Encryp {
   }
 
   // 先轉utf8，再加密
-  base64Encryp(value) {
+  base64Encryp(value: string) {
     const Uft8 = CryptoJS.enc.Utf8.parse(value)
     return CryptoJS.enc.Base64.stringify(Uft8)
   }
 
   // 解密，再轉為utf8格式的字串
-  base64Decrypt(value) {
+  base64Decrypt(value: string) {
     const base64 = CryptoJS.enc.Base64.parse(value)
     return base64.toString(CryptoJS.enc.Utf8)
   }

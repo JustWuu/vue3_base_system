@@ -99,7 +99,6 @@ const user = ref<User>()
 const selectedUsers = ref<User[]>([])
 
 const deleteUserDialog = ref(false)
-const deleteUsersDialog = ref(false)
 
 // onMounted
 onMounted(() => {
@@ -127,7 +126,7 @@ const confirmDeleteUser = (editUser: User) => {
 
 const deleteUser = async () => {
   await userFirebase
-    .update(user.value!.uid, { state: 'delete' })
+    .update(user.value!.uid!, { state: 'delete' })
     .then((res) => {
       success(res)
       router.push('/system/user/list')
@@ -208,32 +207,6 @@ const exportCSV = () => {
               @click="deleteUserDialog = false"
             />
             <Button label="Yes" icon="pi pi-check" class="p-button-text" @click="deleteUser" />
-          </template>
-        </Dialog>
-
-        <Dialog
-          v-model:visible="deleteUsersDialog"
-          :style="{ width: '450px' }"
-          header="Confirm"
-          :modal="true"
-        >
-          <div class="flex align-items-center justify-content-center">
-            <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
-            <span>你確定要刪除所選的帳號嗎?</span>
-          </div>
-          <template #footer>
-            <Button
-              label="No"
-              icon="pi pi-times"
-              class="p-button-text"
-              @click="deleteUsersDialog = false"
-            />
-            <Button
-              label="Yes"
-              icon="pi pi-check"
-              class="p-button-text"
-              @click="deleteSelectedUsers"
-            />
           </template>
         </Dialog>
       </div>

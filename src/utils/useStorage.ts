@@ -3,25 +3,25 @@
 class Storage {
   constructor() {}
   // LocalStorage，永久，手動清除才會消失
-  setLocalStorage(key, value) {
+  setLocalStorage(key: string, value: any) {
     window.localStorage.setItem(key, JSON.stringify(value))
   }
   // SessionStorage，頁面關閉則消失
-  setSessionStorage(key, value) {
+  setSessionStorage(key: string, value: any) {
     window.sessionStorage.setItem(key, JSON.stringify(value))
   }
   // get
-  getLocalStorage(key) {
+  getLocalStorage(key: string) {
     const data = window.localStorage.getItem(key)
-    return JSON.parse(data)
+    return JSON.parse(data!)
   }
   // get
-  getSessionStorage(key) {
+  getSessionStorage(key: string) {
     const data = window.sessionStorage.getItem(key)
-    return JSON.parse(data)
+    return JSON.parse(data!)
   }
   // removeLocalStorage
-  removeLocalStorage(key) {
+  removeLocalStorage(key: string) {
     window.localStorage.removeItem(key)
   }
   // clearLocalStorage
