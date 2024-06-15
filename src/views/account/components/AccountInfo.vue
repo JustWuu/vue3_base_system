@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, watchEffect } from 'vue'
 import { Auth, UserFirebase } from '@/api'
-import { InputTextFloat, FloatText, DebounceButton } from '@/components'
+import { FloatText } from '@/components'
 import { success, error } from '@/utils'
 import { type User, UserObject } from '@/interface'
 
@@ -55,12 +55,7 @@ watchEffect(() => {
       <VForm ref="signinForm" @submit="update()">
         <h5>帳戶資料</h5>
         <div class="field mt-5">
-          <input-text-float
-            label="名稱"
-            v-model="account.displayName"
-            name="displayName"
-            rules="required"
-          />
+          <float-text label="名稱" :content="account.displayName" />
         </div>
         <div class="field mt-5">
           <float-text label="信箱" :content="account.email" />
@@ -74,7 +69,7 @@ watchEffect(() => {
         <div class="field mt-5">
           <float-text label="狀態" :content="account.stateValue" />
         </div>
-        <debounce-button label="送出" type="submit" />
+        <!-- <debounce-button label="送出" type="submit" /> -->
       </VForm>
     </div>
   </div>
