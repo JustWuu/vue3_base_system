@@ -8,7 +8,7 @@ const systemRouter: NewRouteRecordRaw[] = [
       title: '帳號管理',
       auth: true,
       hide: false,
-      icon: 'pi pi-fw pi-users',
+      icon: 'pi pi-fw pi-user',
       theme: 'user',
       roles: ['user:r']
     }
@@ -21,7 +21,7 @@ const systemRouter: NewRouteRecordRaw[] = [
       title: '帳號新增',
       auth: true,
       hide: true,
-      icon: 'pi pi-fw pi-users',
+      icon: 'pi pi-fw pi-user',
       theme: 'user',
       roles: ['user:c']
     }
@@ -34,7 +34,7 @@ const systemRouter: NewRouteRecordRaw[] = [
       title: '帳號編輯',
       auth: true,
       hide: true,
-      icon: 'pi pi-fw pi-users',
+      icon: 'pi pi-fw pi-user',
       theme: 'user',
       roles: ['user:u']
     }
@@ -102,6 +102,32 @@ const systemRouter: NewRouteRecordRaw[] = [
       icon: 'pi pi-fw pi-wrench',
       theme: 'syslog',
       roles: ['syslog:r']
+    }
+  },
+  {
+    path: '/system/storage/list',
+    name: 'StorageList',
+    component: () => import('@/views/system/storage/StorageList.vue'),
+    meta: {
+      title: '貯存管理',
+      auth: true,
+      hide: false,
+      icon: 'pi pi-fw pi-file-arrow-up',
+      theme: 'storage',
+      roles: ['storage:r']
+    }
+  },
+  {
+    path: '/system/storage/read/:id(\\S+)',
+    name: 'StorageRead',
+    component: () => import('@/views/system/storage/StorageRead.vue'),
+    meta: {
+      title: '貯存管理',
+      auth: true,
+      hide: true,
+      icon: 'pi pi-fw pi-file-arrow-up',
+      theme: 'storage',
+      roles: ['storage:r']
     }
   }
 ]

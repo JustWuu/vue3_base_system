@@ -1,11 +1,10 @@
 // 資料庫
-export { default as MemberFirebase } from './firebase/database/member'
-
 export { default as CRUDFirebase } from './firebase/database/CRUD'
 export { default as UserFirebase } from './firebase/database/user'
 export { default as RoleFirebase } from './firebase/database/role'
 export { default as SyslogFirebase } from './firebase/database/syslog'
-export { default as ImagesFirebase } from './firebase/database/image'
+export { default as MemberFirebase } from './firebase/database/member'
+export { default as StorageFirebase } from './firebase/database/storage'
 
 // 功能
 export { default as Auth } from './firebase/utils/useAuth'
