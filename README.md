@@ -1,6 +1,10 @@
 # vue3_base_system
 
-This template should help get you started developing with Vue 3 in Vite.
+專案選用PrimevueUI的Sakai模板進行開發
+並撰寫針對Firebase的Utils，可對應各種前台並快速開發
+
+此後台框架的主旨可快速應用於使用Firebase為資料庫的專案
+後台所需相關功能皆已包裝為元件
 
 ## Recommended IDE Setup
 
