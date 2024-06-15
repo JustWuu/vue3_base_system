@@ -24,11 +24,6 @@ const outMenuItems = ref([
     label: '登入',
     icon: 'pi pi-sign-in',
     to: '/auth/login'
-  },
-  {
-    label: '註冊',
-    icon: 'pi pi-user-edit',
-    to: '/auth/register'
   }
 ])
 const displayConfirmation = ref(false)

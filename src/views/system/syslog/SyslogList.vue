@@ -4,7 +4,6 @@ import { useRouter } from 'vue-router'
 import { UniversalTable } from '@/components/table'
 import { SyslogFirebase, UserFirebase } from '@/api'
 import type { Syslog, User, Filter } from '@/interface'
-import { error } from '@/utils'
 
 const router = useRouter()
 
@@ -53,12 +52,12 @@ const columns = ref([
     sortable: true,
     style: 'min-width:10rem;'
   },
-  // {
-  //   field: 'userip',
-  //   header: '操作者IP',
-  //   sortable: true,
-  //   style: 'min-width:10rem;'
-  // },
+  {
+    field: 'userip',
+    header: '操作者IP',
+    sortable: true,
+    style: 'min-width:10rem;'
+  },
   {
     type: 'date',
     field: 'timestamp',
@@ -86,25 +85,21 @@ const filter = ref<Filter[]>([
 
 // onMounted
 onMounted(() => {
-  syslogFirebase
-    .array()
-    .then((res: Syslog[]) => {
-      syslogs.value = res
-    })
-    .catch((e) => {
-      error(e)
-    })
+  getSyslogs()
   userFirebase.array().then((res: User[]) => {
     res.filter((item) => filter.value[0].options!.push({ value: item.email!, text: item.email! }))
   })
 })
 
 // methods
+const getSyslogs = () => {
+  syslogFirebase.array().then((res: Syslog[]) => {
+    syslogs.value = res
+  })
+}
+
 const read = (syslog: Syslog) => {
   router.push(`/system/syslog/read/${syslog.id}`)
-  // user.value = { ...editUser }
-  // console.log(user)
-  // userDialog.value = true
 }
 
 const exportCSV = () => {
@@ -145,12 +140,6 @@ const exportCSV = () => {
                     @click="read(slotProps.data)"
                   />
                 </div>
-
-                <!-- <Button
-                  icon="pi pi-trash"
-                  class="p-button-rounded p-button-warning mt-2"
-                  @click="confirmDeleteSyslog(slotProps.data)"
-                /> -->
               </template>
             </Column>
           </template>

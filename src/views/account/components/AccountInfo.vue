@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import { ref, watchEffect } from 'vue'
-import { Auth, FireStorage, UserFirebase } from '@/api'
-import { InputTextFloat, FloatText, DebounceButton, CropperDialog } from '@/components'
+import { Auth, UserFirebase } from '@/api'
+import { InputTextFloat, FloatText, DebounceButton } from '@/components'
 import { success, error } from '@/utils'
 import { type User, UserObject } from '@/interface'
 
 // firebase
 const auth = new Auth()
-const fireStorage = new FireStorage()
 const userFirebase = new UserFirebase()
 const { user } = auth.getUser()
 
@@ -27,12 +26,6 @@ const update = () => {
     .catch((e) => {
       error(e)
     })
-}
-const cropper = (file: File) => {
-  // console.log('file', f)
-  fireStorage.uploadProfilePhoto(file).then((res) => {
-    success(`${res}`)
-  })
 }
 
 // watchEffect
@@ -54,7 +47,6 @@ watchEffect(() => {
           <Image :src="account?.photoURL" alt="" width="200" height="200" />
         </div>
       </div>
-      <cropper-dialog chooseLabel="變更大頭照" header="設定大頭照" @cropper="cropper" />
     </div>
   </div>
 

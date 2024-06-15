@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { Auth, UserFirebase } from '@/api'
+import { ref, onMounted, watchEffect } from 'vue'
+import { Auth, UserFirebase, MemberFirebase } from '@/api'
 import {
-  InputPasswordFloat,
   InputTextFloat,
   RoleDropdownFloat,
   StateDropdownFloat,
   FloatText,
-  DebounceButton
+  DebounceButton,
+  MemberDropdownFloat
 } from '@/components'
 import { UserObject } from '@/interface'
-import type { User } from '@/interface'
+import type { User, Member } from '@/interface'
 import { useRoute, useRouter } from 'vue-router'
 import { success, error, ConvertDate } from '@/utils'
 
@@ -29,10 +29,12 @@ const props = defineProps({
 // firebase
 const auth = new Auth()
 const userFirebase = new UserFirebase()
+const memberFirebase = new MemberFirebase()
 
 //data
 const id = ref('')
 const user = ref<User>({ ...UserObject })
+const member = ref<Member>()
 
 const displayConfirmation = ref(false)
 
@@ -40,7 +42,7 @@ const displayConfirmation = ref(false)
 const submit = async (params: User) => {
   if (props.mode === 'add') {
     auth
-      .createUser(params)
+      .membersBecomeUser(member.value!, params)
       .then((res) => {
         if (res) {
           success(res)
@@ -91,9 +93,18 @@ onMounted(() => {
   if (props.mode === 'edit') {
     id.value = route.params.id as string
     userFirebase.get(id.value).then((res) => {
-      console.log(res)
       user.value = res
     })
+  }
+})
+
+// watchEffect
+watchEffect(async () => {
+  if (member.value) {
+    const data = await memberFirebase.getPublic(member.value.uid!)
+    user.value.uid = data.uid
+    user.value.displayName = data.displayName
+    user.value.photoURL = data.photoURL
   }
 })
 </script>
@@ -129,50 +140,33 @@ onMounted(() => {
 
           <div class="grid p-fluid mt-3">
             <div class="col-12 md:col-6">
-              <input-text-float
+              <member-dropdown-float
                 v-if="mode === 'add'"
-                label="信箱"
-                v-model="user.email"
+                v-model="member"
                 name="email"
-                rules="required|email"
+                rules="required"
               />
               <float-text v-if="mode === 'edit'" label="信箱" :content="user.email" />
             </div>
             <div class="col-12 md:col-6">
-              <input-password-float
-                v-if="mode === 'add'"
-                label="密碼"
-                v-model="user.password"
-                name="password"
-                rules="required"
-              />
-              <float-text v-if="mode === 'edit'" label="UID" :content="user.uid" />
+              <float-text label="UID" :content="user.uid" />
             </div>
             <div class="col-12 md:col-6">
-              <input-text-float
-                label="名稱"
-                v-model="user.displayName"
-                name="displayName"
-                rules="required"
-              />
+              <float-text label="名稱" :content="user.displayName" />
             </div>
             <div class="col-12 md:col-6">
-              <input-text-float
-                label="照片"
-                v-model="user.photoURL"
-                name="photoURL"
-                rules="required"
-              />
+              <input-text-float label="照片" v-model="user.photoURL" name="photoURL" />
             </div>
             <div class="col-12 md:col-6">
               <state-dropdown-float v-model="user.state" name="state" rules="required" />
             </div>
-            <div v-role="['role:u']" class="col-12 md:col-6">
+            <div v-role="['role:r']" class="col-12 md:col-6">
               <role-dropdown-float v-model="user.role" name="role" rules="required" />
             </div>
             <div class="md:col-6"></div>
             <div class="col-12 md:col-6">
               <debounce-button
+                v-if="mode === 'edit'"
                 label="重設密碼"
                 type="button"
                 severity="warning"

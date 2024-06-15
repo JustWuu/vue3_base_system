@@ -1,18 +1,11 @@
-<script setup lang="ts">
-// import { userProfileStores } from '@/stores/userProfile'
-
-// firebase
-// const store = userProfileStores()
-
-// store.messageOnValue = false
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <div
     class="surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden"
   >
     <div class="flex flex-column align-items-center justify-content-center">
-      <img src="@/assets/logo.svg" alt="Sakai logo" class="mb-4 w-6rem flex-shrink-0" />
+      <img src="@/assets/logo.svg" alt="logo" class="mb-4 w-6rem flex-shrink-0" />
       <div
         style="
           border-radius: 56px;
@@ -31,10 +24,7 @@
           <span class="text-blue-500 font-bold text-3xl">404</span>
           <h1 class="text-900 font-bold text-3xl lg:text-5xl mb-2">找不到該頁面</h1>
           <div class="text-600 mb-4">請求的網址不可使用</div>
-          <router-link
-            to="/"
-            class="w-full flex align-items-center py-5 border-300 border-bottom-1"
-          >
+          <div class="w-full flex align-items-center py-5 border-300 border-bottom-1">
             <span
               class="flex justify-content-center align-items-center bg-cyan-400 border-round"
               style="height: 3.5rem; width: 3.5rem"
@@ -45,11 +35,8 @@
               <span class="text-900 lg:text-xl font-medium mb-0 block">為什麼會出現這個畫面？</span>
               <span class="text-600 lg:text-xl">請查看以下說明</span>
             </span>
-          </router-link>
-          <router-link
-            to="/"
-            class="w-full flex align-items-center py-5 border-300 border-bottom-1"
-          >
+          </div>
+          <div class="w-full flex align-items-center py-5 border-300 border-bottom-1">
             <span
               class="flex justify-content-center align-items-center bg-orange-400 border-round"
               style="height: 3.5rem; width: 3.5rem"
@@ -60,11 +47,8 @@
               <span class="text-900 lg:text-xl font-medium mb-0">頁面不存在</span>
               <span class="text-600 lg:text-xl">該網址可能不存在任何頁面</span>
             </span>
-          </router-link>
-          <router-link
-            to="/"
-            class="w-full flex align-items-center mb-4 py-5 border-300 border-bottom-1"
-          >
+          </div>
+          <div class="w-full flex align-items-center mb-4 py-5 border-300 border-bottom-1">
             <span
               class="flex justify-content-center align-items-center bg-indigo-400 border-round"
               style="height: 3.5rem; width: 3.5rem"
@@ -73,9 +57,9 @@
             </span>
             <span class="ml-4 flex flex-column">
               <span class="text-900 lg:text-xl font-medium mb-0">暫時關閉</span>
-              <span class="text-600 lg:text-xl">頁面暫停訪問，請查看最新公告</span>
+              <span class="text-600 lg:text-xl">頁面暫停訪問，請洽系統管理員</span>
             </span>
-          </router-link>
+          </div>
         </div>
       </div>
     </div>

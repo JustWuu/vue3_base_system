@@ -14,12 +14,12 @@ class FireStorage {
   constructor() {}
   // 上傳圖片
   async uploadImage(file: File, use: 'profile' | 'upload' = 'upload') {
-    const storageRef = ref(storage, `image/${file.name}`)
+    const storageRef = ref(storage, `system/${file.name}`)
     return await uploadBytes(storageRef, file)
       .then(async (snapshot) => {
         console.log(snapshot.metadata.name, 'Uploaded a blob or file!')
         const image: Image = {
-          url: `https://firebasestorage.googleapis.com/v0/b/${STORAGE_BUCKET}/o/image%2F${snapshot.metadata.name}?alt=media`,
+          url: `https://firebasestorage.googleapis.com/v0/b/${STORAGE_BUCKET}/o/system%2F${snapshot.metadata.name}?alt=media`,
           name: snapshot.metadata.name,
           type: snapshot.metadata.contentType,
           size: snapshot.metadata.size,

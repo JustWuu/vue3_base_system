@@ -21,8 +21,6 @@ const signinAccount = ref({
   keepSignIn: true
 })
 
-// const displayConfirmation = ref(false)
-
 //methods
 const signin = async () => {
   if (signinAccount.value.keepSignIn) {
@@ -66,30 +64,6 @@ function setLocalStorage() {
   }
 }
 
-// const signInAnonymously = () => {
-//   displayConfirmation.value = false
-//   auth
-//     .signInAnonymously()
-//     .then((res) => {
-//       if (res) {
-//         emit('showSuccess', '登入成功')
-//         message.sendSystemMail(mail.value)
-//         router.push('/')
-//       }
-//     })
-//     .catch((error) => {
-//       emit('showError', error)
-//     })
-// }
-
-// const openConfirmation = () => {
-//   displayConfirmation.value = true
-// }
-
-// const closeConfirmation = () => {
-//   displayConfirmation.value = false
-// }
-
 // onMounted
 onMounted(() => {
   if (storage.getLocalStorage('account')) {
@@ -117,18 +91,6 @@ onMounted(() => {
         <div class="w-full surface-card py-8 px-5 sm:px-8" style="border-radius: 53px">
           <div class="text-center mb-4">
             <div class="text-900 text-3xl font-medium mb-3">帳戶登入</div>
-            <router-link
-              class="font-medium no-underline ml-0 text-right cursor-pointer"
-              style="color: var(--primary-color)"
-              to="/auth/login"
-              >帳戶登入</router-link
-            >
-            <router-link
-              class="font-medium no-underline ml-2 text-right cursor-pointer"
-              style="color: var(--primary-color)"
-              to="/auth/register"
-              >帳戶註冊</router-link
-            >
           </div>
 
           <div>
@@ -177,35 +139,9 @@ onMounted(() => {
               >
             </div>
             <Button label="登入" class="w-full p-3 text-xl mb-2" @click="signin"></Button>
-            <!-- <Button
-              label="以訪客身份登入"
-              class="w-full p-3 text-xl"
-              @click="openConfirmation"
-            ></Button> -->
           </div>
         </div>
       </div>
-
-      <!-- <Dialog
-        header="確認"
-        v-model:visible="displayConfirmation"
-        :style="{ width: '350px' }"
-        :modal="true"
-      >
-        <div class="flex align-items-center justify-content-center flex-wrap">
-          <p class="w-full">訪客帳號在瀏覽器關閉時將會遺失，登入後請儘速至個人資料頁完成註冊。</p>
-          <p>是否以訪客身份登入？</p>
-        </div>
-        <template #footer>
-          <Button label="No" icon="pi pi-times" @click="closeConfirmation" class="p-button-text" />
-          <Button
-            label="Yes"
-            icon="pi pi-check"
-            @click="signInAnonymously()"
-            class="p-button-text"
-          />
-        </template>
-      </Dialog> -->
     </div>
   </div>
 </template>

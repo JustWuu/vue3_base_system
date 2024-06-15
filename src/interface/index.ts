@@ -1,3 +1,5 @@
+export type { Member, MemberPublic } from './Member'
+
 export type { User } from './User'
 export type { Role } from './Role'
 export type { StringObject } from './Universal'

@@ -18,7 +18,7 @@ import {
 import { UserStore } from '@/stores'
 import { storeToRefs } from 'pinia'
 import { UserFirebase } from '@/api'
-import { type StringObject, type User } from '@/interface'
+import type { StringObject, User, Member } from '@/interface'
 import { LoadingStore } from '@/stores'
 
 const loadingStore = LoadingStore()
@@ -48,6 +48,18 @@ const authMessage: StringObject = {
 
 class Auth {
   constructor() {}
+  // 創建帳戶(前台會員轉管理員)
+  async membersBecomeUser(member: Member, user: User) {
+    return await userFirebase
+      .setUser(member, user)
+      .then((res) => {
+        console.log(res)
+        return res
+      })
+      .catch((error) => {
+        throw error
+      })
+  }
   // 管理帳號使用(不需依當前登入的帳號來做動)
   // 創建帳戶(不會直接登入)
   async createUser(account: User) {

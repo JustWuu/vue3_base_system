@@ -1,18 +1,11 @@
-<script setup lang="ts">
-// import { userProfileStores } from '@/stores/userProfile'
-
-// firebase
-// const store = userProfileStores()
-
-// store.messageOnValue = false
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <div
     class="surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden"
   >
     <div class="flex flex-column align-items-center justify-content-center">
-      <img src="@/assets/logo.svg" alt="Sakai logo" class="mb-4 w-6rem flex-shrink-0" />
+      <img src="@/assets/logo.svg" alt="logo" class="mb-4 w-6rem flex-shrink-0" />
       <div
         style="
           border-radius: 56px;
@@ -43,13 +36,6 @@
               class="mb-5"
               width="80%"
             />
-            <div class="col-12 mt-5 text-center">
-              <i
-                class="pi pi-fw pi-arrow-left text-blue-500 mr-2"
-                style="vertical-align: center"
-              ></i>
-              <router-link to="/" class="text-blue-500">返回首頁</router-link>
-            </div>
           </div>
         </div>
       </div>
