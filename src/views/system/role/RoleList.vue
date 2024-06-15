@@ -129,7 +129,7 @@ const deleteRole = async () => {
           :filter="filter"
         >
           <template #footer>
-            <Column headerStyle="min-width:10rem;">
+            <Column headerStyle="min-width:10rem;" header="操作" alignFrozen="right" frozen>
               <template #body="slotProps">
                 <Button
                   v-role="['role:u']"

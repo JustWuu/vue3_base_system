@@ -236,6 +236,38 @@ const treeValue = ref<TreeNode[]>([
             data: 'syslog:d'
           }
         ]
+      },
+      {
+        key: 'storage',
+        label: '貯存管理',
+        data: 'storage',
+        icon: 'pi pi-fw pi-file-arrow-up',
+        children: [
+          {
+            key: 'storage:c',
+            label: '新增',
+            icon: 'pi pi-fw pi-file',
+            data: 'storage:c'
+          },
+          {
+            key: 'storage:r',
+            label: '查看',
+            icon: 'pi pi-fw pi-eye',
+            data: 'storage:r'
+          },
+          {
+            key: 'storage:u',
+            label: '更新',
+            icon: 'pi pi-fw pi-pencil',
+            data: 'storage:u'
+          },
+          {
+            key: 'storage:d',
+            label: '刪除',
+            icon: 'pi pi-fw pi-trash',
+            data: 'storage:d'
+          }
+        ]
       }
     ]
   }

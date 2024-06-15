@@ -176,7 +176,6 @@ const deleteSelectedUsers = () => {
           :columns="columns"
           v-model:selection="selectedUsers"
           header="帳號管理"
-          :checkbox="true"
           :filter="filter"
         >
           <template #footer>

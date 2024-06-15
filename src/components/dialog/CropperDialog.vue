@@ -91,7 +91,7 @@ async function getResult() {
   if (!blob) return
 
   const file = await cropper.getFile({
-    fileName: random.generateRandomString(10)
+    fileName: random.generateRandomString(6)
   })
 
   // console.log({ base64, blob, file })
