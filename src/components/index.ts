@@ -10,10 +10,15 @@ import DebounceButton from './form/DebounceButton.vue'
 import UniversalTable from './table/UniversalTable.vue'
 // universal
 import FloatText from './universal/FloatText.vue'
+import FloatBoolean from './universal/FloatBoolean.vue'
+import FloatImg from './universal/FloatImg.vue'
 import PageMenu from './universal/PageMenu.vue'
 
 // dialog
 import CropperDialog from './dialog/CropperDialog.vue'
+
+// TinyMCE
+import TinyMCE from './TinyMCE.vue'
 
 export {
   InputDropdownFloat,
@@ -24,6 +29,9 @@ export {
   DebounceButton,
   UniversalTable,
   FloatText,
+  FloatBoolean,
+  FloatImg,
   PageMenu,
-  CropperDialog
+  CropperDialog,
+  TinyMCE
 }
