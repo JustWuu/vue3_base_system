@@ -151,7 +151,13 @@ const exportCSV = () => {
         <Toolbar class="mb-4">
           <template v-slot:start>
             <div class="my-2">
-              <Button label="新增" icon="pi pi-plus" class="p-button-success mr-2" @click="add" />
+              <Button
+                v-role="['user:c']"
+                label="新增"
+                icon="pi pi-plus"
+                class="p-button-success mr-2"
+                @click="add"
+              />
             </div>
           </template>
 
@@ -171,11 +177,13 @@ const exportCSV = () => {
             <Column headerStyle="min-width:10rem;" header="操作" alignFrozen="right" frozen>
               <template #body="slotProps">
                 <Button
+                  v-role="['user:u']"
                   icon="pi pi-pencil"
                   class="p-button-rounded p-button-success mr-2"
                   @click="edit(slotProps.data)"
                 />
                 <Button
+                  v-role="['user:d']"
                   icon="pi pi-trash"
                   class="p-button-rounded p-button-warning mt-2"
                   @click="confirmDeleteUser(slotProps.data)"
