@@ -5,11 +5,9 @@ import { InputTextFloat, InputDropdownFloat, FloatText, DebounceButton } from '@
 import type { TreeNode, TreeSelectionKeys } from 'primevue/tree'
 import type { Role } from '@/interface'
 import { StateArray } from '@/interface'
-import { Random } from '@/utils'
 import { useRoute, useRouter } from 'vue-router'
 import { success, error } from '@/utils'
 
-const random = new Random()
 const route = useRoute()
 const router = useRouter()
 // props
@@ -34,6 +32,110 @@ const role = ref<Role>({
 })
 const treeValue = ref<TreeNode[]>([
   {
+    key: 'front',
+    label: '前台',
+    data: 'front',
+    icon: 'pi pi-fw pi-inbox',
+    children: [
+      {
+        key: 'news',
+        label: '公告管理',
+        data: 'news',
+        icon: 'pi pi-fw pi-users',
+        children: [
+          {
+            key: 'news:c',
+            label: '新增',
+            icon: 'pi pi-fw pi-file',
+            data: 'news:c'
+          },
+          {
+            key: 'news:r',
+            label: '查看',
+            icon: 'pi pi-fw pi-eye',
+            data: 'news:r'
+          },
+          {
+            key: 'news:u',
+            label: '更新',
+            icon: 'pi pi-fw pi-pencil',
+            data: 'news:u'
+          },
+          {
+            key: 'news:d',
+            label: '刪除',
+            icon: 'pi pi-fw pi-trash',
+            data: 'news:d'
+          }
+        ]
+      },
+      {
+        key: 'recommend',
+        label: '每周推薦',
+        data: 'recommend',
+        icon: 'pi pi-fw pi-users',
+        children: [
+          {
+            key: 'recommend:c',
+            label: '新增',
+            icon: 'pi pi-fw pi-file',
+            data: 'recommend:c'
+          },
+          {
+            key: 'recommend:r',
+            label: '查看',
+            icon: 'pi pi-fw pi-eye',
+            data: 'recommend:r'
+          },
+          {
+            key: 'recommend:u',
+            label: '更新',
+            icon: 'pi pi-fw pi-pencil',
+            data: 'recommend:u'
+          },
+          {
+            key: 'recommend:d',
+            label: '刪除',
+            icon: 'pi pi-fw pi-trash',
+            data: 'recommend:d'
+          }
+        ]
+      },
+      {
+        key: 'member',
+        label: '會員管理',
+        data: 'member',
+        icon: 'pi pi-fw pi-users',
+        children: [
+          {
+            key: 'member:c',
+            label: '新增',
+            icon: 'pi pi-fw pi-file',
+            data: 'member:c'
+          },
+          {
+            key: 'member:r',
+            label: '查看',
+            icon: 'pi pi-fw pi-eye',
+            data: 'member:r'
+          },
+          {
+            key: 'member:u',
+            label: '更新',
+            icon: 'pi pi-fw pi-pencil',
+            data: 'member:u'
+          },
+          {
+            key: 'member:d',
+            label: '刪除',
+            icon: 'pi pi-fw pi-trash',
+            data: 'member:d'
+          }
+        ]
+      }
+    ]
+  },
+  {
     key: 'system',
     label: '系統',
     data: 'system',
@@ -43,7 +145,7 @@ const treeValue = ref<TreeNode[]>([
         key: 'user',
         label: '帳號管理',
         data: 'user',
-        icon: 'pi pi-fw pi-users',
+        icon: 'pi pi-fw pi-user',
         children: [
           {
             key: 'user:c',
@@ -143,11 +245,9 @@ const selectedTreeValue = ref<TreeSelectionKeys>({})
 //methods
 const submit = async (params: object) => {
   if (props.mode === 'add') {
-    id.value = random.generateRandomString(10)
-    role.value.id = id.value
     role.value.roles = keysWithTrueChecked()
     roleFirebase
-      .set(id.value, params)
+      .add(params)
       .then((res) => {
         success(res)
         router.push('/system/role/list')

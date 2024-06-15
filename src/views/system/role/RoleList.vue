@@ -4,7 +4,7 @@ import { useRouter } from 'vue-router'
 import { UniversalTable } from '@/components/table'
 import { RoleFirebase } from '@/api'
 import type { Role, Filter } from '@/interface'
-import { error } from '@/utils'
+import { success, error } from '@/utils'
 
 const router = useRouter()
 
@@ -59,23 +59,21 @@ const filter = ref<Filter[]>([
 
 const roles = ref<Role[]>([])
 const role = ref<Role>()
-const selectedRoles = ref<Role[]>([])
 
 const deleteRoleDialog = ref(false)
 
 // onMounted
 onMounted(() => {
-  roleFirebase
-    .array()
-    .then((res: Role[]) => {
-      roles.value = res
-    })
-    .catch((e) => {
-      error(e)
-    })
+  getRoles()
 })
 
 // methods
+const getRoles = () => {
+  roleFirebase.array().then((res: Role[]) => {
+    roles.value = res
+  })
+}
+
 const add = () => {
   router.push('/system/role/add')
 }
@@ -88,9 +86,19 @@ const confirmDeleteRole = (editRole: Role) => {
   role.value = editRole
   deleteRoleDialog.value = true
 }
+
 // 確定刪除
-const deleteRole = () => {
-  // roles.value = roles.value.filter((val: Role) => val.uid !== role.value.uid)
+const deleteRole = async () => {
+  await roleFirebase
+    .update(role.value!.id, { state: 'delete' })
+    .then((res) => {
+      success(res)
+      router.push('/system/user/list')
+    })
+    .catch((e) => {
+      error(e)
+    })
+  getRoles()
   deleteRoleDialog.value = false
 }
 </script>
@@ -103,13 +111,6 @@ const deleteRole = () => {
           <template v-slot:start>
             <div class="my-2">
               <Button label="新增" icon="pi pi-plus" class="p-button-success mr-2" @click="add" />
-              <!-- <Button
-                label="刪除"
-                icon="pi pi-trash"
-                class="p-button-danger"
-                @click="confirmDeleteSelected"
-                :disabled="!selectedRoles || !selectedRoles.length"
-              /> -->
             </div>
           </template>
         </Toolbar>
@@ -118,22 +119,18 @@ const deleteRole = () => {
           ref="dt"
           :data="roles"
           :columns="columns"
-          v-model:selection="selectedRoles"
           header="權限管理"
-          :checkbox="true"
           :filter="filter"
         >
           <template #footer>
             <Column headerStyle="min-width:10rem;">
               <template #body="slotProps">
                 <Button
-                  v-role="['role:u']"
                   icon="pi pi-pencil"
                   class="p-button-rounded p-button-success mr-2"
                   @click="edit(slotProps.data)"
                 />
                 <Button
-                  v-role="['role:d']"
                   icon="pi pi-trash"
                   class="p-button-rounded p-button-warning mt-2"
                   @click="confirmDeleteRole(slotProps.data)"
