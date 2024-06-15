@@ -166,6 +166,7 @@ watchEffect(async () => {
             <div class="md:col-6"></div>
             <div class="col-12 md:col-6">
               <debounce-button
+                v-if="mode === 'edit'"
                 label="重設密碼"
                 type="button"
                 severity="warning"
