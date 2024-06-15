@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-
 import { FloatText } from '@/components'
 import { SyslogFirebase } from '@/api'
 import type { Syslog } from '@/interface'
@@ -24,7 +23,6 @@ const syslogFirebase = new SyslogFirebase()
 
 //data
 const id = ref('')
-
 const syslog = ref<Syslog>({ ...new SyslogClass('', '', '', 0, '', '', '', 'enable', '') })
 
 //methods
@@ -34,7 +32,6 @@ onMounted(() => {
   if (props.mode === 'read') {
     id.value = route.params.id as string
     syslogFirebase.get(id.value).then((res) => {
-      console.log(res)
       syslog.value = res
     })
   }
@@ -68,14 +65,13 @@ onMounted(() => {
             <div class="col-12 md:col-6">
               <float-text label="操作者UID" :content="syslog.useruid" copy-button />
             </div>
-            <!-- <div class="col-12 md:col-6">
+            <div class="col-12 md:col-6">
               <float-text label="操作者IP" :content="syslog.userip" />
-            </div> -->
+            </div>
             <div class="col-12 md:col-6">
               <float-text label="操作時間" :content="convertDate.convertDate(syslog.timestamp)" />
             </div>
           </div>
-          <!-- <Button label="送出" type="submit"></Button> -->
         </div>
       </VForm>
     </div>
