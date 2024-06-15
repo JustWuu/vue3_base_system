@@ -1,0 +1,1 @@
+import{Z as s}from"./index-xUVfnviE.js";const r=3e3;function a(e){s.config.globalProperties.$toast.add({severity:"success",summary:"Success Message",detail:e,life:r})}function i(e){s.config.globalProperties.$toast.add({severity:"error",summary:"Error Message",detail:e,life:r})}export{i as e,a as s};
