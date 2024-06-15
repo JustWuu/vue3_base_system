@@ -1,6 +1,26 @@
+import moment from 'moment-timezone'
+
 class ConvertDate {
   constructor() {}
-  //把傳入的毫秒轉成年月日時
+  /**
+   * 回傳毫秒
+   */
+  time(): number {
+    const timeZone = import.meta.env.VITE_TIME_ZONE!
+    const date = moment.tz(new Date(), timeZone).valueOf()
+    return date
+  }
+  /**
+   * 回傳YYYY-MM-DD HH:mm:ss
+   */
+  date(): string {
+    const timeZone = import.meta.env.VITE_TIME_ZONE!
+    const date = moment.tz(new Date(), timeZone).format('YYYY-MM-DD HH:mm:ss')
+    return date
+  }
+  /**
+   * 把傳入的毫秒轉成年月日時
+   */
   convertDate(date: any) {
     const d = new Date(date)
     const year = d.getFullYear()
