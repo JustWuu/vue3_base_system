@@ -1,4 +1,6 @@
 // 資料庫
+export { default as MemberFirebase } from './firebase/database/member'
+
 export { default as CRUDFirebase } from './firebase/database/CRUD'
 export { default as UserFirebase } from './firebase/database/user'
 export { default as RoleFirebase } from './firebase/database/role'

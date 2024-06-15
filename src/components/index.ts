@@ -4,6 +4,7 @@ import InputPasswordFloat from './form/InputPasswordFloat.vue'
 import InputTextFloat from './form/InputTextFloat.vue'
 import RoleDropdownFloat from './form/RoleDropdownFloat.vue'
 import StateDropdownFloat from './form/StateDropdownFloat.vue'
+import MemberDropdownFloat from './form/MemberDropdownFloat.vue'
 
 import DebounceButton from './form/DebounceButton.vue'
 // table
@@ -26,6 +27,7 @@ export {
   InputTextFloat,
   RoleDropdownFloat,
   StateDropdownFloat,
+  MemberDropdownFloat,
   DebounceButton,
   UniversalTable,
   FloatText,
