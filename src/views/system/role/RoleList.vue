@@ -110,7 +110,13 @@ const deleteRole = async () => {
         <Toolbar class="mb-4">
           <template v-slot:start>
             <div class="my-2">
-              <Button label="新增" icon="pi pi-plus" class="p-button-success mr-2" @click="add" />
+              <Button
+                v-role="['role:c']"
+                label="新增"
+                icon="pi pi-plus"
+                class="p-button-success mr-2"
+                @click="add"
+              />
             </div>
           </template>
         </Toolbar>
@@ -126,11 +132,13 @@ const deleteRole = async () => {
             <Column headerStyle="min-width:10rem;">
               <template #body="slotProps">
                 <Button
+                  v-role="['role:u']"
                   icon="pi pi-pencil"
                   class="p-button-rounded p-button-success mr-2"
                   @click="edit(slotProps.data)"
                 />
                 <Button
+                  v-role="['role:d']"
                   icon="pi pi-trash"
                   class="p-button-rounded p-button-warning mt-2"
                   @click="confirmDeleteRole(slotProps.data)"
