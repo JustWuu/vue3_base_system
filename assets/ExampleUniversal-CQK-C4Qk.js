@@ -1,1 +1,0 @@
-import{E as e}from"./ExampleComponent-BoMpEADq.js";import{d as a,D as o,o as t}from"./index-BAnCtb42.js";const i=a({__name:"ExampleUniversal",setup(r){return(n,p)=>(t(),o(e,{src:"https://sakai.primevue.org/demo/images/galleria/galleria1.jpg",title:"通用範例頁面",content:"這裡是通用範例頁面"}))}});export{i as default};
