@@ -131,7 +131,7 @@ const exportCSV = () => {
           resizableColumns
         >
           <template #footer>
-            <Column :style="'min-width:2rem'">
+            <Column headerStyle="'min-width:2rem'" header="操作" alignFrozen="right" frozen>
               <template #body="slotProps">
                 <div class="flex justify-content-center">
                   <Button

@@ -209,7 +209,7 @@ onMounted(() => {
           resizableColumns
         >
           <template #footer>
-            <Column :style="'min-width:2rem'" header="操作">
+            <Column :style="'min-width:2rem'" header="操作" alignFrozen="right" frozen>
               <template #body="slotProps">
                 <Button
                   icon="pi pi-eye"
