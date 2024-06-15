@@ -2,7 +2,7 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { UniversalTable } from '@/components/table'
-import { StorageFirebase, UserFirebase, FireStorage } from '@/api'
+import { StorageFirebase, MemberFirebase, FireStorage } from '@/api'
 import type { Storage, User, Filter } from '@/interface'
 import { success, error } from '@/utils'
 
@@ -10,7 +10,7 @@ const router = useRouter()
 
 // firebase
 const storageFirebase = new StorageFirebase()
-const userFirebase = new UserFirebase()
+const memberFirebase = new MemberFirebase()
 const fireStorage = new FireStorage()
 
 // data
@@ -151,7 +151,7 @@ const deleteSelectedStorages = async () => {
 // onMounted
 onMounted(() => {
   getStorage()
-  userFirebase.array().then((res: User[]) => {
+  memberFirebase.array().then((res: User[]) => {
     res.filter((item) => filter.value[0].options!.push({ value: item.email!, text: item.email! }))
   })
 })
