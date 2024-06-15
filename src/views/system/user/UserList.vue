@@ -96,26 +96,26 @@ const filter = ref<Filter[]>([
 
 const users = ref<User[]>([])
 const user = ref<User>()
-const selectedUsers = ref<User[]>([])
 
 const deleteUserDialog = ref(false)
 
 // onMounted
 onMounted(() => {
-  userFirebase.array().then((res: User[]) => {
-    users.value = res
-  })
+  getUsers()
 })
 
 // methods
+const getUsers = () => {
+  userFirebase.array().then((res: User[]) => {
+    users.value = res
+  })
+}
+
 const add = () => {
   router.push('/system/user/add')
 }
 const edit = (editUser: User) => {
   router.push(`/system/user/edit/${editUser.uid}`)
-  // user.value = { ...editUser }
-  // console.log(user)
-  // userDialog.value = true
 }
 
 // dialog
@@ -124,6 +124,7 @@ const confirmDeleteUser = (editUser: User) => {
   deleteUserDialog.value = true
 }
 
+// 確定刪除
 const deleteUser = async () => {
   await userFirebase
     .update(user.value!.uid!, { state: 'delete' })
@@ -134,6 +135,7 @@ const deleteUser = async () => {
     .catch((e) => {
       error(e)
     })
+  getUsers()
   deleteUserDialog.value = false
 }
 
@@ -162,22 +164,18 @@ const exportCSV = () => {
           ref="dt"
           :data="users"
           :columns="columns"
-          v-model:selection="selectedUsers"
           header="帳號管理"
-          :checkbox="true"
           :filter="filter"
         >
           <template #footer>
             <Column headerStyle="min-width:10rem;" header="操作" alignFrozen="right" frozen>
               <template #body="slotProps">
                 <Button
-                  v-role="['user:u']"
                   icon="pi pi-pencil"
                   class="p-button-rounded p-button-success mr-2"
                   @click="edit(slotProps.data)"
                 />
                 <Button
-                  v-role="['user:d']"
                   icon="pi pi-trash"
                   class="p-button-rounded p-button-warning mt-2"
                   @click="confirmDeleteUser(slotProps.data)"
