@@ -53,12 +53,6 @@ const columns = ref([
     style: 'min-width:10rem;'
   },
   {
-    field: 'userip',
-    header: '操作者IP',
-    sortable: true,
-    style: 'min-width:10rem;'
-  },
-  {
     type: 'date',
     field: 'timestamp',
     header: '操作時間',
