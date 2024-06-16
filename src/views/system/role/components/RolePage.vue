@@ -309,7 +309,15 @@ onMounted(() => {
                 :value="treeValue"
                 selectionMode="checkbox"
                 v-model:selectionKeys="selectedTreeValue"
-                :expandedKeys="{ system: true, user: true, role: true, syslog: true }"
+                :expandedKeys="{
+                  front: true,
+                  member: true,
+                  system: true,
+                  user: true,
+                  role: true,
+                  syslog: true,
+                  storage: true
+                }"
               ></Tree>
             </div>
           </div>

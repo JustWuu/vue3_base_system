@@ -136,14 +136,15 @@ const deleteSelectedStorages = async () => {
     selectedStorages.value.map(async (item) => {
       await fireStorage
         .deleteStorage(item)
-        .then(() => {})
+        .then(() => {
+          success('刪除成功')
+          selectedStorages.value = []
+        })
         .catch((e) => {
           error(e)
         })
     })
   )
-  success('刪除成功')
-  selectedStorages.value = []
   getStorage()
   deleteStoragesDialog.value = false
 }
