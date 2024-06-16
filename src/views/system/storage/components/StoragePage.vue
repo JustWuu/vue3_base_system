@@ -59,6 +59,12 @@ onMounted(() => {
             <div class="col-12 md:col-6">
               <float-text label="檔名" :content="storage.name" />
             </div>
+            <div class="col-12 md:col-6">
+              <float-text label="檔案大小" :content="storage.size" />
+            </div>
+            <div class="col-12 md:col-6">
+              <float-text label="檔案位置" :content="storage.fullPath" />
+            </div>
             <div class="col-12">
               <float-text label="網址" :content="storage.url" copy-button />
             </div>
