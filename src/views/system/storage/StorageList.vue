@@ -166,6 +166,7 @@ onMounted(() => {
             <template v-slot:start>
               <div class="my-2">
                 <Button
+                  v-role="['storage:d']"
                   label="刪除"
                   icon="pi pi-trash"
                   class="p-button-danger"
@@ -177,6 +178,7 @@ onMounted(() => {
           </Toolbar>
 
           <FileUpload
+            v-role="['storage:c']"
             name="demo[]"
             @uploader="upload"
             @select="selectFile($event)"
@@ -217,6 +219,7 @@ onMounted(() => {
                   @click="read(slotProps.data)"
                 />
                 <Button
+                  v-role="['storage:d']"
                   icon="pi pi-trash"
                   class="p-button-rounded p-button-warning"
                   @click="confirmDeleteStorage(slotProps.data)"
