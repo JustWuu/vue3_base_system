@@ -70,6 +70,9 @@ const file_picker = (callback: any) => {
 
 const image_upload = (blobInfo: any) =>
   new Promise((resolve, reject) => {
+    if (blobInfo.blob().size > 1000000) {
+      return reject('檔案大小超過1MB')
+    }
     const file = new File([blobInfo.blob()], random.generateRandomString(6), {
       type: blobInfo.blob().type,
       lastModified: blobInfo.blob().lastModified
@@ -78,11 +81,11 @@ const image_upload = (blobInfo: any) =>
       .uploadStorage(file)
       .then((res) => {
         if (res) {
-          resolve(res)
+          return resolve(res)
         }
       })
       .catch((e) => {
-        reject(e)
+        return reject(e)
       })
   })
 
