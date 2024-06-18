@@ -1,5 +1,8 @@
 # vue3_base_system
 
+DEMO：https://justwuu.github.io/vue3_base_system
+帳號：test@gmail.com、密碼：testadmin
+
 專案選用PrimevueUI的Sakai模板進行開發
 並撰寫針對Firebase的Utils，可對應各種前台並快速開發
 
