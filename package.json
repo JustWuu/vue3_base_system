@@ -25,6 +25,7 @@
     "@vueuse/core": "^10.9.0",
     "axios": "^1.6.8",
     "chart.js": "^4.4.2",
+    "compressorjs": "^1.2.1",
     "crypto-js": "^4.2.0",
     "firebase": "^10.11.1",
     "js-cookie": "^3.0.5",
