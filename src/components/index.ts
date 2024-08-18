@@ -1,3 +1,5 @@
+import LoadingButton from './button/LoadingButton.vue'
+
 // form
 import InputDropdownFloat from './form/InputDropdownFloat.vue'
 import InputPasswordFloat from './form/InputPasswordFloat.vue'
@@ -22,6 +24,7 @@ import CropperDialog from './dialog/CropperDialog.vue'
 import TinyMCE from './TinyMCE.vue'
 
 export {
+  LoadingButton,
   InputDropdownFloat,
   InputPasswordFloat,
   InputTextFloat,
