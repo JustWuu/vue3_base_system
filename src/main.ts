@@ -77,6 +77,53 @@ app.use(PrimeVue, {
     overlay: 1000, //dropdown, overlaypanel
     menu: 1000, //overlay menus
     tooltip: 1100 //tooltip
+  },
+  locale: {
+    accept: '確定',
+    reject: '取消',
+    choose: '選擇',
+    upload: '上傳',
+    cancel: '取消',
+    dayNames: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+    dayNamesShort: ['日', '一', '二', '三', '四', '五', '六'],
+    dayNamesMin: ['日', '一', '二', '三', '四', '五', '六'],
+    monthNames: [
+      '一月',
+      '二月',
+      '三月',
+      '四月',
+      '五月',
+      '六月',
+      '七月',
+      '八月',
+      '九月',
+      '十月',
+      '十一月',
+      '十二月'
+    ],
+    monthNamesShort: [
+      '1月',
+      '2月',
+      '3月',
+      '4月',
+      '5月',
+      '6月',
+      '7月',
+      '8月',
+      '9月',
+      '10月',
+      '11月',
+      '12月'
+    ],
+    today: '今天',
+    clear: '清除',
+    weekHeader: '週',
+    firstDayOfWeek: 1,
+    dateFormat: 'yy-mm-dd',
+    weak: '弱',
+    medium: '中',
+    strong: '強',
+    passwordPrompt: '請輸入密碼'
   }
 })
 app.use(ToastService)
@@ -117,5 +164,11 @@ app.component('Tree', Tree)
 app.component('VField', Field)
 app.component('VForm', Form)
 app.component('ErrorMessage', ErrorMessage)
+
+// 掛載 Global 的 VeeValidate 元件
+// 未來保留此，上方的則會刪除
+app.component('VeeField', Field)
+app.component('VeeForm', Form)
+app.component('VeeErrorMessage', ErrorMessage)
 
 app.mount('#app')
