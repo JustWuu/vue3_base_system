@@ -1,3 +1,17 @@
+# 調整部分暫時紀錄
+
+Toast使用製作新的封裝，useToasts
+
+import之後需要宣告，const toasts = useToasts();
+
+toasts.success("主訊息", "副訊息");
+
+Date使用製作新的封裝，useDateNew，之後要直接取代舊的useDate
+
+import之後需要宣告，const date = useDate();
+
+date.convertDate(news.releaseAt, true);
+
 # vue3_base_system
 
 專案選用PrimevueUI的Sakai模板進行開發
@@ -17,8 +31,8 @@ TypeScript cannot handle type information for `.vue` imports by default, so we r
 If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
 
 1. Disable the built-in TypeScript Extension
-    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
+   1. Run `Extensions: Show Built-in Extensions` from VSCode's command palette
+   2. Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
 2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
 
 ## Customize configuration
