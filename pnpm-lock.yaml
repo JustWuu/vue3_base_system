@@ -35,6 +35,9 @@ importers:
       firebase:
         specifier: ^10.11.1
         version: 10.11.1
+      js-cookie:
+        specifier: ^3.0.5
+        version: 3.0.5
       lodash-es:
         specifier: ^4.17.21
         version: 4.17.21

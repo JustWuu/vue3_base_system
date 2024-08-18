@@ -6,6 +6,7 @@ declare module '*.vue' {
 }
 
 declare module 'lodash-es'
+declare module 'js-cookie'
 
 // declare module '*.vue' {
 //   import { defineComponent } from 'vue'

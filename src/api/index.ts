@@ -12,3 +12,4 @@ export { default as FireStorage } from './firebase/utils/useFireStorage'
 
 // axios
 export { default as Ipify } from './axios/ipify'
+export { default as ExampleRequest } from './restful/example'
